@@ -1,2 +1,2 @@
 # MiniBen
-RPP game
+RPG game
