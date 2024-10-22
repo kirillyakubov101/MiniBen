@@ -12,18 +12,18 @@ class LEVELSTREAMINGUTILS_API ALevelStreamingBridge : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ALevelStreamingBridge();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintCallable)
-	void ListAllSubLevels(UWorld* World) const;
+	UFUNCTION(BlueprintPure)
+	bool IsLevelLoaded(const TSoftObjectPtr<UWorld>& LevelPtr) const;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+protected:
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly)
+	TSoftObjectPtr<UWorld> m_Sublevel_1;
+
+	UPROPERTY(EditInstanceOnly, BlueprintReadOnly)
+	TSoftObjectPtr<UWorld> m_Sublevel_2;
 
 };

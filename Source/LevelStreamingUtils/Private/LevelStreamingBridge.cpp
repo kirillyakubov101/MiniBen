@@ -13,44 +13,24 @@ ALevelStreamingBridge::ALevelStreamingBridge()
 
 }
 
-// Called when the game starts or when spawned
-void ALevelStreamingBridge::BeginPlay()
+
+bool ALevelStreamingBridge::IsLevelLoaded(const TSoftObjectPtr<UWorld>& LevelPtr) const
 {
-	Super::BeginPlay();
-	
-}
+	UWorld* World = GetWorld();
 
-void ALevelStreamingBridge::ListAllSubLevels(UWorld* World) const
-{
-	UWorld* CurrentWorld = nullptr;
-	
-	if (World == nullptr)
+	if (World && LevelPtr.IsValid())
 	{
-		CurrentWorld = GetWorld();
-	}
-	else
-	{
-		CurrentWorld = World;
-	}
+		const TArray<ULevelStreaming*>& ListOfStreamingLevels = World->GetStreamingLevels();
+		FString LevelName = LevelPtr.GetLongPackageName();
 
-	const TArray<ULevelStreaming*>& ListOfStreamingLevels = CurrentWorld->GetStreamingLevels();
-
-	for (ULevelStreaming* StreamingLevel : ListOfStreamingLevels)
-	{
-		if (StreamingLevel)
+		for (ULevelStreaming* StreamingLevel : ListOfStreamingLevels)
 		{
-			FString LevelName = StreamingLevel->GetWorldAssetPackageName();
-			UE_LOG(LogTemp, Warning, TEXT("Sublevel: %s"), *LevelName);
-			bool bIsLevelLoaded = StreamingLevel->IsLevelLoaded();
-			UE_LOG(LogTemp, Warning, TEXT("Is level loaded: %s"), bIsLevelLoaded ? TEXT("true") : TEXT("false"));
+			if (StreamingLevel && StreamingLevel->GetWorldAssetPackageName().Contains(LevelName))
+			{
+				return StreamingLevel->IsLevelLoaded();
+			}
 		}
 	}
+
+	return false;
 }
-
-// Called every frame
-void ALevelStreamingBridge::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
