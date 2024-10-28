@@ -18,13 +18,20 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item")
 	FPrimaryAssetType ItemType = "Collectable";
 
-    // ItemID can be any descriptive identifier, like "healing potion" or "mana potion"
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
-    FName ItemID;
-
     // Override the GetPrimaryAssetId function to return the asset ID based on ItemType and ItemID
     virtual FPrimaryAssetId GetPrimaryAssetId() const override
     {
         return FPrimaryAssetId(ItemType, ItemID);
     }
+
+
+    const FName GetItemName() const
+    {
+        return ItemID;
+    }
+
+protected:
+    // ItemID can be any descriptive identifier, like "healing potion" or "mana potion"
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item")
+    FName ItemID;
 };
