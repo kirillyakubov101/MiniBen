@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MyStructs.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "MiniBenBlueprintFunctionLibrary.generated.h"
 
@@ -19,5 +20,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Saving | Inventory")
 	static TMap<UCollectableitemsDataAsset*, int32> ConvertSerializableToRealInventory(const TMap<FName, int32>& InventoryData, const TArray<UObject*>& LoadedDataAssets);
+
+    UFUNCTION(BlueprintCallable, Category = "Utils")
+	static int32 FindIndexByGuid(const TArray<FSaveableWorldItem>& Items, const FGuid& Guid);
+   
 	
 };
