@@ -103,3 +103,55 @@ void UMiniBenGameInstance::RestorePlayer()
 void UMiniBenGameInstance::RestoreCurrentWorldAssets()
 {
 }
+
+void UMiniBenGameInstance::RestoreSublevels()
+{
+    if (!MainSaveData.bHasSaved)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("!MainSaveData.bHasSaved"));
+        return;
+    }
+
+    UCustomWorldSubsystem* CustomWorldSubsystem = GetWorld()->GetSubsystem<UCustomWorldSubsystem>();
+    FWorldDataSave* CurrentLevelWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
+
+    if (CurrentLevelWorldDataSave && CustomWorldSubsystem && CurrentLevelWorldDataSave->bHasLevelBeenInitialized)
+    {
+        TArray<ULevelStreaming*> AllSubLevels = CustomWorldSubsystem->GetAllSubLevels(GetWorld());
+
+        for (ULevelStreaming* ele : AllSubLevels)
+        {
+            FString SublevelName = ULevelStreamingFunctionsUtils::ConvertLevelStreamingInstanceToString(ele);
+            bool* SublevelState = CurrentLevelWorldDataSave->ListOfSublevels.Find(SublevelName);
+            /*FString LevelPackageName = ele->GetWorldAssetPackageName();
+            TSoftObjectPtr<UWorld> LevelToLoad = TSoftObjectPtr<UWorld>(FStringAssetReference(LevelPackageName));*/
+
+            int32 state = static_cast<int32>(*SublevelState);
+          
+            if (state == 1)
+            {
+                FLatentActionInfo LatentInfo;
+                LatentInfo.ExecutionFunction = FName("FinishStreamLevelsFunc");
+                LatentInfo.CallbackTarget = this;
+                LatentInfo.Linkage = 0;
+                LatentInfo.UUID = FMath::Rand();
+                UGameplayStatics::LoadStreamLevelBySoftObjectPtr(GetWorld(), ele->GetLoadedLevel(), true, false, LatentInfo);
+
+            }
+            else
+            {
+                FLatentActionInfo LatentInfo;
+                LatentInfo.UUID = FMath::Rand();
+                LatentInfo.ExecutionFunction = FName("FinishStreamLevelsFunc");
+                LatentInfo.CallbackTarget = this;
+                LatentInfo.Linkage = 0;
+                UGameplayStatics::UnloadStreamLevelBySoftObjectPtr(GetWorld(), ele->GetLoadedLevel(), LatentInfo, false);
+            }
+        }
+    }
+}
+
+void UMiniBenGameInstance::FinishStreamLevelsFunc()
+{
+    UE_LOG(LogTemp, Warning, TEXT("FINISH"));
+}

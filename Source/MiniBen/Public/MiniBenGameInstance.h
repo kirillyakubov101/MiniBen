@@ -55,6 +55,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Load")
 	void RestoreCurrentWorldAssets();
 
+	UFUNCTION(BlueprintCallable, Category = "Load")
+	void RestoreSublevels();
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
 	FString CurrentLevelName;
@@ -64,5 +67,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
 	bool bHasGameInstanceStarted;
+
+	UFUNCTION()
+	void FinishStreamLevelsFunc();
 	
 };
