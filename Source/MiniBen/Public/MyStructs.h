@@ -17,7 +17,7 @@ public:
 
 	}
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Stats")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Stats", SaveGame)
 	float PlayerHealth;
 };
 
@@ -50,6 +50,10 @@ struct FWorldDataSave
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	bool bHasLevelBeenInitialized;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	TMap<FString,bool> ListOfSublevels;
 

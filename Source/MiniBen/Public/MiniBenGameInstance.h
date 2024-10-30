@@ -14,23 +14,55 @@ class MINIBEN_API UMiniBenGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
+
+	virtual void Init() override;
+
+	UFUNCTION()
+	void OnLevelChanged(UWorld* LoadedWorld);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void GameModeIsReady();
+
+	/// <summary>
+	/// Saving Methods
+	/// </summary>
+
 	UFUNCTION(BlueprintCallable, Category = "Save")
-	void SaveCurrentWorld();
+	void InitCurrentWorld();
 
 	UFUNCTION(BlueprintCallable, Category = "Save")
 	void SaveSublevels();
 
 	UFUNCTION(BlueprintCallable, Category = "Save")
-	void SavePlayer();
+	void SavePlayer(const FCharacterStats& PlayerStats);
 
 	UFUNCTION(BlueprintCallable, Category = "Save")
 	void SaveCurrentWorldAssets();
 
+	UFUNCTION(BlueprintCallable, Category = "Save")
+	void AddNewWorldAssetToSaveData(const FSaveableWorldItem& newItem);
+
+	/// <summary>
+	/// Loading Methods
+	/// </summary>
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Load")
+	void BeginLoadLevelProcess();
+
+	UFUNCTION(BlueprintCallable, Category = "Load")
+	void RestorePlayer();
+
+	UFUNCTION(BlueprintCallable, Category = "Load")
+	void RestoreCurrentWorldAssets();
+
 protected:
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
 	FString CurrentLevelName;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Save")
 	FMainSaveData MainSaveData;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
+	bool bHasGameInstanceStarted;
 	
 };

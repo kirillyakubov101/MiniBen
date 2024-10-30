@@ -8,7 +8,7 @@ public class MiniBen : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "LevelStreamingUtils" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "LevelStreamingUtils","PlayerActions" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

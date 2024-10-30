@@ -5,18 +5,35 @@
 #include "Kismet/GameplayStatics.h"
 #include <LevelStreamingUtils/Public/CustomWorldSubsystem.h>
 #include <LevelStreamingUtils/Public/LevelStreamingFunctionsUtils.h>
+#include "PlayerActions/Public/Saveable.h"
 
-void UMiniBenGameInstance::SaveCurrentWorld()
+void UMiniBenGameInstance::Init()
 {
-	CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
+    Super::Init();
+
+    FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UMiniBenGameInstance::OnLevelChanged); //bind to level changed delegate
+    CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
+}
+
+void UMiniBenGameInstance::OnLevelChanged(UWorld* LoadedWorld)
+{
+    CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
+    InitCurrentWorld();
+    BeginLoadLevelProcess();
+}
+
+//First Empty Init entry to the save data file
+void UMiniBenGameInstance::InitCurrentWorld()
+{
+    if (MainSaveData.AllLevels.Contains(CurrentLevelName)) { return; }
 
 	MainSaveData.AllLevels.Add(CurrentLevelName, FWorldDataSave());
+
 }
 
 void UMiniBenGameInstance::SaveSublevels()
 {
 	UCustomWorldSubsystem* CustomWorldSubsystem = GetWorld()->GetSubsystem<UCustomWorldSubsystem>();
-    CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
 
     if (CustomWorldSubsystem)
     {
@@ -24,6 +41,8 @@ void UMiniBenGameInstance::SaveSublevels()
 
         if (CurrentLevelWorldDataSave)
         {
+            CurrentLevelWorldDataSave->bHasLevelBeenInitialized = true;
+
             auto AllSublevels = CustomWorldSubsystem->GetAllSubLevels(GetWorld());
             FString SubLevelName;
 
@@ -40,10 +59,47 @@ void UMiniBenGameInstance::SaveSublevels()
     }
 }
 
-void UMiniBenGameInstance::SavePlayer()
+void UMiniBenGameInstance::SavePlayer(const FCharacterStats& PlayerStats)
 {
+    MainSaveData.PlayerStats = PlayerStats;
 }
 
 void UMiniBenGameInstance::SaveCurrentWorldAssets()
+{
+    TArray<AActor*> SaveableActors;
+    UGameplayStatics::GetAllActorsWithInterface(GetWorld(), USaveable::StaticClass(), SaveableActors);
+
+    if (SaveableActors.IsEmpty())
+    {
+        UE_LOG(LogTemp, Warning, TEXT("NOT FOUND"));
+    }
+
+    for (AActor* ele : SaveableActors)
+    {
+        ISaveable::Execute_SaveAndRecordSelf(ele);
+    }
+}
+
+void UMiniBenGameInstance::AddNewWorldAssetToSaveData(const FSaveableWorldItem& newItem)
+{
+    auto CurrentLevelWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
+    if(CurrentLevelWorldDataSave == nullptr){ UE_LOG(LogTemp, Warning, TEXT("CurrentLevelWorldDataSave NOT FOUND")); }
+
+    auto foundItem = CurrentLevelWorldDataSave->ListOfLevelAssets.Find(newItem);
+    if (foundItem == INDEX_NONE)
+    {
+        CurrentLevelWorldDataSave->ListOfLevelAssets.Add(newItem);
+    }
+    else
+    {
+        CurrentLevelWorldDataSave->ListOfLevelAssets[foundItem] = newItem;
+    }
+}
+
+void UMiniBenGameInstance::RestorePlayer()
+{
+}
+
+void UMiniBenGameInstance::RestoreCurrentWorldAssets()
 {
 }
