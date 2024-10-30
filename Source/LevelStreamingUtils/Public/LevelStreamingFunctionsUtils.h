@@ -14,6 +14,7 @@ class LEVELSTREAMINGUTILS_API ULevelStreamingFunctionsUtils : public UBlueprintF
 {
 	GENERATED_BODY()
 
+public:
 	UFUNCTION(BlueprintPure)
 	static FString ConvertLevelStreamingInstanceToString(ULevelStreaming* StreamingLevel);
 	

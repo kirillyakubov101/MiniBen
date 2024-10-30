@@ -12,5 +12,6 @@ public class MiniBenEditorTarget : TargetRules
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_4;
 		ExtraModuleNames.Add("MiniBen");
         ExtraModuleNames.Add("PlayerActions");
+        ExtraModuleNames.Add("LevelStreamingUtils");
     }
 }

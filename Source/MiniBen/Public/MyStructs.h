@@ -42,6 +42,39 @@ public:
 	{
 		return other.Guid == this->Guid;
 	}
+};
 
+USTRUCT(BlueprintType)
+struct FWorldDataSave
+{
+	GENERATED_BODY()
 
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	TMap<FString,bool> ListOfSublevels;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	FVector PlayerPosition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	TArray<FSaveableWorldItem> ListOfLevelAssets;
+};
+
+USTRUCT(BlueprintType)
+struct FMainSaveData
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	FCharacterStats PlayerStats;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	TMap<FName, int32> PlayerInventory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	TMap<FString, FWorldDataSave> AllLevels;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	bool bHasSaved;
 };
