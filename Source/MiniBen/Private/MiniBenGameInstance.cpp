@@ -14,10 +14,16 @@ void UMiniBenGameInstance::Init()
     Super::Init();
 
     FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UMiniBenGameInstance::OnLevelChanged); //bind to level changed delegate
+    FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &UMiniBenGameInstance::RecordCurrentProgress);   //bind to level ABOUT to change delegate
     CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
 }
 
-void UMiniBenGameInstance::OnLevelChanged(UWorld* LoadedWorld)
+/// <summary>
+/// When leve changes, we record the new level name, we try to init a new world entry if it does not exist
+/// We start the restore process from the loaded save file
+/// </summary>
+/// <param name="LoadedWorld"></param>
+void UMiniBenGameInstance::OnLevelChanged_Implementation(UWorld* LoadedWorld)
 {
     CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
     InitCurrentWorld();
@@ -120,6 +126,11 @@ void UMiniBenGameInstance::AddNewWorldAssetToSaveData(const FSaveableWorldItem& 
    
 }
 
+void UMiniBenGameInstance::SavePlayerInventory(const TMap<FName, int32>& inventory)
+{
+    MainSaveData.PlayerInventory = inventory;
+}
+
 void UMiniBenGameInstance::RestorePlayer(FCharacterStats& PlayerStats, FVector& NewPos)
 {
     FWorldDataSave* CurrentLevelWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
@@ -169,6 +180,11 @@ void UMiniBenGameInstance::RestoreSublevels()
         // Start processing the queue
         ProcessNextSublevel();
     }
+}
+
+void UMiniBenGameInstance::RestorePlayerInventory(TMap<FName, int32>& Outinventory)
+{
+    Outinventory = MainSaveData.PlayerInventory;
 }
 
 void UMiniBenGameInstance::ProcessNextSublevel()

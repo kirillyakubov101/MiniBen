@@ -20,7 +20,7 @@ public:
 
 	virtual void Init() override;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "Save")
 	void OnLevelChanged(UWorld* LoadedWorld);
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
@@ -29,6 +29,13 @@ public:
 	/// <summary>
 	/// Saving Methods
 	/// </summary>
+	
+	//Very important, it records all of the things we can save, it does NOT save it, just records it to the FMainSaveData struct of the game instance
+	//It records on TWO occasions:
+	//1. Load differnt level (we want to move to a new level with all of our things (don't save yet)
+	//2. We click save, so it records all and then saves it
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Save")
+	void RecordCurrentProgress(const FString& temp);
 
 	UFUNCTION(BlueprintCallable, Category = "Save")
 	void InitCurrentWorld();
@@ -45,6 +52,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Save")
 	void AddNewWorldAssetToSaveData(const FSaveableWorldItem& newItem);
 
+	UFUNCTION(BlueprintCallable, Category = "Save")
+	void SavePlayerInventory(const TMap<FName, int32>& inventory);
+
 	/// <summary>
 	/// Loading Methods
 	/// </summary>
@@ -60,6 +70,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Load")
 	void RestoreSublevels();
+
+	UFUNCTION(BlueprintCallable, Category = "Load")
+	void RestorePlayerInventory(TMap<FName, int32>& Outinventory);
 
 	void ProcessNextSublevel();
 
