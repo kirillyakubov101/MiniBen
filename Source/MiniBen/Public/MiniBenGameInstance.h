@@ -8,6 +8,9 @@
 #include "MiniBenGameInstance.generated.h"
 
 
+
+
+
 UCLASS()
 class MINIBEN_API UMiniBenGameInstance : public UGameInstance
 {
@@ -50,13 +53,15 @@ public:
 	void BeginLoadLevelProcess();
 
 	UFUNCTION(BlueprintCallable, Category = "Load")
-	void RestorePlayer();
+	void RestorePlayer(FCharacterStats& PlayerStats,FVector& NewPos);
 
 	UFUNCTION(BlueprintCallable, Category = "Load")
 	void RestoreCurrentWorldAssets();
 
 	UFUNCTION(BlueprintCallable, Category = "Load")
 	void RestoreSublevels();
+
+	void ProcessNextSublevel();
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
@@ -68,6 +73,18 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
 	bool bHasGameInstanceStarted;
 
+private:
+	// Struct to store information about each sublevel in the queue
+	struct FQueuedSublevel
+	{
+		ULevelStreaming* Level;
+		bool bShouldBeLoaded;
+	};
+
+private:
+	TQueue<FQueuedSublevel> SublevelQueue;
+
+private:
 	UFUNCTION()
 	void FinishStreamLevelsFunc();
 	

@@ -51,6 +51,11 @@ struct FWorldDataSave
 
 public:
 
+	FWorldDataSave()
+		:bHasLevelBeenInitialized(false)
+	{
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	bool bHasLevelBeenInitialized;
 
