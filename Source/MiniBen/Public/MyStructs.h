@@ -12,13 +12,19 @@ public:
 public:
 
 	FCharacterStats()
-		:PlayerHealth(100.f)
+		:PlayerHealth(100.f), PlayerExp(0), PlayerLevel(1)
 	{
 
 	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Stats", SaveGame)
 	float PlayerHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Stats", SaveGame)
+	int32 PlayerLevel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Stats", SaveGame)
+	int32 PlayerExp;
 };
 
 USTRUCT(BlueprintType)
@@ -90,4 +96,52 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Saveable", SaveGame)
 	FName LastSavedLevel;
+};
+
+USTRUCT(BlueprintType)
+struct FQuestRequirements
+{
+	GENERATED_BODY()
+	//for QT_Kill
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 AmountToKill;
+};
+
+UENUM(BlueprintType)
+enum class EQuestType : uint8
+{
+	QT_Kill      UMETA(DisplayName = "Kill"),
+	QT_Gather    UMETA(DisplayName = "Gather"),
+	QT_GoTo      UMETA(DisplayName = "GoTo"),
+	QT_TalkTo    UMETA(DisplayName = "TalkTo"),
+	QT_Interact  UMETA(DisplayName = "InteractWith")
+};
+
+USTRUCT(BlueprintType)
+struct FQuest : public FTableRowBase
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName QuestID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString QuestTitle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString QuestDescription;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EQuestType QuestType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsCompleted;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 ExpReward;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FQuestRequirements QuestRequirements;
 };
