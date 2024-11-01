@@ -74,6 +74,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Load")
 	void RestorePlayerInventory(TMap<FName, int32>& Outinventory);
 
+	UFUNCTION(BlueprintPure, Category = "Load")
+	TArray<FSaveableWorldItem> GetListOfWorldItems();
+
 	void ProcessNextSublevel();
 
 protected:

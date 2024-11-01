@@ -43,6 +43,8 @@ void UMiniBenGameInstance::SaveSublevels()
 {
 	UCustomWorldSubsystem* CustomWorldSubsystem = GetWorld()->GetSubsystem<UCustomWorldSubsystem>();
 
+    MainSaveData.LastSavedLevel = *CurrentLevelName; // save the level 
+
     if (CustomWorldSubsystem)
     {
        auto CurrentLevelWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
@@ -141,7 +143,13 @@ void UMiniBenGameInstance::RestorePlayer(FCharacterStats& PlayerStats, FVector& 
 
 void UMiniBenGameInstance::RestoreCurrentWorldAssets()
 {
+    TArray<AActor*> SaveableActors;
+    UGameplayStatics::GetAllActorsWithInterface(GetWorld(), USaveable::StaticClass(), SaveableActors);
 
+    for (AActor* ele : SaveableActors)
+    {
+        ISaveable::Execute_LoadAndRestoreSelf(ele);
+    }
 }
 
 void UMiniBenGameInstance::RestoreSublevels()
@@ -185,6 +193,17 @@ void UMiniBenGameInstance::RestoreSublevels()
 void UMiniBenGameInstance::RestorePlayerInventory(TMap<FName, int32>& Outinventory)
 {
     Outinventory = MainSaveData.PlayerInventory;
+}
+
+TArray<FSaveableWorldItem> UMiniBenGameInstance::GetListOfWorldItems()
+{
+    if (!MainSaveData.AllLevels.Contains(this->CurrentLevelName))
+    {
+        UE_LOG(LogTemp, Warning, TEXT("GetListOfWorldItems is empty"));
+        return TArray<FSaveableWorldItem>();
+    }
+
+    return MainSaveData.AllLevels.Find(this->CurrentLevelName)->ListOfLevelAssets;
 }
 
 void UMiniBenGameInstance::ProcessNextSublevel()

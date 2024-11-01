@@ -34,8 +34,9 @@ public:
 	FGuid Guid;
 
 	FSaveableWorldItem()
-		:Guid(FGuid::NewGuid()), ShouldBeRemoved(false)
+		:ShouldBeRemoved(false)
 	{
+		Guid = FGuid::NewGuid();
 	}
 
 	bool operator==(const FSaveableWorldItem& other) const
@@ -86,4 +87,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	bool bHasSaved;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Saveable", SaveGame)
+	FName LastSavedLevel;
 };
