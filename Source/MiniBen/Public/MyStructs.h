@@ -1,6 +1,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameEntity_Enemy.generated.h"
+#include "Items/Item.h"
 #include "MyStructs.generated.h"
 
 USTRUCT(BlueprintType)
@@ -98,15 +100,6 @@ public:
 	FName LastSavedLevel;
 };
 
-USTRUCT(BlueprintType)
-struct FQuestRequirements
-{
-	GENERATED_BODY()
-	//for QT_Kill
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 AmountToKill;
-};
-
 UENUM(BlueprintType)
 enum class EQuestType : uint8
 {
@@ -118,30 +111,45 @@ enum class EQuestType : uint8
 };
 
 USTRUCT(BlueprintType)
+struct FQuestRequirment
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	EQuestType QuestType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TMap<TSubclassOf<AGameEntity_Enemy>, int32> TargetsToKill;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TMap<TSubclassOf<AItem>, int32> TargetsToGather;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 ExpReward;
+};
+
+
+
+USTRUCT(BlueprintType)
 struct FQuest : public FTableRowBase
 {
 	GENERATED_BODY()
 
 public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FName QuestID;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString QuestTitle;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FText QuestTitle;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FString QuestDescription;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FText QuestDescription;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EQuestType QuestType;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FQuestRequirment QuestRequirment;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsCompleted;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 ExpReward;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FQuestRequirements QuestRequirements;
 };
