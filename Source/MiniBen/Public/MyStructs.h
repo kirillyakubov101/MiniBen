@@ -75,30 +75,9 @@ public:
 	FVector PlayerPosition;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	TArray<FSaveableWorldItem> ListOfLevelAssets;
+	TArray<FSaveableWorldItem> ListOfLevelAssets;		
 };
 
-USTRUCT(BlueprintType)
-struct FMainSaveData
-{
-	GENERATED_BODY()
-public:
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	FCharacterStats PlayerStats;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	TMap<FName, int32> PlayerInventory;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	TMap<FString, FWorldDataSave> AllLevels;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	bool bHasSaved;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Saveable", SaveGame)
-	FName LastSavedLevel;
-};
 
 UENUM(BlueprintType)
 enum class EQuestType : uint8
@@ -152,4 +131,35 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsCompleted;
+};
+
+USTRUCT(BlueprintType)
+struct FMainSaveData
+{
+	GENERATED_BODY()
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	FCharacterStats PlayerStats;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	TMap<FName, int32> PlayerInventory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	TMap<FString, FWorldDataSave> AllLevels;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	bool bHasSaved;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Saveable", SaveGame)
+	FName LastSavedLevel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	FQuest CurrentQuest;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	TMap<TSubclassOf<AItem>, int32> CurrentQuestTargetsGathered;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	TMap<TSubclassOf<AGameEntity_Enemy>, int32> CurrentQuestTargetsKilled;
 };
