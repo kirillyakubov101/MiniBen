@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameEntity_Enemy.generated.h"
 #include "Items/Item.h"
+#include "Quests/QuestInitializer.h"
 #include "MyStructs.generated.h"
 
 USTRUCT(BlueprintType)
@@ -129,8 +130,37 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FQuestRequirment QuestRequirment;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bIsCompleted;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<UQuestInitializer> QuestInitializer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TArray<FDataTableRowHandle> SubQuests;
+};
+
+USTRUCT(BlueprintType)
+struct FActiveQuestInfo
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	bool bIsDoingMainQuest;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	int32 CurrentSubquestIndex;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	FQuest CurrentQuest;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	FQuest CurrentSubquest;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	TMap<TSubclassOf<AItem>, int32> CurrentQuestTargetsToGather;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	TMap<TSubclassOf<AGameEntity_Enemy>, int32> CurrentQuestTargetsToKill;
 };
 
 USTRUCT(BlueprintType)
@@ -155,11 +185,5 @@ public:
 	FName LastSavedLevel;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	FQuest CurrentQuest;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	TMap<TSubclassOf<AItem>, int32> CurrentQuestTargetsGathered;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	TMap<TSubclassOf<AGameEntity_Enemy>, int32> CurrentQuestTargetsKilled;
+	FActiveQuestInfo ActiveQuestInfo;
 };

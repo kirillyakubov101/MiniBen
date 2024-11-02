@@ -18,6 +18,21 @@ void UMiniBenGameInstance::Init()
     CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
 }
 
+void UMiniBenGameInstance::SaveLoadComponentIsReady()
+{
+    
+    // Lock the critical section to ensure thread safety
+    FScopeLock Lock(&LoadedComponentsMutex);
+
+    AmountOfSaveLoadSubs++;
+
+    //no need to load anything if you never saved anything!
+    if (AmountOfSaveLoadSubs == MaxAmountOfSaveLoadSubs && MainSaveData.bHasSaved)
+    {
+        BeginLoadLevelProcess();
+    }
+}
+
 /// <summary>
 /// When leve changes, we record the new level name, we try to init a new world entry if it does not exist
 /// We start the restore process from the loaded save file
