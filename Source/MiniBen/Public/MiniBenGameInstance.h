@@ -25,9 +25,6 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void GameModeIsReady();
-
-	UFUNCTION(BlueprintCallable, Category = "Save")
-	void SaveLoadComponentIsReady();
 	
 	/// <summary>
 	/// Saving Methods
@@ -82,13 +79,6 @@ public:
 
 	void ProcessNextSublevel();
 
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Save")
-	int32 MaxAmountOfSaveLoadSubs;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Save")
-	int32 AmountOfSaveLoadSubs;
-
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
 	FString CurrentLevelName;
@@ -115,5 +105,4 @@ private:
 private:
 	UFUNCTION()
 	void FinishStreamLevelsFunc();
-	
 };

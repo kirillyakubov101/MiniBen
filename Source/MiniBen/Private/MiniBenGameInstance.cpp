@@ -18,20 +18,6 @@ void UMiniBenGameInstance::Init()
     CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
 }
 
-void UMiniBenGameInstance::SaveLoadComponentIsReady()
-{
-    
-    // Lock the critical section to ensure thread safety
-    FScopeLock Lock(&LoadedComponentsMutex);
-
-    AmountOfSaveLoadSubs++;
-
-    //no need to load anything if you never saved anything!
-    if (AmountOfSaveLoadSubs == MaxAmountOfSaveLoadSubs && MainSaveData.bHasSaved)
-    {
-        BeginLoadLevelProcess();
-    }
-}
 
 /// <summary>
 /// When leve changes, we record the new level name, we try to init a new world entry if it does not exist
@@ -76,10 +62,6 @@ void UMiniBenGameInstance::SaveSublevels()
                 SubLevelName = ULevelStreamingFunctionsUtils::ConvertLevelStreamingInstanceToString(ele);
                 CurrentLevelWorldDataSave->ListOfSublevels.Add(SubLevelName, ele->IsLevelVisible());
             }
-        }
-        else
-        {
-            UE_LOG(LogTemp, Warning, TEXT("NOT FOUND"));
         }
     }
 }
@@ -169,13 +151,6 @@ void UMiniBenGameInstance::RestoreCurrentWorldAssets()
 
 void UMiniBenGameInstance::RestoreSublevels()
 {
-    // Check if there is saved data to restore
-    if (!MainSaveData.bHasSaved)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("!MainSaveData.bHasSaved"));
-        return;
-    }
-
     // Get required references
     UCustomWorldSubsystem* CustomWorldSubsystem = GetWorld()->GetSubsystem<UCustomWorldSubsystem>();
     FWorldDataSave* CurrentLevelWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
