@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameEntity_Enemy.generated.h"
 #include "Items/Item.h"
+#include "Quests/QuestStarter.h"
 #include "MyStructs.generated.h"
 
 USTRUCT(BlueprintType)
@@ -42,9 +43,8 @@ public:
 	FGuid Guid;
 
 	FSaveableWorldItem()
-		:ShouldBeRemoved(false)
+		:ShouldBeRemoved(false), Guid(FGuid())
 	{
-		Guid = FGuid::NewGuid();
 	}
 
 	bool operator==(const FSaveableWorldItem& other) const
@@ -60,8 +60,7 @@ struct FWorldDataSave
 
 public:
 
-	FWorldDataSave()
-		:bHasLevelBeenInitialized(false)
+	FWorldDataSave() :bHasLevelBeenInitialized(false), PlayerPosition(FVector(0, 0, 0))
 	{
 	}
 
@@ -95,6 +94,12 @@ struct FQuestRequirment
 	GENERATED_BODY()
 
 public:
+
+	FQuestRequirment()
+		:ExpReward(0), QuestType(EQuestType::QT_GoTo)
+	{
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	EQuestType QuestType;
 
@@ -117,6 +122,11 @@ struct FQuest : public FTableRowBase
 
 public:
 
+	FQuest()
+		:QuestID(FName()), QuestTitle(FText()), QuestDescription(FText()), QuestRequirment(FQuestRequirment())
+	{
+	}
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FName QuestID;
 
@@ -131,6 +141,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<FDataTableRowHandle> SubQuests;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSubclassOf<AQuestStarter> QuestStarterClass;
 };
 
 USTRUCT(BlueprintType)
@@ -139,6 +152,9 @@ struct FActiveQuestInfo
 	GENERATED_BODY()
 
 public:
+	FActiveQuestInfo():bIsDoingMainQuest(false), CurrentSubquestIndex(0)
+	{
+	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
 	bool bIsDoingMainQuest;
@@ -164,6 +180,10 @@ struct FMainSaveData
 {
 	GENERATED_BODY()
 public:
+
+	FMainSaveData():bHasSaved(false)
+	{
+	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	FCharacterStats PlayerStats;
