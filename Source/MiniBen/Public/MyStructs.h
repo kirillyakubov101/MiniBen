@@ -3,7 +3,6 @@
 #include "CoreMinimal.h"
 #include "GameEntity_Enemy.generated.h"
 #include "Items/Item.h"
-#include "Quests/QuestInitializer.h"
 #include "MyStructs.generated.h"
 
 USTRUCT(BlueprintType)
@@ -129,9 +128,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FQuestRequirment QuestRequirment;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSubclassOf<UQuestInitializer> QuestInitializer;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TArray<FDataTableRowHandle> SubQuests;
