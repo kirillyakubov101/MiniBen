@@ -14,7 +14,3 @@ void AQuestStarter::BeginPlay()
 	Super::BeginPlay();
 
 }
-
-void AQuestStarter::InitQuestRequiredElements()
-{
-}

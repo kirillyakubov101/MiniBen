@@ -18,6 +18,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	UFUNCTION(BlueprintCallable)
-	virtual void InitQuestRequiredElements();
+	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
+	void InitQuestRequiredElements();
 };
