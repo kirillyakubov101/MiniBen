@@ -25,7 +25,15 @@
 			"AdditionalDependencies": [
 				"Engine"
 			]
-		}
+		},
+		 {
+            		"Name": "Json",
+           		 "Type": "Runtime"
+        	},
+        	{
+            		"Name": "JsonUtilities",
+            		"Type": "Runtime"
+        	},
 	],
 	"Plugins": [
 		{

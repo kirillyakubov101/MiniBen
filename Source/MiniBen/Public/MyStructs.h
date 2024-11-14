@@ -21,7 +21,7 @@ public:
 	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Stats", SaveGame)
-	float PlayerHealth;
+	float PlayerHealth; 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Stats", SaveGame)
 	int32 PlayerLevel;

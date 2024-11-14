@@ -16,4 +16,9 @@ class MINIBEN_API AGameEntity_NPC : public AGameEntity, public IInteractable
 	GENERATED_BODY()
 
 public:
+
+	/*const FGuid& GetWorldGuid() const;*/
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
+	FGuid WorldGuid;
+
 };

@@ -5,6 +5,10 @@
 #include "MyStructs.h"
 #include "Saving/SaveGameContainer.h"
 #include "Kismet/GameplayStatics.h"
+//JSON Start Zone
+#include "Serialization/JsonSerializer.h"
+#include "Serialization/JsonWriter.h"
+//JSON End Zone
 
 
 void USavingSystemSubSystem::Initialize(FSubsystemCollectionBase& Collection)
@@ -23,6 +27,7 @@ void USavingSystemSubSystem::SaveGame(const FMainSaveData& MainSaveData)
 		UE_LOG(LogTemp, Warning, TEXT("SaveGameContainer is empty, could not save!!!!"));
 		return;
 	}
+
 	UGameplayStatics::SaveGameToSlot(SaveGameContainer, SlotName, 0);
 }
 
