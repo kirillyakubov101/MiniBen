@@ -21,6 +21,7 @@ public:
 protected:
 	TSharedPtr<FJsonObject> SerializeCharacterStats(const struct FCharacterStats& Stats);
 	TSharedPtr<FJsonObject> SerializeSaveableWorldItem(const struct FSaveableWorldItem& Item);
+	TSharedPtr<FJsonObject> SerializeSaveableNpcs(const struct FSaveableWorldNpcs& Npc);
 	TSharedPtr<FJsonObject> SerializeWorldDataSave(const struct FWorldDataSave& WorldData);
 	TSharedPtr<FJsonObject> SerializePlayerInventory(const TMap<FName, int32>& WorldData);
 	

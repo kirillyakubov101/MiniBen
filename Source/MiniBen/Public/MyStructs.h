@@ -6,6 +6,28 @@
 #include "Quests/QuestStarter.h"
 #include "MyStructs.generated.h"
 
+//ENUMS
+UENUM(BlueprintType)
+enum class EQuestType : uint8
+{
+	QT_Kill      UMETA(DisplayName = "Kill"),
+	QT_Gather    UMETA(DisplayName = "Gather"),
+	QT_GoTo      UMETA(DisplayName = "GoTo"),
+	QT_TalkTo    UMETA(DisplayName = "TalkTo"),
+	QT_Interact  UMETA(DisplayName = "InteractWith")
+};
+
+UENUM(BlueprintType)
+enum class EQuestGiverState : uint8
+{
+	QGS_None                 UMETA(DisplayName = "None"),
+	QGS_GotQuest		     UMETA(DisplayName = "GotQuest"),
+	QGS_QuestInProgress      UMETA(DisplayName = "QuestInProgress")
+};
+
+
+//STRUCTS
+
 USTRUCT(BlueprintType)
 struct FCharacterStats
 {
@@ -54,6 +76,36 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FSaveableWorldNpcs
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	FName NPCName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	bool ShouldBeRemoved;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	FGuid Guid;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	EQuestGiverState QuestGiverState;
+
+	FSaveableWorldNpcs()
+		:ShouldBeRemoved(false), Guid(FGuid()), QuestGiverState(EQuestGiverState::QGS_None)
+	{
+	}
+
+	bool operator==(const FSaveableWorldNpcs& other) const
+	{
+		return other.Guid == this->Guid;
+	}
+};
+
+USTRUCT(BlueprintType)
 struct FWorldDataSave
 {
 	GENERATED_BODY()
@@ -74,19 +126,12 @@ public:
 	FVector PlayerPosition;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	TArray<FSaveableWorldItem> ListOfLevelAssets;		
+	TArray<FSaveableWorldItem> ListOfLevelAssets;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	TArray<FSaveableWorldNpcs> ListOfLevelSaveableNpcs;
 };
 
-
-UENUM(BlueprintType)
-enum class EQuestType : uint8
-{
-	QT_Kill      UMETA(DisplayName = "Kill"),
-	QT_Gather    UMETA(DisplayName = "Gather"),
-	QT_GoTo      UMETA(DisplayName = "GoTo"),
-	QT_TalkTo    UMETA(DisplayName = "TalkTo"),
-	QT_Interact  UMETA(DisplayName = "InteractWith")
-};
 
 USTRUCT(BlueprintType)
 struct FQuestRequirment

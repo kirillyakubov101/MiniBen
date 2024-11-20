@@ -53,6 +53,17 @@ TSharedPtr<FJsonObject> UJsonSerializerGISubsystem::SerializeSaveableWorldItem(c
 	return JsonObject;
 }
 
+TSharedPtr<FJsonObject> UJsonSerializerGISubsystem::SerializeSaveableNpcs(const FSaveableWorldNpcs& Npc)
+{
+	TSharedPtr<FJsonObject> JsonObject = MakeShared<FJsonObject>();
+	JsonObject->SetStringField(TEXT("NPC_Name"), Npc.NPCName.ToString());
+	JsonObject->SetStringField(TEXT("Guid"), Npc.Guid.ToString());
+	JsonObject->SetNumberField(TEXT("QuestGiverState"), static_cast<int32>(Npc.QuestGiverState));
+	JsonObject->SetBoolField(TEXT("ShouldBeRemoved"), Npc.ShouldBeRemoved);
+
+	return JsonObject;
+}
+
 TSharedPtr<FJsonObject> UJsonSerializerGISubsystem::SerializeWorldDataSave(const FWorldDataSave& WorldData)
 {
 	TSharedPtr<FJsonObject> JsonObject = MakeShared<FJsonObject>();
@@ -83,7 +94,17 @@ TSharedPtr<FJsonObject> UJsonSerializerGISubsystem::SerializeWorldDataSave(const
 	}
 
 	JsonObject->SetArrayField(TEXT("ListOfLevelAssets"), LevelAssetsArray);
+	
 
+	// Serialize List of NPCs 
+	TArray<TSharedPtr<FJsonValue>> LevelNpcsArray;
+	for (const FSaveableWorldNpcs& Item : WorldData.ListOfLevelSaveableNpcs)
+	{
+		LevelNpcsArray.Add(MakeShared<FJsonValueObject>(SerializeSaveableNpcs(Item)));
+	}
+
+	JsonObject->SetArrayField(TEXT("NPCS"), LevelNpcsArray);
+	
 
 	return JsonObject;
 }

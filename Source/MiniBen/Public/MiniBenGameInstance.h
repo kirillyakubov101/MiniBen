@@ -47,10 +47,13 @@ public:
 	void SavePlayer(const FCharacterStats& PlayerStats);
 
 	UFUNCTION(BlueprintCallable, Category = "Save")
-	void SaveCurrentWorldAssets();
+	void SaveCurrentWorldAssets(); //this is actually calling all the actors that implement the ISaveable interface in the level
 
 	UFUNCTION(BlueprintCallable, Category = "Save")
-	void AddNewWorldAssetToSaveData(const FSaveableWorldItem& newItem);
+	void AddNewWorldAssetToSaveData(const FSaveableWorldItem& newItem); //adds to the mainsavedata all the static items in the level (potions, collectables and more)
+
+	UFUNCTION(BlueprintCallable, Category = "Save")
+	void AddNPCToSaveData(const FSaveableWorldNpcs& newNpc); //adds to the mainsavedata all the Npcs that give quests and/or can be interacted with and change their state
 
 	UFUNCTION(BlueprintCallable, Category = "Save")
 	void SavePlayerInventory(const TMap<FName, int32>& inventory);
@@ -85,9 +88,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Save")
 	FMainSaveData MainSaveData;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
-	bool bHasGameInstanceStarted;
 
 private:
 	// Struct to store information about each sublevel in the queue

@@ -125,6 +125,24 @@ void UMiniBenGameInstance::AddNewWorldAssetToSaveData(const FSaveableWorldItem& 
    
 }
 
+void UMiniBenGameInstance::AddNPCToSaveData(const FSaveableWorldNpcs& newNpc)
+{
+    auto CurrentLevelWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
+    if (CurrentLevelWorldDataSave)
+    {
+        int32 foundItem = CurrentLevelWorldDataSave->ListOfLevelSaveableNpcs.Find(newNpc);
+
+        if (foundItem == INDEX_NONE)
+        {
+            CurrentLevelWorldDataSave->ListOfLevelSaveableNpcs.Add(newNpc);
+        }
+        else
+        {
+            CurrentLevelWorldDataSave->ListOfLevelSaveableNpcs[foundItem] = newNpc;
+        }
+    }
+}
+
 void UMiniBenGameInstance::SavePlayerInventory(const TMap<FName, int32>& inventory)
 {
     MainSaveData.PlayerInventory = inventory;
