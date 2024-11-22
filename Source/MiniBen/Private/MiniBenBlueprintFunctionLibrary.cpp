@@ -46,15 +46,6 @@ TMap<UCollectableitemsDataAsset*, int32> UMiniBenBlueprintFunctionLibrary::Conve
     return InventoryMap;
 }
 
-int32 UMiniBenBlueprintFunctionLibrary::FindIndexByGuid(const TArray<FSaveableWorldItem>& Items, const FGuid& Guid)
-{
-    for (int32 Index = 0; Index < Items.Num(); ++Index)
-    {
-        if (Items[Index].Guid == Guid)
-        {
-            return Index; // Return the index if found
-        }
-    }
-    return INDEX_NONE; // Return INDEX_NONE if not found
-}
+
+
 

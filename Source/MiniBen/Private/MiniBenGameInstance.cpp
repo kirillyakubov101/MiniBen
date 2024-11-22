@@ -109,20 +109,17 @@ void UMiniBenGameInstance::SaveCurrentWorldAssets()
 void UMiniBenGameInstance::AddNewWorldAssetToSaveData(const FSaveableWorldItem& newItem)
 {
     auto CurrentLevelWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
+
+    //NEW WAY, BETTER WAY
     if (CurrentLevelWorldDataSave)
     {
-        int32 foundItem = CurrentLevelWorldDataSave->ListOfLevelAssets.Find(newItem);
-
-        if (foundItem == INDEX_NONE)
+        bool isFound = CurrentLevelWorldDataSave->MapOfLevelWorldItems.Contains(newItem.Guid);
+        if (!isFound)
         {
-            CurrentLevelWorldDataSave->ListOfLevelAssets.Add(newItem);
-        }
-        else
-        {
-            CurrentLevelWorldDataSave->ListOfLevelAssets[foundItem] = newItem;
+            CurrentLevelWorldDataSave->MapOfLevelWorldItems.Add(newItem.Guid, newItem);
         }
     }
-   
+    
 }
 
 void UMiniBenGameInstance::AddNPCToSaveData(const FSaveableWorldNpcs& newNpc)
@@ -203,15 +200,15 @@ void UMiniBenGameInstance::RestorePlayerInventory(TMap<FName, int32>& Outinvento
     Outinventory = MainSaveData.PlayerInventory;
 }
 
-TArray<FSaveableWorldItem> UMiniBenGameInstance::GetListOfWorldItems()
+const TMap<FGuid, FSaveableWorldItem> UMiniBenGameInstance::GetMapOfWorldItems() const
 {
     if (!MainSaveData.AllLevels.Contains(this->CurrentLevelName))
     {
-        UE_LOG(LogTemp, Warning, TEXT("GetListOfWorldItems is empty"));
-        return TArray<FSaveableWorldItem>();
+        UE_LOG(LogTemp, Warning, TEXT("GetMapOfWorldItems -> MainSaveData.AllLevels.Contains is empty"));
+        return TMap<FGuid, FSaveableWorldItem>();
     }
 
-    return MainSaveData.AllLevels.Find(this->CurrentLevelName)->ListOfLevelAssets;
+    return MainSaveData.AllLevels[CurrentLevelName].MapOfLevelWorldItems;
 }
 
 void UMiniBenGameInstance::ProcessNextSublevel()

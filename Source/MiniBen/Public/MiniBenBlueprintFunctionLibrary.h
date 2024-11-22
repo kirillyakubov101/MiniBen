@@ -21,10 +21,6 @@ public:
 	static TMap<FName, int32> ConvertRealInventoryToSerializable(const TMap<UCollectableitemsDataAsset*, int32>& InventoryData);
 
 	UFUNCTION(BlueprintPure, Category = "Saving | Inventory")
-	static TMap<UCollectableitemsDataAsset*, int32> ConvertSerializableToRealInventory(const TMap<FName, int32>& InventoryData, const TArray<UObject*>& LoadedDataAssets);
-
-    UFUNCTION(BlueprintCallable, Category = "Utils")
-	static int32 FindIndexByGuid(const TArray<FSaveableWorldItem>& Items, const FGuid& Guid);
-   
-	
+	static TMap<UCollectableitemsDataAsset*, int32> ConvertSerializableToRealInventory(const TMap<FName, int32>& InventoryData, const TArray<UObject*>& LoadedDataAssets); 
 };
+

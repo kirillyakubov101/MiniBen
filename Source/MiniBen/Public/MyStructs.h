@@ -125,11 +125,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	FVector PlayerPosition;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	TArray<FSaveableWorldItem> ListOfLevelAssets;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame) //refactor
+	TArray<FSaveableWorldNpcs> ListOfLevelSaveableNpcs;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	TArray<FSaveableWorldNpcs> ListOfLevelSaveableNpcs;
+	TMap<FGuid, FSaveableWorldItem> MapOfLevelWorldItems;
 };
 
 

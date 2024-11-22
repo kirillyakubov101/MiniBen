@@ -88,9 +88,9 @@ TSharedPtr<FJsonObject> UJsonSerializerGISubsystem::SerializeWorldDataSave(const
 
 	// Serialize ListOfLevelAssets (TArray)
 	TArray<TSharedPtr<FJsonValue>> LevelAssetsArray;
-	for (const FSaveableWorldItem& Item : WorldData.ListOfLevelAssets)
+	for (auto pair : WorldData.MapOfLevelWorldItems)
 	{
-		LevelAssetsArray.Add(MakeShared<FJsonValueObject>(SerializeSaveableWorldItem(Item)));
+		LevelAssetsArray.Add(MakeShared<FJsonValueObject>(SerializeSaveableWorldItem(pair.Value)));
 	}
 
 	JsonObject->SetArrayField(TEXT("ListOfLevelAssets"), LevelAssetsArray);
