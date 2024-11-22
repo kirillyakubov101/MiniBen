@@ -81,6 +81,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Load")
 	const TMap<FGuid, FSaveableWorldItem> GetMapOfWorldItems() const;
 
+	UFUNCTION(BlueprintPure, Category = "Load")
+	const TMap<FGuid, FSaveableWorldNpcs> GetMapOfWorldNpcs() const;
+
 	void ProcessNextSublevel();
 
 protected:

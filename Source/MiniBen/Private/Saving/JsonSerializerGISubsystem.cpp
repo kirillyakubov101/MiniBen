@@ -88,7 +88,7 @@ TSharedPtr<FJsonObject> UJsonSerializerGISubsystem::SerializeWorldDataSave(const
 
 	// Serialize ListOfLevelAssets (TArray)
 	TArray<TSharedPtr<FJsonValue>> LevelAssetsArray;
-	for (auto pair : WorldData.MapOfLevelWorldItems)
+	for (const auto& pair : WorldData.MapOfLevelWorldItems)
 	{
 		LevelAssetsArray.Add(MakeShared<FJsonValueObject>(SerializeSaveableWorldItem(pair.Value)));
 	}
@@ -98,9 +98,9 @@ TSharedPtr<FJsonObject> UJsonSerializerGISubsystem::SerializeWorldDataSave(const
 
 	// Serialize List of NPCs 
 	TArray<TSharedPtr<FJsonValue>> LevelNpcsArray;
-	for (const FSaveableWorldNpcs& Item : WorldData.ListOfLevelSaveableNpcs)
+	for (const auto& pair : WorldData.MapOfLevelSaveableNpcs)
 	{
-		LevelNpcsArray.Add(MakeShared<FJsonValueObject>(SerializeSaveableNpcs(Item)));
+		LevelNpcsArray.Add(MakeShared<FJsonValueObject>(SerializeSaveableNpcs(pair.Value)));
 	}
 
 	JsonObject->SetArrayField(TEXT("NPCS"), LevelNpcsArray);

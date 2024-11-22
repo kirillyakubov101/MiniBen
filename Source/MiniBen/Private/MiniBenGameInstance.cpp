@@ -118,6 +118,14 @@ void UMiniBenGameInstance::AddNewWorldAssetToSaveData(const FSaveableWorldItem& 
         {
             CurrentLevelWorldDataSave->MapOfLevelWorldItems.Add(newItem.Guid, newItem);
         }
+        else
+        {
+            CurrentLevelWorldDataSave->MapOfLevelWorldItems[newItem.Guid] = newItem;
+        }
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("AddNewWorldAssetToSaveData CurrentLevelWorldDataSave was not found"));
     }
     
 }
@@ -127,16 +135,19 @@ void UMiniBenGameInstance::AddNPCToSaveData(const FSaveableWorldNpcs& newNpc)
     auto CurrentLevelWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
     if (CurrentLevelWorldDataSave)
     {
-        int32 foundItem = CurrentLevelWorldDataSave->ListOfLevelSaveableNpcs.Find(newNpc);
-
-        if (foundItem == INDEX_NONE)
+        bool isFound = CurrentLevelWorldDataSave->MapOfLevelSaveableNpcs.Contains(newNpc.Guid);
+        if (!isFound)
         {
-            CurrentLevelWorldDataSave->ListOfLevelSaveableNpcs.Add(newNpc);
+            CurrentLevelWorldDataSave->MapOfLevelSaveableNpcs.Add(newNpc.Guid, newNpc);
         }
         else
         {
-            CurrentLevelWorldDataSave->ListOfLevelSaveableNpcs[foundItem] = newNpc;
+            CurrentLevelWorldDataSave->MapOfLevelSaveableNpcs[newNpc.Guid] = newNpc;
         }
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("AddNPCToSaveData CurrentLevelWorldDataSave was not found"));
     }
 }
 
@@ -209,6 +220,17 @@ const TMap<FGuid, FSaveableWorldItem> UMiniBenGameInstance::GetMapOfWorldItems()
     }
 
     return MainSaveData.AllLevels[CurrentLevelName].MapOfLevelWorldItems;
+}
+
+const TMap<FGuid, FSaveableWorldNpcs> UMiniBenGameInstance::GetMapOfWorldNpcs() const
+{
+    if (!MainSaveData.AllLevels.Contains(this->CurrentLevelName))
+    {
+        UE_LOG(LogTemp, Warning, TEXT("GetMapOfWorldNpcs -> MainSaveData.AllLevels.Contains is empty"));
+        return TMap<FGuid, FSaveableWorldNpcs>();
+    }
+
+    return MainSaveData.AllLevels[CurrentLevelName].MapOfLevelSaveableNpcs;
 }
 
 void UMiniBenGameInstance::ProcessNextSublevel()
