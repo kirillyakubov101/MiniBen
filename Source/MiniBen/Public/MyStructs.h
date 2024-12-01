@@ -212,12 +212,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
 	FQuest CurrentSubquest;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
-	TMap<TSubclassOf<AItem>, int32> CurrentQuestTargetsToGather;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
-	TMap<TSubclassOf<AGameEntity_Enemy>, int32> CurrentQuestTargetsToKill;
 };
 
 USTRUCT(BlueprintType)
@@ -244,7 +238,4 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Saveable", SaveGame)
 	FName LastSavedLevel;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	FActiveQuestInfo ActiveQuestInfo;
 };

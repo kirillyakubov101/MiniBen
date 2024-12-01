@@ -5,6 +5,7 @@
 #include "MyStructs.h"
 #include "Saving/SaveGameContainer.h"
 #include "Kismet/GameplayStatics.h"
+#include <MiniBenGameInstance.h>
 
 void USavingSystemSubSystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -43,7 +44,15 @@ void USavingSystemSubSystem::InitSaveSlot()
 
 	else
 	{
-		USaveGame* NewSaveGame = UGameplayStatics::CreateSaveGameObject(USaveGameContainer::StaticClass());
+		UMiniBenGameInstance* MinBenGameInstance = Cast<UMiniBenGameInstance>(GetGameInstance());
+
+		if (MinBenGameInstance == nullptr || MinBenGameInstance->SaveGameContainerClass == nullptr)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("USavingSystemSubSystem: MinBenGameInstance or SaveGameContainerClass is null!"));
+			return;
+		}
+
+		USaveGame* NewSaveGame = UGameplayStatics::CreateSaveGameObject(MinBenGameInstance->SaveGameContainerClass);
 		if (NewSaveGame)
 		{
 			SaveGameContainer = Cast<USaveGameContainer>(NewSaveGame);

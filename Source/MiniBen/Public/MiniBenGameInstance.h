@@ -86,6 +86,10 @@ public:
 
 	void ProcessNextSublevel();
 
+public:
+	UPROPERTY(EditAnywhere,Category = "Save")
+	TSubclassOf<class USaveGameContainer> SaveGameContainerClass;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
 	FString CurrentLevelName;

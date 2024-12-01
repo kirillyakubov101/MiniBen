@@ -29,10 +29,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void InitSaveSlot();
 
-	UFUNCTION(BlueprintCallable)
+	//can be removed?
 	USaveGameContainer* LoadGame();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	USaveGameContainer* GetSaveData();
 	
 };

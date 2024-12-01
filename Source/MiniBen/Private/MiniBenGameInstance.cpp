@@ -31,7 +31,7 @@ void UMiniBenGameInstance::OnLevelChanged_Implementation(UWorld* LoadedWorld)
     BeginLoadLevelProcess();
 }
 
-//First Empty Init entry to the save data file
+//I need to add newly encoutered level to the map of levels, if it is already there, just return
 void UMiniBenGameInstance::InitCurrentWorld()
 {
     if (MainSaveData.AllLevels.Contains(CurrentLevelName)) { return; }
