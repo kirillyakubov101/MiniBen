@@ -74,8 +74,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Load")
 	void RestorePlayerInventory(TMap<FName, int32>& Outinventory);
 
-	UFUNCTION(BlueprintCallable, Category = "Load")
-	void RestoreLoadedSublevelActors(TSoftObjectPtr<UWorld> LevelPtr);
+	/*UFUNCTION(BlueprintCallable, Category = "Load")
+	void RestoreLoadedSublevelActors(TSoftObjectPtr<UWorld> LevelPtr);*/
 
 	//returns a map of all the current world static/collectable items "FSaveableWorldItem" faster than just a list O(n) vs O(1)
 	UFUNCTION(BlueprintPure, Category = "Load")

@@ -200,19 +200,20 @@ void UMiniBenGameInstance::RestorePlayerInventory(TMap<FName, int32>& Outinvento
     Outinventory = MainSaveData.PlayerInventory;
 }
 
-void UMiniBenGameInstance::RestoreLoadedSublevelActors(TSoftObjectPtr<UWorld> LevelPtr)
-{
-    if (LevelPtr.IsValid() && LevelPtr.Get()->GetCurrentLevel())
-    {
-        for (AActor* actor : LevelPtr.Get()->GetCurrentLevel()->Actors)
-        {
-            if (actor->Implements<USaveable>())
-            {
-                ISaveable::Execute_LoadAndRestoreSelf(actor);
-            }
-        }
-    }
-}
+//Force approach to iterate through all the actors in the sublevel, find the ISaveables and load and restore them (O(n)) not the best approach
+//void UMiniBenGameInstance::RestoreLoadedSublevelActors(TSoftObjectPtr<UWorld> LevelPtr)
+//{
+//    if (LevelPtr.IsValid() && LevelPtr.Get()->GetCurrentLevel())
+//    {
+//        for (AActor* actor : LevelPtr.Get()->GetCurrentLevel()->Actors)
+//        {
+//            if (actor->Implements<USaveable>())
+//            {
+//                ISaveable::Execute_LoadAndRestoreSelf(actor);
+//            }
+//        }
+//    }
+//}
 
 const TMap<FGuid, FSaveableWorldItem> UMiniBenGameInstance::GetMapOfWorldItems() const
 {
@@ -241,7 +242,7 @@ void UMiniBenGameInstance::ProcessNextSublevel()
     // If the queue is empty, we're done
     if (SublevelQueue.IsEmpty())
     {
-        RestoreSaveableActorsForAllSublevels();
+        //RestoreSaveableActorsForAllSublevels();
         //All sublevels processed
         return;
     }
