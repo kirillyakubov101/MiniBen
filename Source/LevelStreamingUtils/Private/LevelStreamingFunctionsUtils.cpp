@@ -13,7 +13,7 @@ FString ULevelStreamingFunctionsUtils::ConvertLevelStreamingInstanceToString(ULe
 		FString LevelName = StreamingLevel->GetWorldAssetPackageName();
 		return LevelName;
 	}
-
+	
 	// If StreamingLevel is null, return an empty string
 	return FString("Invalid Level");
 }

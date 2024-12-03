@@ -69,13 +69,13 @@ public:
 	void RestorePlayer(FCharacterStats& PlayerStats,FVector& NewPos);
 
 	UFUNCTION(BlueprintCallable, Category = "Load")
-	void RestoreCurrentWorldAssets();
-
-	UFUNCTION(BlueprintCallable, Category = "Load")
 	void RestoreSublevels();
 
 	UFUNCTION(BlueprintCallable, Category = "Load")
 	void RestorePlayerInventory(TMap<FName, int32>& Outinventory);
+
+	UFUNCTION(BlueprintCallable, Category = "Load")
+	void RestoreLoadedSublevelActors(TSoftObjectPtr<UWorld> LevelPtr);
 
 	//returns a map of all the current world static/collectable items "FSaveableWorldItem" faster than just a list O(n) vs O(1)
 	UFUNCTION(BlueprintPure, Category = "Load")
@@ -85,6 +85,8 @@ public:
 	const TMap<FGuid, FSaveableWorldNpcs> GetMapOfWorldNpcs() const;
 
 	void ProcessNextSublevel();
+	void RestoreSaveableActorsForAllSublevels(); //i need this only for the game load NOT the bridge levelstreaming
+	
 
 public:
 	UPROPERTY(EditAnywhere,Category = "Save")
@@ -107,8 +109,6 @@ private:
 
 private:
 	TQueue<FQueuedSublevel> SublevelQueue;
-	FCriticalSection LoadedComponentsMutex;
-
 
 private:
 	UFUNCTION()

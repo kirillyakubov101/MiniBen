@@ -4,7 +4,6 @@
 #include "MiniBenBlueprintFunctionLibrary.h"
 #include "CollectableitemsDataAsset.h"
 
-
 TMap<FName, int32> UMiniBenBlueprintFunctionLibrary::ConvertRealInventoryToSerializable(const TMap<UCollectableitemsDataAsset*, int32>& InventoryData)
 {
     TMap<FName, int32> SerializableMap;
@@ -45,6 +44,7 @@ TMap<UCollectableitemsDataAsset*, int32> UMiniBenBlueprintFunctionLibrary::Conve
 
     return InventoryMap;
 }
+
 
 
 

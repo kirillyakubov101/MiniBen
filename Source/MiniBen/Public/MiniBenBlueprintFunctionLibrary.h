@@ -22,5 +22,6 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Saving | Inventory")
 	static TMap<UCollectableitemsDataAsset*, int32> ConvertSerializableToRealInventory(const TMap<FName, int32>& InventoryData, const TArray<UObject*>& LoadedDataAssets); 
+
 };
 

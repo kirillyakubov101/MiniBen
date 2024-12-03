@@ -164,17 +164,6 @@ void UMiniBenGameInstance::RestorePlayer(FCharacterStats& PlayerStats, FVector& 
     PlayerStats = MainSaveData.PlayerStats;
 }
 
-void UMiniBenGameInstance::RestoreCurrentWorldAssets()
-{
-    TArray<AActor*> SaveableActors;
-    UGameplayStatics::GetAllActorsWithInterface(GetWorld(), USaveable::StaticClass(), SaveableActors);
-
-    for (AActor* ele : SaveableActors)
-    {
-        ISaveable::Execute_LoadAndRestoreSelf(ele);
-    }
-}
-
 void UMiniBenGameInstance::RestoreSublevels()
 {
     // Get required references
@@ -211,6 +200,20 @@ void UMiniBenGameInstance::RestorePlayerInventory(TMap<FName, int32>& Outinvento
     Outinventory = MainSaveData.PlayerInventory;
 }
 
+void UMiniBenGameInstance::RestoreLoadedSublevelActors(TSoftObjectPtr<UWorld> LevelPtr)
+{
+    if (LevelPtr.IsValid() && LevelPtr.Get()->GetCurrentLevel())
+    {
+        for (AActor* actor : LevelPtr.Get()->GetCurrentLevel()->Actors)
+        {
+            if (actor->Implements<USaveable>())
+            {
+                ISaveable::Execute_LoadAndRestoreSelf(actor);
+            }
+        }
+    }
+}
+
 const TMap<FGuid, FSaveableWorldItem> UMiniBenGameInstance::GetMapOfWorldItems() const
 {
     if (!MainSaveData.AllLevels.Contains(this->CurrentLevelName))
@@ -238,7 +241,8 @@ void UMiniBenGameInstance::ProcessNextSublevel()
     // If the queue is empty, we're done
     if (SublevelQueue.IsEmpty())
     {
-      //All sublevels processed
+        RestoreSaveableActorsForAllSublevels();
+        //All sublevels processed
         return;
     }
 
@@ -254,6 +258,7 @@ void UMiniBenGameInstance::ProcessNextSublevel()
         FString LevelPackageName = NextSublevel.Level->GetWorldAssetPackageName();
         TSoftObjectPtr<UWorld> LevelToLoad = TSoftObjectPtr<UWorld>(FStringAssetReference(LevelPackageName));
 
+
         if (NextSublevel.bShouldBeLoaded)
         {
             // Load the sublevel
@@ -266,6 +271,34 @@ void UMiniBenGameInstance::ProcessNextSublevel()
         }
     }
 }
+
+void UMiniBenGameInstance::RestoreSaveableActorsForAllSublevels()
+{
+    UCustomWorldSubsystem* CustomWorldSubsystem = GetWorld()->GetSubsystem<UCustomWorldSubsystem>();
+    FWorldDataSave* CurrentLevelWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
+
+    if (CurrentLevelWorldDataSave && CustomWorldSubsystem && CurrentLevelWorldDataSave->bHasLevelBeenInitialized)
+    {
+        TArray<ULevelStreaming*> AllSubLevels = CustomWorldSubsystem->GetAllSubLevels(GetWorld());
+      
+        // Populate the queue with sublevels to load/unload
+        for (ULevelStreaming* ele : AllSubLevels)
+        {
+            if (ele->IsLevelVisible())
+            {
+                for (AActor* actor : ele->GetLoadedLevel()->Actors)
+                {
+                    if (actor->Implements<USaveable>())
+                    {
+                        ISaveable::Execute_LoadAndRestoreSelf(actor);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
 void UMiniBenGameInstance::FinishStreamLevelsFunc()
 {
