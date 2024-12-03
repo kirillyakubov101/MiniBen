@@ -90,21 +90,21 @@ void UMiniBenGameInstance::SavePlayer(const FCharacterStats& PlayerStats)
     }
 }
 
-void UMiniBenGameInstance::SaveCurrentWorldAssets()
-{
-    TArray<AActor*> SaveableActors;
-    UGameplayStatics::GetAllActorsWithInterface(GetWorld(), USaveable::StaticClass(), SaveableActors);
-
-    if (SaveableActors.IsEmpty())
-    {
-        UE_LOG(LogTemp, Warning, TEXT("NOT FOUND SaveableActors.IsEmpty()"));
-    }
-
-    for (AActor* ele : SaveableActors)
-    {
-        ISaveable::Execute_SaveAndRecordSelf(ele);
-    }
-}
+//void UMiniBenGameInstance::SaveCurrentWorldAssets()
+//{
+//    TArray<AActor*> SaveableActors;
+//    UGameplayStatics::GetAllActorsWithInterface(GetWorld(), USaveable::StaticClass(), SaveableActors);
+//
+//    if (SaveableActors.IsEmpty())
+//    {
+//        UE_LOG(LogTemp, Warning, TEXT("NOT FOUND SaveableActors.IsEmpty()"));
+//    }
+//
+//    for (AActor* ele : SaveableActors)
+//    {
+//        ISaveable::Execute_SaveAndRecordSelf(ele);
+//    }
+//}
 
 void UMiniBenGameInstance::AddNewWorldAssetToSaveData(const FSaveableWorldItem& newItem)
 {
@@ -256,7 +256,6 @@ void UMiniBenGameInstance::ProcessNextSublevel()
 
         if (NextSublevel.bShouldBeLoaded)
         {
-            
             // Load the sublevel
             UGameplayStatics::LoadStreamLevelBySoftObjectPtr(GetWorld(), LevelToLoad, true, false, LatentInfo);
         }

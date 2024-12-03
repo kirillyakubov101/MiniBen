@@ -22,7 +22,8 @@ enum class EQuestGiverState : uint8
 {
 	QGS_None                 UMETA(DisplayName = "None"),
 	QGS_GotQuest		     UMETA(DisplayName = "GotQuest"),
-	QGS_QuestInProgress      UMETA(DisplayName = "QuestInProgress")
+	QGS_QuestInProgress      UMETA(DisplayName = "QuestInProgress"),
+	QGC_ReadyForReward		 UMETA(DisplayName = "QuestCompleteReadyForReward"),
 };
 
 

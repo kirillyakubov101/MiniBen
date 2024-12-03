@@ -46,8 +46,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Save")
 	void SavePlayer(const FCharacterStats& PlayerStats);
 
-	UFUNCTION(BlueprintCallable, Category = "Save")
-	void SaveCurrentWorldAssets(); //this is actually calling all the actors that implement the ISaveable interface in the level
+	//UFUNCTION(BlueprintCallable, Category = "Save")
+	//void SaveCurrentWorldAssets(); //this is actually calling all the actors that implement the ISaveable interface in the level
 
 	UFUNCTION(BlueprintCallable, Category = "Save")
 	void AddNewWorldAssetToSaveData(const FSaveableWorldItem& newItem); //adds to the mainsavedata all the static items in the level (potions, collectables and more)
