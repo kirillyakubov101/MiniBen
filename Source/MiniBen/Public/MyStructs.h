@@ -133,6 +133,22 @@ public:
 	TMap<FGuid, FSaveableWorldItem> MapOfLevelWorldItems;
 };
 
+USTRUCT(BlueprintType)
+struct FQuestProgress
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EQuestType QuestType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<TSubclassOf<AItem>, int32> TargetsGathered;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<TSubclassOf<AGameEntity_Enemy>, int32> TargetsKilled;
+};
+
 
 USTRUCT(BlueprintType)
 struct FQuestRequirment
@@ -157,6 +173,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 ExpReward;
+
 };
 
 
@@ -192,7 +209,7 @@ public:
 	TSubclassOf<AQuestStarter> QuestStarterClass;
 };
 
-USTRUCT(BlueprintType)
+USTRUCT(BlueprintType) //TODO: remove later
 struct FActiveQuestInfo
 {
 	GENERATED_BODY()
