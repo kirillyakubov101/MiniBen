@@ -94,6 +94,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	EQuestGiverState QuestGiverState;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	int32 CurrentQuestIndex = 0;
+
 	FSaveableWorldNpcs()
 		:ShouldBeRemoved(false), Guid(FGuid()), QuestGiverState(EQuestGiverState::QGS_None)
 	{
@@ -185,13 +188,9 @@ struct FQuest : public FTableRowBase
 public:
 
 	FQuest()
-		:QuestID(FName()), QuestTitle(FText()), QuestDescription(FText()), QuestRequirment(FQuestRequirment())
+		:QuestTitle(FText()), QuestDescription(FText()), QuestRequirment(FQuestRequirment())
 	{
 	}
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FName QuestID;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	FText QuestTitle;
 
