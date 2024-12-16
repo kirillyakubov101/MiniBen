@@ -135,22 +135,6 @@ public:
 	TMap<FGuid, FSaveableWorldItem> MapOfLevelWorldItems;
 };
 
-USTRUCT(BlueprintType)
-struct FQuestProgress
-{
-	GENERATED_BODY()
-
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EQuestType QuestType;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<TSubclassOf<AItem>, int32> TargetsGathered;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<TSubclassOf<AGameEntity_Enemy>, int32> TargetsKilled;
-};
-
 
 USTRUCT(BlueprintType)
 struct FQuestRequirment
