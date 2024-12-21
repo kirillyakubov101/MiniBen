@@ -4,11 +4,6 @@
 #include "MiniBenGameMode.h"
 #include "MiniBenGameInstance.h"
 
-void AMiniBenGameMode::AssignSaveData(const FMainSaveData& data)
-{
-	this->MainSaveDataDev = data;
-}
-
 void AMiniBenGameMode::BeginPlay()
 {
 	Super::BeginPlay();

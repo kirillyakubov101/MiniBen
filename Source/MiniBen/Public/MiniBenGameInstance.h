@@ -110,7 +110,12 @@ private:
 private:
 	TQueue<FQueuedSublevel> SublevelQueue;
 
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = true),Category = "Save")
+	FName IntroLevelName = "Intro_Level";
+
 private:
 	UFUNCTION()
 	void FinishStreamLevelsFunc();
+	UFUNCTION(BlueprintPure, Category = "Save")
+	bool IsCurrentLevelGameLevel() const;
 };

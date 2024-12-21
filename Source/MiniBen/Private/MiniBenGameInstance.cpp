@@ -34,6 +34,7 @@ void UMiniBenGameInstance::OnLevelChanged_Implementation(UWorld* LoadedWorld)
 //I need to add newly encoutered level to the map of levels, if it is already there, just return
 void UMiniBenGameInstance::InitCurrentWorld()
 {
+    if (!IsCurrentLevelGameLevel()) { return; }
     if (MainSaveData.AllLevels.Contains(CurrentLevelName)) { return; }
 
 	MainSaveData.AllLevels.Add(CurrentLevelName, FWorldDataSave());
@@ -305,4 +306,9 @@ void UMiniBenGameInstance::FinishStreamLevelsFunc()
 {
     // Move to the next sublevel in the queue
     ProcessNextSublevel();
+}
+
+bool UMiniBenGameInstance::IsCurrentLevelGameLevel() const
+{
+    return this->CurrentLevelName != IntroLevelName;
 }
