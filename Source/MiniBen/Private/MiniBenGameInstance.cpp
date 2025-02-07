@@ -14,7 +14,7 @@ void UMiniBenGameInstance::Init()
     Super::Init();
 
     FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UMiniBenGameInstance::OnLevelChanged); //bind to level changed delegate
-    FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &UMiniBenGameInstance::RecordCurrentProgress);   //bind to level ABOUT to change delegate
+    FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &UMiniBenGameInstance::PreLoadMapEvent);   //bind to level ABOUT to change delegate
     CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
 }
 
@@ -26,9 +26,21 @@ void UMiniBenGameInstance::Init()
 /// <param name="LoadedWorld"></param>
 void UMiniBenGameInstance::OnLevelChanged_Implementation(UWorld* LoadedWorld)
 {
-    CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld());
+    CurrentLevelName = UGameplayStatics::GetCurrentLevelName(GetWorld()); //another safeguard to make sure the level name is saved correctly
     InitCurrentWorld();
     BeginLoadLevelProcess();
+}
+
+/// <summary>
+/// I need this delegate to update my current level name so that all the saveable items in the new level
+/// could reload their state based on the CurrentLevelName Key lookup
+/// </summary>
+/// <param name="temp">The long path level name that is about to load</param>
+void UMiniBenGameInstance::PreLoadMapEvent_Implementation(const FString& temp)
+{
+    RecordCurrentProgress();
+    FString LevelName = FPaths::GetBaseFilename(temp);
+    CurrentLevelName = LevelName;
 }
 
 //I need to add newly encoutered level to the map of levels, if it is already there, just return

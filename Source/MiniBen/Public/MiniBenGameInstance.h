@@ -35,7 +35,10 @@ public:
 	//1. Load differnt level (we want to move to a new level with all of our things (don't save yet)
 	//2. We click save, so it records all and then saves it
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "Save")
-	void RecordCurrentProgress(const FString& temp);
+	void RecordCurrentProgress();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Save")
+	void PreLoadMapEvent(const FString& temp);
 
 	UFUNCTION(BlueprintCallable, Category = "Save")
 	void InitCurrentWorld();
@@ -93,7 +96,7 @@ public:
 	TSubclassOf<class USaveGameContainer> SaveGameContainerClass;
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Save")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Save")
 	FString CurrentLevelName;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Save")

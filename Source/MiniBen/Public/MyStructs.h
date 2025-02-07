@@ -1,9 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameEntity_Enemy.generated.h"
 #include "Items/Item.h"
 #include "Quests/QuestStarter.h"
+#include "Entities/GameEntity_Enemy.h"
 #include "MyStructs.generated.h"
 
 //ENUMS
