@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "5.4",
+	"EngineAssociation": "5.5",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -26,14 +26,16 @@
 				"Engine"
 			]
 		},
-		 {
-            		"Name": "Json",
-           		 "Type": "Runtime"
-        	},
-        	{
-            		"Name": "JsonUtilities",
-            		"Type": "Runtime"
-        	},
+		{
+			"Name": "Json",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "JsonUtilities",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
 	],
 	"Plugins": [
 		{
