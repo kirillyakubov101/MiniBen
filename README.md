@@ -1,4 +1,4 @@
 # MiniBen
 RPG game
 
-#Combat RPG
+#Combat RPG | v.1
