@@ -4,26 +4,30 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Rollable.h"
 #include "MiniBenCharacter.generated.h"
 
+
 UCLASS()
-class MINIBEN_API AMiniBenCharacter : public ACharacter
+class MINIBEN_API AMiniBenCharacter : public ACharacter, public IRollable
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	AMiniBenCharacter();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual void BindToRollEvent_Implementation(UObject* Object, FName FunctionName) override;
+
+public:
+	UPROPERTY(BlueprintAssignable,BlueprintCallable, Category = "Roll")
+	FOnRolled OnRollDelegate;
 
 };
