@@ -16,7 +16,7 @@ class MINIBEN_API UJsonSerializerGISubsystem : public UGameInstanceSubsystem
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void SerializeToJSON(const struct FMainSaveData& data);
+	void SerializeToJSON(const struct FMainSaveData& data, const TArray<FName>& ActiveQuestsNames, const TArray<FName>& CompletedQuestsNames);
 
 protected:
 	TSharedPtr<FJsonObject> SerializeCharacterStats(const struct FCharacterStats& Stats);
@@ -24,7 +24,10 @@ protected:
 	TSharedPtr<FJsonObject> SerializeSaveableNpcs(const struct FSaveableWorldNpcs& Npc);
 	TSharedPtr<FJsonObject> SerializeWorldDataSave(const struct FWorldDataSave& WorldData);
 	TSharedPtr<FJsonObject> SerializePlayerInventory(const TMap<FName, int32>& WorldData);
+	TSharedPtr<FJsonObject> SerializeActiveQuests(const TArray<FName>& ActiveQuestsNames);
+	TSharedPtr<FJsonObject> SerializeCompletedQuests(const TArray<FName>& CompletedQuestsNames);
 	
 private:
 	FString FilePath = FPaths::Combine(FPaths::ProjectDir(), TEXT("Saved/SaveGames/MyStructData.json"));
+	TArray<TSharedPtr<FJsonValue>> SerializeFNameArray(const TArray<FName>& Array);
 };
