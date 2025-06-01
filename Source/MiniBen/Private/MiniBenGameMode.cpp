@@ -7,11 +7,11 @@
 void AMiniBenGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UMiniBenGameInstance* MiniBenGameInstance = Cast<UMiniBenGameInstance>(GetGameInstance());
+	//DEPRECATED
+	/*UMiniBenGameInstance* MiniBenGameInstance = Cast<UMiniBenGameInstance>(GetGameInstance());
 	if (MiniBenGameInstance)
 	{
 		MiniBenGameInstance->GameModeIsReady();
-	}
+	}*/
 }
 

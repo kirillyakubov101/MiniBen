@@ -6,7 +6,7 @@
 #include "Serialization/JsonSerializer.h"
 #include "Serialization/JsonWriter.h"
 
-void UJsonSerializerGISubsystem::SerializeToJSON(const FMainSaveData& data)
+void UJsonSerializerGISubsystem::SerializeToJSON(const FMainSaveData& data, const TArray<FName>& ActiveQuestsNames, const TArray<FName>& CompletedQuestsNames)
 {
 	TSharedPtr<FJsonObject> JsonObject = MakeShared<FJsonObject>();
 
@@ -22,6 +22,16 @@ void UJsonSerializerGISubsystem::SerializeToJSON(const FMainSaveData& data)
 
 	JsonObject->SetObjectField(TEXT("AllLevels"), LevelsObject);
 	JsonObject->SetObjectField("Invetory", SerializePlayerInventory(data.PlayerInventory));
+
+	// Create a single Quests object
+	TSharedPtr<FJsonObject> QuestsObject = MakeShared<FJsonObject>();
+
+	// Add both quest arrays as fields to that object
+	QuestsObject->SetArrayField(TEXT("ActiveQuests"), SerializeFNameArray(ActiveQuestsNames));
+	QuestsObject->SetArrayField(TEXT("CompletedQuests"), SerializeFNameArray(CompletedQuestsNames));
+
+	// Add the Quests object to the main JSON
+	JsonObject->SetObjectField(TEXT("Quests"), QuestsObject);
 
 	// Convert to JSON string
 	FString OutputString;
@@ -123,3 +133,36 @@ TSharedPtr<FJsonObject> UJsonSerializerGISubsystem::SerializePlayerInventory(con
 
 	return JsonObject;
 }
+
+TSharedPtr<FJsonObject> UJsonSerializerGISubsystem::SerializeActiveQuests(const TArray<FName>& ActiveQuestsNames)
+{
+	TSharedPtr<FJsonObject> JsonObject = MakeShared<FJsonObject>();
+	TArray<TSharedPtr<FJsonValue>> JsonArray = SerializeFNameArray(ActiveQuestsNames);
+
+	JsonObject->SetArrayField(TEXT("ActiveQuests"), JsonArray);
+
+	return JsonObject;
+}
+
+TSharedPtr<FJsonObject> UJsonSerializerGISubsystem::SerializeCompletedQuests(const TArray<FName>& CompletedQuestsNames)
+{
+	TSharedPtr<FJsonObject> JsonObject = MakeShared<FJsonObject>();
+	TArray<TSharedPtr<FJsonValue>> JsonArray = SerializeFNameArray(CompletedQuestsNames);
+	
+	JsonObject->SetArrayField(TEXT("CompletedQuests"), JsonArray);
+
+	return JsonObject;
+}
+
+TArray<TSharedPtr<FJsonValue>> UJsonSerializerGISubsystem::SerializeFNameArray(const TArray<FName>& Array)
+{
+	TArray<TSharedPtr<FJsonValue>> JsonArray;
+	for (const FName& Name : Array)
+	{
+		JsonArray.Add(MakeShared<FJsonValueString>(Name.ToString()));
+	}
+
+	return JsonArray;
+}
+
+
