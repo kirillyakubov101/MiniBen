@@ -32,14 +32,5 @@ void AMiniBenCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 }
 
-void AMiniBenCharacter::BindToRollEvent_Implementation(UObject* Object, FName FunctionName)
-{
-	if (Object && Object->IsValidLowLevel())
-	{
-		FScriptDelegate Delegate;
-		Delegate.BindUFunction(Object, FunctionName);
-		OnRollDelegate.Add(Delegate);
-	}
-}
 
 
