@@ -239,3 +239,4 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Saveable", SaveGame)
 	FName LastSavedLevel;
 };
+

@@ -24,5 +24,8 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	UFUNCTION(BlueprintCallable, Category = "SignalTest")
+	void FireTestSignal(FString QuestName,
+		int32 AmountToCollect,
+		FString ItemToCollect);
 };
