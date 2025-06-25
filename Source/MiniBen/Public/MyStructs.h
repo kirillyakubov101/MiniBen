@@ -240,22 +240,3 @@ public:
 	FName LastSavedLevel;
 };
 
-USTRUCT(BlueprintType)
-struct FMySignal
-{
-	GENERATED_BODY()
-public:
-	int32 Amount;
-
-	FMySignal() {}
-
-	FMySignal(int32 InAmount)
-		: Amount(InAmount)
-	{
-	}
-
-	static FName GetSignalName()
-	{
-		return TEXT("FMySignal");
-	}
-};

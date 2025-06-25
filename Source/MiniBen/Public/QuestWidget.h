@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "MyStructs.h"
+#include "../../PlayerActions/Public/Signals/Signals.h"
 #include "QuestWidget.generated.h"
 
 
@@ -18,8 +18,6 @@ class MINIBEN_API UQuestWidget : public UUserWidget
 
 public:
 	virtual void NativeConstruct() override;
-
-	UFUNCTION(BlueprintCallable, Category = "SignalTest")
-	void FireTestSignal();
+	void UpdateQuestHUD(const struct FCollectQuestSignal& Signal);
 	
 };

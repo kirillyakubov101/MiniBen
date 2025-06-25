@@ -8,18 +8,18 @@
 void UQuestWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	EventBus::GetInst().RegisterHandler<FMySignal>(
-		[](const FMySignal& Signal)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Handled FMySignal with Amount = %d"), Signal.Amount);
-			
-		});
 
+	
+	EventBus::GetInst().Subscribe<FCollectQuestSignal>(
+		[this](const FCollectQuestSignal& Signal)
+		{
+			this->UpdateQuestHUD(Signal);
+		});
+	
 }
 
-void UQuestWidget::FireTestSignal()
+void UQuestWidget::UpdateQuestHUD(const FCollectQuestSignal& Signal)
 {
-	FMySignal Signal(999);
-	EventBus::GetInst().Dispatch(Signal);
+	UE_LOG(LogTemp, Warning, TEXT("Quest: %s Amount: %d Item to collect: %s"), *Signal.QuestName, Signal.AmountToCollect, *Signal.ItemToCollect);
 }
 
