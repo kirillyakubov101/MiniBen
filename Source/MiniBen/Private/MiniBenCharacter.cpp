@@ -20,7 +20,7 @@ void AMiniBenCharacter::BeginPlay()
 	check(GameInstance);
 
 	//Subscribe
-	GameEventsBroker::GetInst().OnPlayerCanActivate.AddUObject(this, &AMiniBenCharacter::LoadAndRestoreSelf_Implementation);
+	GameEventsBroker::GetInst().BindToPlayerCanActivate(this, &AMiniBenCharacter::LoadAndRestoreSelf_Implementation);
 }
 
 
@@ -56,6 +56,7 @@ void AMiniBenCharacter::SaveAndRecordSelf_Implementation()
 void AMiniBenCharacter::LoadAndRestoreSelf_Implementation()
 {
 	SetActorTransform(GameInstance->GetWorldDataSave()->PlayerTransformData.PlayerTransform);
+	ISaveable::Execute_LoadAndRestoreSelf(this);
 	//inventory and quests should be loaded here as well
 }
 

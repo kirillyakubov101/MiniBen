@@ -8,3 +8,9 @@ GameEventsBroker& GameEventsBroker::GetInst()
 	static GameEventsBroker Instance;
 	return Instance;
 }
+
+GameEventsBroker::~GameEventsBroker()
+{
+	this->OnPlayerCanActivate.Clear();
+}
+

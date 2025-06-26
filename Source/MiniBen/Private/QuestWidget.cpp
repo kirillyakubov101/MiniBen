@@ -7,7 +7,7 @@
 void UQuestWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	GameEventsBroker::GetInst().OnPlayerCanActivate.AddUObject(this, &UQuestWidget::UpdateQuestHUD);
+	GameEventsBroker::GetInst().BindToPlayerCanActivate(this, &UQuestWidget::UpdateQuestHUD);
 }
 
 void UQuestWidget::UpdateQuestHUD()

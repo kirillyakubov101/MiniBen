@@ -9,17 +9,26 @@ DECLARE_MULTICAST_DELEGATE(FOnPlayerCanActivate);
 
 class MINIBEN_API GameEventsBroker
 {
+public:
+	static GameEventsBroker& GetInst();
+
+	// OnPlayerCanActivate
+	void BroadcastPlayerCanActivate() { OnPlayerCanActivate.Broadcast(); }
+
+	template<typename UserClass, typename FuncType>
+	void BindToPlayerCanActivate(UserClass* Object, FuncType Func)
+	{
+		OnPlayerCanActivate.AddUObject(Object, Func);
+	}
+
 private:
 	GameEventsBroker() {}
 	GameEventsBroker(const GameEventsBroker&) = delete;
 	GameEventsBroker& operator=(const GameEventsBroker&) = delete;
+	virtual ~GameEventsBroker();
 
-public:
-	static GameEventsBroker& GetInst();
 
-	// Delegates
+private:
 	FOnPlayerCanActivate OnPlayerCanActivate;
-	void BroadcastPlayerCanActivate() { OnPlayerCanActivate.Broadcast(); }
-	
 
 };
