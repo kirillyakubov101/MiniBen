@@ -10,9 +10,6 @@ void UJsonSerializerGISubsystem::SerializeToJSON(const FMainSaveData& data, cons
 {
 	TSharedPtr<FJsonObject> JsonObject = MakeShared<FJsonObject>();
 
-	//Character
-	JsonObject->SetObjectField("CharacterStats", SerializeCharacterStats(data.PlayerStats)); 
-
 	  // Serialize AllLevels (TMap)
 	TSharedPtr<FJsonObject> LevelsObject = MakeShared<FJsonObject>();
 	for (const auto& Entry : data.AllLevels)
@@ -42,17 +39,6 @@ void UJsonSerializerGISubsystem::SerializeToJSON(const FMainSaveData& data, cons
 	FFileHelper::SaveStringToFile(OutputString, *FilePath);
 }
 
-TSharedPtr<FJsonObject> UJsonSerializerGISubsystem::SerializeCharacterStats(const FCharacterStats& Stats)
-{
-	TSharedPtr<FJsonObject> JsonObject = MakeShared<FJsonObject>();
-
-	JsonObject->SetNumberField(TEXT("PlayerHealth"), Stats.PlayerHealth);
-	JsonObject->SetNumberField(TEXT("PlayerLevel"), Stats.PlayerLevel);
-	JsonObject->SetNumberField(TEXT("PlayerExp"), Stats.PlayerExp);
-
-
-	return JsonObject;
-}
 
 TSharedPtr<FJsonObject> UJsonSerializerGISubsystem::SerializeSaveableWorldItem(const FSaveableWorldItem& Item)
 {
@@ -88,13 +74,6 @@ TSharedPtr<FJsonObject> UJsonSerializerGISubsystem::SerializeWorldDataSave(const
 
 	JsonObject->SetObjectField(TEXT("ListOfSublevels"), SublevelsObject);
 
-	// Serialize PlayerPosition (FVector)
-	TSharedPtr<FJsonObject> PositionObject = MakeShared<FJsonObject>();
-	PositionObject->SetNumberField(TEXT("X"), WorldData.PlayerPosition.X);
-	PositionObject->SetNumberField(TEXT("Y"), WorldData.PlayerPosition.Y);
-	PositionObject->SetNumberField(TEXT("Z"), WorldData.PlayerPosition.Z);
-
-	JsonObject->SetObjectField(TEXT("PlayerPosition"), PositionObject);
 
 	// Serialize ListOfLevelAssets (TArray)
 	TArray<TSharedPtr<FJsonValue>> LevelAssetsArray;

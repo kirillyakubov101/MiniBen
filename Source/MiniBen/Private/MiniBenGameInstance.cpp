@@ -47,9 +47,14 @@ void UMiniBenGameInstance::PreLoadMapEvent_Implementation(const FString& temp)
 void UMiniBenGameInstance::InitCurrentWorld()
 {
     if (!IsCurrentLevelGameLevel()) { return; }
-    if (MainSaveData.AllLevels.Contains(CurrentLevelName)) { return; }
+    FWorldDataSave* WorldData = MainSaveData.AllLevels.Find(CurrentLevelName);
 
-	MainSaveData.AllLevels.Add(CurrentLevelName, FWorldDataSave());
+    if (!MainSaveData.AllLevels.Contains(CurrentLevelName))
+    {
+        MainSaveData.AllLevels.Add(CurrentLevelName, FWorldDataSave());
+    }
+
+    this->CurrentWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
 
 }
 
@@ -61,11 +66,9 @@ void UMiniBenGameInstance::SaveSublevels()
 
     if (CustomWorldSubsystem)
     {
-       auto CurrentLevelWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
-
-        if (CurrentLevelWorldDataSave)
+        if (CurrentWorldDataSave)
         {
-            CurrentLevelWorldDataSave->bHasLevelBeenInitialized = true;
+            CurrentWorldDataSave->bHasLevelBeenInitialized = true;
 
             auto AllSublevels = CustomWorldSubsystem->GetAllSubLevels(GetWorld());
             FString SubLevelName;
@@ -73,67 +76,40 @@ void UMiniBenGameInstance::SaveSublevels()
             for (const auto& ele : AllSublevels)
             {
                 SubLevelName = ULevelStreamingFunctionsUtils::ConvertLevelStreamingInstanceToString(ele);
-                CurrentLevelWorldDataSave->ListOfSublevels.Add(SubLevelName, ele->IsLevelVisible());
+                CurrentWorldDataSave->ListOfSublevels.Add(SubLevelName, ele->IsLevelVisible());
             }
         }
     }
 }
 
-void UMiniBenGameInstance::SavePlayer(const FCharacterStats& PlayerStats)
+void UMiniBenGameInstance::SavePlayer()
 {
-    MainSaveData.PlayerStats = PlayerStats;
-
-    FWorldDataSave* CurrentLevelWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
-
-    if (CurrentLevelWorldDataSave)
+    auto PlayerController = GetWorld()->GetFirstPlayerController();
+    if (PlayerController)
     {
-        ACharacter* PlayerChar = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-        if (PlayerChar)
+        auto Character = PlayerController->GetCharacter();
+        if (Character)
         {
-            CurrentLevelWorldDataSave->PlayerPosition = PlayerChar->GetActorLocation();
+            ISaveable::Execute_SaveAndRecordSelf(Character);
         }
-        else
-        {
-            UE_LOG(LogTemp, Warning, TEXT("SavePlayer - > PlayerChar is nullptr"));
-        }
-    }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("SavePlayer CurrentLevelWorldDataSave is nullptr"));
     }
 }
 
-//void UMiniBenGameInstance::SaveCurrentWorldAssets()
-//{
-//    TArray<AActor*> SaveableActors;
-//    UGameplayStatics::GetAllActorsWithInterface(GetWorld(), USaveable::StaticClass(), SaveableActors);
-//
-//    if (SaveableActors.IsEmpty())
-//    {
-//        UE_LOG(LogTemp, Warning, TEXT("NOT FOUND SaveableActors.IsEmpty()"));
-//    }
-//
-//    for (AActor* ele : SaveableActors)
-//    {
-//        ISaveable::Execute_SaveAndRecordSelf(ele);
-//    }
-//}
 
 void UMiniBenGameInstance::AddNewWorldAssetToSaveData(const FSaveableWorldItem& newItem)
 {
-    auto CurrentLevelWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
 
     //NEW WAY, BETTER WAY
-    if (CurrentLevelWorldDataSave)
+    if (CurrentWorldDataSave)
     {
-        bool isFound = CurrentLevelWorldDataSave->MapOfLevelWorldItems.Contains(newItem.Guid);
+        bool isFound = CurrentWorldDataSave->MapOfLevelWorldItems.Contains(newItem.Guid);
         if (!isFound)
         {
-            CurrentLevelWorldDataSave->MapOfLevelWorldItems.Add(newItem.Guid, newItem);
+            CurrentWorldDataSave->MapOfLevelWorldItems.Add(newItem.Guid, newItem);
         }
         else
         {
-            CurrentLevelWorldDataSave->MapOfLevelWorldItems[newItem.Guid] = newItem;
+            CurrentWorldDataSave->MapOfLevelWorldItems[newItem.Guid] = newItem;
         }
     }
     else
@@ -164,17 +140,18 @@ void UMiniBenGameInstance::AddNPCToSaveData(const FSaveableWorldNpcs& newNpc)
     }
 }
 
-void UMiniBenGameInstance::SavePlayerInventory(const TMap<FName, int32>& inventory)
-{
-    MainSaveData.PlayerInventory = inventory;
-}
 
-void UMiniBenGameInstance::RestorePlayer(FCharacterStats& PlayerStats, FVector& NewPos)
+void UMiniBenGameInstance::RestorePlayer()
 {
-    FWorldDataSave* CurrentLevelWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
-
-    NewPos = CurrentLevelWorldDataSave->PlayerPosition;
-    PlayerStats = MainSaveData.PlayerStats;
+    auto PlayerController = GetWorld()->GetFirstPlayerController();
+    if (PlayerController)
+    {
+        auto Character = PlayerController->GetCharacter();
+        if (Character)
+        {
+            ISaveable::Execute_LoadAndRestoreSelf(Character);
+        }
+    }
 }
 
 void UMiniBenGameInstance::RestoreSublevels()
@@ -207,26 +184,6 @@ void UMiniBenGameInstance::RestoreSublevels()
         ProcessNextSublevel();
     }
 }
-
-void UMiniBenGameInstance::RestorePlayerInventory(TMap<FName, int32>& Outinventory)
-{
-    Outinventory = MainSaveData.PlayerInventory;
-}
-
-//Force approach to iterate through all the actors in the sublevel, find the ISaveables and load and restore them (O(n)) not the best approach
-//void UMiniBenGameInstance::RestoreLoadedSublevelActors(TSoftObjectPtr<UWorld> LevelPtr)
-//{
-//    if (LevelPtr.IsValid() && LevelPtr.Get()->GetCurrentLevel())
-//    {
-//        for (AActor* actor : LevelPtr.Get()->GetCurrentLevel()->Actors)
-//        {
-//            if (actor->Implements<USaveable>())
-//            {
-//                ISaveable::Execute_LoadAndRestoreSelf(actor);
-//            }
-//        }
-//    }
-//}
 
 const TMap<FGuid, FSaveableWorldItem> UMiniBenGameInstance::GetMapOfWorldItems() const
 {
@@ -289,9 +246,9 @@ void UMiniBenGameInstance::ProcessNextSublevel()
 void UMiniBenGameInstance::RestoreSaveableActorsForAllSublevels()
 {
     UCustomWorldSubsystem* CustomWorldSubsystem = GetWorld()->GetSubsystem<UCustomWorldSubsystem>();
-    FWorldDataSave* CurrentLevelWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
+    
 
-    if (CurrentLevelWorldDataSave && CustomWorldSubsystem && CurrentLevelWorldDataSave->bHasLevelBeenInitialized)
+    if (this->CurrentWorldDataSave && CustomWorldSubsystem && CurrentWorldDataSave->bHasLevelBeenInitialized)
     {
         TArray<ULevelStreaming*> AllSubLevels = CustomWorldSubsystem->GetAllSubLevels(GetWorld());
       
@@ -314,6 +271,11 @@ void UMiniBenGameInstance::RestoreSaveableActorsForAllSublevels()
 
 
 
+void UMiniBenGameInstance::SetCurrentWorldDataSave()
+{
+    this->CurrentWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
+}
+
 void UMiniBenGameInstance::FinishStreamLevelsFunc()
 {
     // Move to the next sublevel in the queue
@@ -324,3 +286,4 @@ bool UMiniBenGameInstance::IsCurrentLevelGameLevel() const
 {
     return this->CurrentLevelName != IntroLevelName;
 }
+

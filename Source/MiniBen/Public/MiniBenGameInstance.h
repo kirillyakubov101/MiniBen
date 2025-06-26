@@ -23,9 +23,6 @@ public:
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "Save")
 	void OnLevelChanged(UWorld* LoadedWorld);
 
-	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
-	void GameModeIsReady();
-	
 	/// <summary>
 	/// Saving Methods
 	/// </summary>
@@ -47,10 +44,7 @@ public:
 	void SaveSublevels();
 
 	UFUNCTION(BlueprintCallable, Category = "Save")
-	void SavePlayer(const FCharacterStats& PlayerStats);
-
-	//UFUNCTION(BlueprintCallable, Category = "Save")
-	//void SaveCurrentWorldAssets(); //this is actually calling all the actors that implement the ISaveable interface in the level
+	void SavePlayer();
 
 	UFUNCTION(BlueprintCallable, Category = "Save")
 	void AddNewWorldAssetToSaveData(const FSaveableWorldItem& newItem); //adds to the mainsavedata all the static items in the level (potions, collectables and more)
@@ -58,8 +52,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Save")
 	void AddNPCToSaveData(const FSaveableWorldNpcs& newNpc); //adds to the mainsavedata all the Npcs that give quests and/or can be interacted with and change their state
 
-	UFUNCTION(BlueprintCallable, Category = "Save")
-	void SavePlayerInventory(const TMap<FName, int32>& inventory);
 
 	/// <summary>
 	/// Loading Methods
@@ -69,16 +61,10 @@ public:
 	void BeginLoadLevelProcess();
 
 	UFUNCTION(BlueprintCallable, Category = "Load")
-	void RestorePlayer(FCharacterStats& PlayerStats,FVector& NewPos);
+	void RestorePlayer();
 
 	UFUNCTION(BlueprintCallable, Category = "Load")
 	void RestoreSublevels();
-
-	UFUNCTION(BlueprintCallable, Category = "Load")
-	void RestorePlayerInventory(TMap<FName, int32>& Outinventory);
-
-	/*UFUNCTION(BlueprintCallable, Category = "Load")
-	void RestoreLoadedSublevelActors(TSoftObjectPtr<UWorld> LevelPtr);*/
 
 	//returns a map of all the current world static/collectable items "FSaveableWorldItem" faster than just a list O(n) vs O(1)
 	UFUNCTION(BlueprintPure, Category = "Load")
@@ -94,6 +80,11 @@ public:
 public:
 	UPROPERTY(EditAnywhere,Category = "Save")
 	TSubclassOf<class USaveGameContainer> SaveGameContainerClass;
+
+public:
+	FWorldDataSave* GetWorldDataSave() const { return this->CurrentWorldDataSave; }
+	TMap<FName, int32>& GetPlayerInventory() { return this->MainSaveData.PlayerInventory; }
+
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Save")
@@ -112,13 +103,18 @@ private:
 
 private:
 	TQueue<FQueuedSublevel> SublevelQueue;
+	FWorldDataSave* CurrentWorldDataSave = nullptr;
 
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = true),Category = "Save")
 	FName IntroLevelName = "Intro_Level";
+
+	void SetCurrentWorldDataSave();
 
 private:
 	UFUNCTION()
 	void FinishStreamLevelsFunc();
 	UFUNCTION(BlueprintPure, Category = "Save")
 	bool IsCurrentLevelGameLevel() const;
+
+
 };

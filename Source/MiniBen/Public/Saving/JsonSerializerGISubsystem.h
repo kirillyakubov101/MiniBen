@@ -19,7 +19,6 @@ public:
 	void SerializeToJSON(const struct FMainSaveData& data, const TArray<FName>& ActiveQuestsNames, const TArray<FName>& CompletedQuestsNames);
 
 protected:
-	TSharedPtr<FJsonObject> SerializeCharacterStats(const struct FCharacterStats& Stats);
 	TSharedPtr<FJsonObject> SerializeSaveableWorldItem(const struct FSaveableWorldItem& Item);
 	TSharedPtr<FJsonObject> SerializeSaveableNpcs(const struct FSaveableWorldNpcs& Npc);
 	TSharedPtr<FJsonObject> SerializeWorldDataSave(const struct FWorldDataSave& WorldData);
