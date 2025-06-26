@@ -7,6 +7,7 @@
 #include <LevelStreamingUtils/Public/LevelStreamingFunctionsUtils.h>
 #include "PlayerActions/Public/Saveable.h"
 #include "GameFramework/Character.h"
+#include "GameEventsBroker.h"
 
 
 void UMiniBenGameInstance::Init()
@@ -141,19 +142,6 @@ void UMiniBenGameInstance::AddNPCToSaveData(const FSaveableWorldNpcs& newNpc)
 }
 
 
-void UMiniBenGameInstance::RestorePlayer()
-{
-    auto PlayerController = GetWorld()->GetFirstPlayerController();
-    if (PlayerController)
-    {
-        auto Character = PlayerController->GetCharacter();
-        if (Character)
-        {
-            ISaveable::Execute_LoadAndRestoreSelf(Character);
-        }
-    }
-}
-
 void UMiniBenGameInstance::RestoreSublevels()
 {
     // Get required references
@@ -212,8 +200,9 @@ void UMiniBenGameInstance::ProcessNextSublevel()
     // If the queue is empty, we're done
     if (SublevelQueue.IsEmpty())
     {
-        //RestoreSaveableActorsForAllSublevels();
         //All sublevels processed
+        //Let the player know that he can load and activate self
+        GameEventsBroker::GetInst().BroadcastPlayerCanActivate();
         return;
     }
 

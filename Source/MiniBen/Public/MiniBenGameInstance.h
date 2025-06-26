@@ -61,9 +61,6 @@ public:
 	void BeginLoadLevelProcess();
 
 	UFUNCTION(BlueprintCallable, Category = "Load")
-	void RestorePlayer();
-
-	UFUNCTION(BlueprintCallable, Category = "Load")
 	void RestoreSublevels();
 
 	//returns a map of all the current world static/collectable items "FSaveableWorldItem" faster than just a list O(n) vs O(1)
