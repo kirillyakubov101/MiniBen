@@ -2,24 +2,17 @@
 
 
 #include "QuestWidget.h"
-#include "MyStructs.h"
-#include "../../PlayerActions/Public/EventBus.h"
+#include "GameEventsBroker.h"
 
 void UQuestWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-
-	
-	EventBus::GetInst().Subscribe<FCollectQuestSignal>(
-		[this](const FCollectQuestSignal& Signal)
-		{
-			this->UpdateQuestHUD(Signal);
-		});
-	
+	GameEventsBroker::GetInst().OnPlayerCanActivate.AddUObject(this, &UQuestWidget::UpdateQuestHUD);
 }
 
-void UQuestWidget::UpdateQuestHUD(const FCollectQuestSignal& Signal)
+void UQuestWidget::UpdateQuestHUD()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Quest: %s Amount: %d Item to collect: %s"), *Signal.QuestName, Signal.AmountToCollect, *Signal.ItemToCollect);
+	UE_LOG(LogTemp, Warning, TEXT("UE UpdateQuestHUD UPDATED!"));
 }
+
 

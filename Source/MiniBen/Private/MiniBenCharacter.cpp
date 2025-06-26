@@ -3,31 +3,34 @@
 
 #include "MiniBenCharacter.h"
 #include "MiniBenGameInstance.h"
+#include "GameEventsBroker.h"
 
 // Sets default values
 AMiniBenCharacter::AMiniBenCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
 
-// Called when the game starts or when spawned
+
 void AMiniBenCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	GameInstance = Cast<UMiniBenGameInstance>(GetGameInstance());
 	check(GameInstance);
+
+	//Subscribe
+	GameEventsBroker::GetInst().OnPlayerCanActivate.AddUObject(this, &AMiniBenCharacter::LoadAndRestoreSelf_Implementation);
 }
 
-// Called every frame
+
 void AMiniBenCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-// Called to bind functionality to input
+
 void AMiniBenCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);

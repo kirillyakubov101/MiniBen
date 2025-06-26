@@ -2,8 +2,6 @@
 
 
 #include "Quests/QuestManager.h"
-#include <Signals/Signals.h>
-#include <EventBus.h>
 
 // Sets default values for this component's properties
 UQuestManager::UQuestManager()
@@ -32,17 +30,5 @@ void UQuestManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ..
-}
-
-void UQuestManager::FireTestSignal(FString QuestName, int32 AmountToCollect, FString ItemToCollect)
-{
-	FCollectQuestSignal Signal;
-	FString SignalName = Signal.StaticStruct()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("Invoking signal: %s"), *SignalName);
-	Signal.AmountToCollect = AmountToCollect;
-	Signal.ItemToCollect = ItemToCollect;
-	Signal.QuestName = QuestName;
-
-	EventBus::GetInst().Invoke(Signal);
 }
 
