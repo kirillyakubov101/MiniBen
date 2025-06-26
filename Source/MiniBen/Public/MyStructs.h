@@ -29,27 +29,19 @@ enum class EQuestGiverState : uint8
 //STRUCTS
 
 USTRUCT(BlueprintType)
-struct FCharacterStats
+struct FPlayerTransformData
 {
 public:
 	GENERATED_BODY()
 
 public:
 
-	FCharacterStats()
-		:PlayerHealth(100.f), PlayerExp(0), PlayerLevel(1)
+	FPlayerTransformData()
 	{
-
 	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Stats", SaveGame)
-	float PlayerHealth; 
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Stats", SaveGame)
-	int32 PlayerLevel;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Character Stats", SaveGame)
-	int32 PlayerExp;
+	FTransform PlayerTransform;
 };
 
 USTRUCT(BlueprintType)
@@ -115,7 +107,7 @@ struct FWorldDataSave
 
 public:
 
-	FWorldDataSave() :bHasLevelBeenInitialized(false), PlayerPosition(FVector(0, 0, 0))
+	FWorldDataSave() :bHasLevelBeenInitialized(false)
 	{
 	}
 
@@ -126,13 +118,13 @@ public:
 	TMap<FString,bool> ListOfSublevels;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	FVector PlayerPosition;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	TMap<FGuid,FSaveableWorldNpcs> MapOfLevelSaveableNpcs;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	TMap<FGuid, FSaveableWorldItem> MapOfLevelWorldItems;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	FPlayerTransformData PlayerTransformData;
 };
 
 
@@ -223,9 +215,6 @@ public:
 	FMainSaveData():bHasSaved(false)
 	{
 	}
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	FCharacterStats PlayerStats;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	TMap<FName, int32> PlayerInventory;
