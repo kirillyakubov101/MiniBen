@@ -122,17 +122,16 @@ void UMiniBenGameInstance::AddNewWorldAssetToSaveData(const FSaveableWorldItem& 
 
 void UMiniBenGameInstance::AddNPCToSaveData(const FSaveableWorldNpcs& newNpc)
 {
-    auto CurrentLevelWorldDataSave = MainSaveData.AllLevels.Find(CurrentLevelName);
-    if (CurrentLevelWorldDataSave)
+    if (CurrentWorldDataSave)
     {
-        bool isFound = CurrentLevelWorldDataSave->MapOfLevelSaveableNpcs.Contains(newNpc.Guid);
+        bool isFound = CurrentWorldDataSave->MapOfLevelSaveableNpcs.Contains(newNpc.Guid);
         if (!isFound)
         {
-            CurrentLevelWorldDataSave->MapOfLevelSaveableNpcs.Add(newNpc.Guid, newNpc);
+            CurrentWorldDataSave->MapOfLevelSaveableNpcs.Add(newNpc.Guid, newNpc);
         }
         else
         {
-            CurrentLevelWorldDataSave->MapOfLevelSaveableNpcs[newNpc.Guid] = newNpc;
+            CurrentWorldDataSave->MapOfLevelSaveableNpcs[newNpc.Guid] = newNpc;
         }
     }
     else
