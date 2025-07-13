@@ -18,7 +18,7 @@ public:
 	UFUNCTION(BlueprintPure)
 	const TArray<ULevelStreaming*>& GetAllSubLevels(UWorld* World) const;
 
-	UFUNCTION(BlueprintPure)
-	TArray<AActor*> GetAllActorsInSublevel(TSoftObjectPtr<UWorld> Sublevel) const;
+	/*UFUNCTION(BlueprintPure)
+	TArray<AActor*> GetAllActorsInSublevel(TSoftObjectPtr<UWorld> Sublevel) const;*/
 	
 };

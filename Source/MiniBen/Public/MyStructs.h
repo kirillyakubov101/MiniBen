@@ -50,14 +50,14 @@ struct FSaveableWorldItem
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	bool ShouldBeRemoved;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	//bool ShouldBeRemoved;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	FGuid Guid;
 
 	FSaveableWorldItem()
-		:ShouldBeRemoved(false), Guid(FGuid())
+		:/*ShouldBeRemoved(false), */Guid(FGuid())
 	{
 	}
 
