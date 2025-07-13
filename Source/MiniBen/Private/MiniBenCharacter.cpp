@@ -21,6 +21,7 @@ void AMiniBenCharacter::BeginPlay()
 
 	//Subscribe
 	GameEventsBroker::GetInst().BindToPlayerCanActivate(this, &AMiniBenCharacter::LoadAndRestoreSelf_Implementation);
+	GameEventsBroker::GetInst().BindToPlayerDeath(this, &AMiniBenCharacter::HandlePlayerDeath);
 }
 
 

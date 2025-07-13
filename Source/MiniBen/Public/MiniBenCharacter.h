@@ -29,6 +29,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RestorePlayerInventory(TMap<FName, int32>& Outinventory);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void HandlePlayerDeath();
+
 	// ISaveable Interface
 	virtual void SaveAndRecordSelf_Implementation();
 	virtual void LoadAndRestoreSelf_Implementation();
