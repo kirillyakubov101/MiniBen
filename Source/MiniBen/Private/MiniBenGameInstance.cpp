@@ -141,6 +141,27 @@ void UMiniBenGameInstance::AddNPCToSaveData(const FSaveableWorldNpcs& newNpc)
     }
 }
 
+void UMiniBenGameInstance::AddEnemyToSaveData(const FSavealbeWorldEnemy& newEnemy)
+{
+    if (CurrentWorldDataSave)
+    {
+        bool isFound = CurrentWorldDataSave->MapOfLevelSaveableEnemies.Contains(newEnemy.Guid);
+        if (!isFound)
+        {
+            CurrentWorldDataSave->MapOfLevelSaveableEnemies.Add(newEnemy.Guid, newEnemy);
+        }
+        else
+        {
+            CurrentWorldDataSave->MapOfLevelSaveableEnemies[newEnemy.Guid] = newEnemy;
+        }
+    }
+
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("AddEnemyToSaveData CurrentLevelWorldDataSave was not found"));
+    }
+}
+
 
 void UMiniBenGameInstance::RestoreSublevels()
 {
@@ -193,6 +214,17 @@ const TMap<FGuid, FSaveableWorldNpcs> UMiniBenGameInstance::GetMapOfWorldNpcs() 
     }
 
     return MainSaveData.AllLevels[CurrentLevelName].MapOfLevelSaveableNpcs;
+}
+
+const TMap<FGuid, FSavealbeWorldEnemy> UMiniBenGameInstance::GetMapOfWorldEnemies() const
+{
+    if (!MainSaveData.AllLevels.Contains(this->CurrentLevelName))
+    {
+        UE_LOG(LogTemp, Warning, TEXT("GetMapOfWorldEnemies -> MainSaveData.AllLevels.Contains is empty"));
+        return TMap<FGuid, FSavealbeWorldEnemy>();
+    }
+
+    return MainSaveData.AllLevels[CurrentLevelName].MapOfLevelSaveableEnemies;
 }
 
 void UMiniBenGameInstance::ProcessNextSublevel()

@@ -52,6 +52,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Save")
 	void AddNPCToSaveData(const FSaveableWorldNpcs& newNpc); //adds to the mainsavedata all the Npcs that give quests and/or can be interacted with and change their state
 
+	UFUNCTION(BlueprintCallable, Category = "Save")
+	void AddEnemyToSaveData(const FSavealbeWorldEnemy& newEnemy);
+
 
 	/// <summary>
 	/// Loading Methods
@@ -69,6 +72,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Load")
 	const TMap<FGuid, FSaveableWorldNpcs> GetMapOfWorldNpcs() const;
+
+	UFUNCTION(BlueprintPure, Category = "Load")
+	const TMap<FGuid, FSavealbeWorldEnemy> GetMapOfWorldEnemies() const;
 
 	void ProcessNextSublevel();
 	void RestoreSaveableActorsForAllSublevels(); //i need this only for the game load NOT the bridge levelstreaming
