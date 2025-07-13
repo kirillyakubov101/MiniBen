@@ -12,5 +12,6 @@ GameEventsBroker& GameEventsBroker::GetInst()
 GameEventsBroker::~GameEventsBroker()
 {
 	this->OnPlayerCanActivate.Clear();
+	this->OnPlayerDeath.Clear();
 }
 
