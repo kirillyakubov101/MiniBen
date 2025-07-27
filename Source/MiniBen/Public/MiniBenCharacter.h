@@ -6,11 +6,12 @@
 #include "GameFramework/Character.h"
 #include "../../PlayerActions/Public/Saveable.h"
 #include "Interfaces/KillHandlerInterface.h"
+#include "Interfaces/PlayerInterface.h"
 #include "MiniBenCharacter.generated.h"
 
 
 UCLASS()
-class MINIBEN_API AMiniBenCharacter : public ACharacter, public ISaveable, public IKillHandlerInterface
+class MINIBEN_API AMiniBenCharacter : public ACharacter, public ISaveable, public IKillHandlerInterface, public IPlayerInterface
 {
 	GENERATED_BODY()
 
@@ -39,6 +40,9 @@ public:
 
 	// IKillHandlerInterface Interface
 	virtual void SignalEnemyKilled_Implementation(TSubclassOf<class AGameEntity_Enemy> EnemyClass);
+
+	// IPlayerInterface
+	virtual bool CanBeTargeted_Implementation();
 
 private:
 	class UMiniBenGameInstance* GameInstance;

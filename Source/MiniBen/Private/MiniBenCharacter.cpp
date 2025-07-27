@@ -66,6 +66,12 @@ void AMiniBenCharacter::SignalEnemyKilled_Implementation(TSubclassOf<class AGame
 	//
 }
 
+bool AMiniBenCharacter::CanBeTargeted_Implementation()
+{
+	//
+	return false;
+}
+
 
 
 

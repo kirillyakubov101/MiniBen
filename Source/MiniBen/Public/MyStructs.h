@@ -8,6 +8,15 @@
 
 //ENUMS
 UENUM(BlueprintType)
+enum class EPlayerMovementState : uint8
+{
+	MS_Normal					 UMETA(DisplayName = "Normal"),
+	MS_FistCombat			     UMETA(DisplayName = "FistCombat"),
+	MS_OneHandedSwordCombat      UMETA(DisplayName = "OneHandedSwordCombat"),
+	MS_Locked					 UMETA(DisplayName = "Locked"),
+};
+
+UENUM(BlueprintType)
 enum class EQuestType : uint8
 {
 	QT_Kill      UMETA(DisplayName = "Kill"),

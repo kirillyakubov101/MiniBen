@@ -22,6 +22,30 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = "Death")
 	void NotifyPlayerDeath();
 
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	void DecreaseHealth(float DamageAmount);
 
-		
+	UFUNCTION(BlueprintPure, Category = "Health")
+	bool IsDead();
+
+	UFUNCTION(BlueprintPure, Category = "Health")
+	bool ShouldStaggerPlayer();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void UseStaggerState();
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void UseDeathState();
+
+protected:
+
+	UPROPERTY(EditAnywhere)
+	float CurrentPlayerHealth;
+
+	UPROPERTY(EditAnywhere)
+	float MaxPlayerHealth;
+
+	UPROPERTY(EditAnywhere)
+	float ChanceToStaggerPlayer;
+	
 };	
