@@ -5,11 +5,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "../../PlayerActions/Public/Saveable.h"
+#include "Interfaces/KillHandlerInterface.h"
 #include "MiniBenCharacter.generated.h"
 
 
 UCLASS()
-class MINIBEN_API AMiniBenCharacter : public ACharacter, public ISaveable
+class MINIBEN_API AMiniBenCharacter : public ACharacter, public ISaveable, public IKillHandlerInterface
 {
 	GENERATED_BODY()
 
@@ -35,6 +36,9 @@ public:
 	// ISaveable Interface
 	virtual void SaveAndRecordSelf_Implementation();
 	virtual void LoadAndRestoreSelf_Implementation();
+
+	// IKillHandlerInterface Interface
+	virtual void SignalEnemyKilled_Implementation(TSubclassOf<class AGameEntity_Enemy> EnemyClass);
 
 private:
 	class UMiniBenGameInstance* GameInstance;

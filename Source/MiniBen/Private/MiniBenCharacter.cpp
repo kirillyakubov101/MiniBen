@@ -61,6 +61,11 @@ void AMiniBenCharacter::LoadAndRestoreSelf_Implementation()
 	//inventory and quests should be loaded here as well
 }
 
+void AMiniBenCharacter::SignalEnemyKilled_Implementation(TSubclassOf<class AGameEntity_Enemy> EnemyClass)
+{
+	//
+}
+
 
 
 
