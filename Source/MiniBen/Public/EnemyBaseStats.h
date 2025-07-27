@@ -26,10 +26,6 @@ struct FEnemyBaseStat
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float MaxHealth;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	float DetectionRadius;
-
 };
 
 
@@ -53,11 +49,6 @@ struct FEnemyRuntimeStat
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MaxHealth;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float DetectionRadius;
-
-	
-
 	// TODO: this needs to be created either on BP or called from Native
 	void InitFromBaseStats(const FEnemyBaseStat& Base)
 	{
@@ -66,7 +57,6 @@ struct FEnemyRuntimeStat
 		this->MaxAttackDamage = Base.MaxAttackDamage;
 		this->ChaseSpeed = Base.ChaseSpeed;
 		this->MaxHealth = Base.MaxHealth;
-		this->DetectionRadius = Base.DetectionRadius;
 	}
 };
 

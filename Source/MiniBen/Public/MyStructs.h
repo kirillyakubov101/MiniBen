@@ -50,14 +50,14 @@ struct FSaveableWorldItem
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	bool ShouldBeRemoved;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	//bool ShouldBeRemoved;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	FGuid Guid;
 
 	FSaveableWorldItem()
-		:ShouldBeRemoved(false), Guid(FGuid())
+		:/*ShouldBeRemoved(false), */Guid(FGuid())
 	{
 	}
 
@@ -101,6 +101,28 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FSavealbeWorldEnemy
+{
+	GENERATED_BODY()
+
+public:
+	FSavealbeWorldEnemy() :ShouldBeRemoved(false)
+	{
+	}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	bool ShouldBeRemoved;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	FGuid Guid;
+
+	bool operator==(const FSavealbeWorldEnemy& other) const
+	{
+		return other.Guid == this->Guid;
+	}
+};
+
+USTRUCT(BlueprintType)
 struct FWorldDataSave
 {
 	GENERATED_BODY()
@@ -122,6 +144,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	TMap<FGuid, FSaveableWorldItem> MapOfLevelWorldItems;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	TMap<FGuid, FSavealbeWorldEnemy> MapOfLevelSaveableEnemies;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	FPlayerTransformData PlayerTransformData;

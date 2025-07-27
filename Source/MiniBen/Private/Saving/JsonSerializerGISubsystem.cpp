@@ -43,7 +43,6 @@ void UJsonSerializerGISubsystem::SerializeToJSON(const FMainSaveData& data, cons
 TSharedPtr<FJsonObject> UJsonSerializerGISubsystem::SerializeSaveableWorldItem(const FSaveableWorldItem& Item)
 {
 	TSharedPtr<FJsonObject> JsonObject = MakeShared<FJsonObject>();
-	JsonObject->SetBoolField(TEXT("ShouldBeRemoved"), Item.ShouldBeRemoved);
 	JsonObject->SetStringField(TEXT("Guid"), Item.Guid.ToString());
 
 	return JsonObject;
