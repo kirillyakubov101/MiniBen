@@ -29,6 +29,39 @@ enum class EQuestGiverState : uint8
 //STRUCTS
 
 USTRUCT(BlueprintType)
+struct FEnemyKillQuest
+{
+public:
+	GENERATED_BODY()
+
+	FEnemyKillQuest():AmountToKill(0)
+	{
+	}
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+	TSubclassOf<AGameEntity_Enemy> EnemyToKillClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+	int32 AmountToKill;
+};
+
+USTRUCT(BlueprintType)
+struct FItemGatherQuest
+{
+public:
+	GENERATED_BODY()
+
+	FItemGatherQuest() :AmountToGather(0)
+	{
+	}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+	TSubclassOf<AItem> ItemToGatherClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+	int32 AmountToGather;
+};
+
+USTRUCT(BlueprintType)
 struct FPlayerTransformData
 {
 public:
@@ -50,9 +83,6 @@ struct FSaveableWorldItem
 	GENERATED_BODY()
 
 public:
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	//bool ShouldBeRemoved;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	FGuid Guid;
 
@@ -168,11 +198,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	EQuestType QuestType;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TMap<TSubclassOf<AGameEntity_Enemy>, int32> TargetsToKill;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FEnemyKillQuest TargetsToKill;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TMap<TSubclassOf<AItem>, int32> TargetsToGather;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FItemGatherQuest TargetsToGather;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 ExpReward;
