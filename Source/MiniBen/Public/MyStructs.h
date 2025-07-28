@@ -7,6 +7,32 @@
 #include "MyStructs.generated.h"
 
 //ENUMS
+
+UENUM(BlueprintType)
+enum class EPlayerActions : uint8
+{
+	PA_None				UMETA(DisplayName = "None"),
+	PA_MidRolling		UMETA(DisplayName = "MidRolling"),
+	PA_Attacking		UMETA(DisplayName = "Attacking"),
+	PA_Sheath			UMETA(DisplayName = "Sheath"),
+	PA_UnSheath			UMETA(DisplayName = "UnSheath"),
+	PA_Stagger			UMETA(DisplayName = "Stagger"),
+	PA_Dead				UMETA(DisplayName = "Dead"),
+	PA_Air				UMETA(DisplayName = "Air"),
+	PA_MidSheath		UMETA(DisplayName = "MidSheath"),
+};
+
+
+UENUM(BlueprintType)
+enum class EWeaponType : uint8
+{
+	WT_Fists				UMETA(DisplayName = "Fists"),
+	WT_OneHandedWeapon		UMETA(DisplayName = "OneHandedWeapon"),
+	WT_TwoHandedWeapon      UMETA(DisplayName = "TwoHandedWeapon"),
+	WT_Bow					UMETA(DisplayName = "Bow"),
+	WT_Unarmed				UMETA(DisplayName = "Unarmed"),
+};
+
 UENUM(BlueprintType)
 enum class EPlayerMovementState : uint8
 {
