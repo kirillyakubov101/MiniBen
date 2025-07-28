@@ -3,13 +3,13 @@
 
 #include "MiniBenCharacter.h"
 #include "MiniBenGameInstance.h"
+#include "Camera/CameraComponent.h"
 #include "GameEventsBroker.h"
 
 // Sets default values
 AMiniBenCharacter::AMiniBenCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 
@@ -18,6 +18,9 @@ void AMiniBenCharacter::BeginPlay()
 	Super::BeginPlay();
 	GameInstance = Cast<UMiniBenGameInstance>(GetGameInstance());
 	check(GameInstance);
+
+	//GetCamera
+	MainCamera = Cast<UCameraComponent>(GetComponentByClass(UCameraComponent::StaticClass()));
 
 	//Subscribe
 	GameEventsBroker::GetInst().BindToPlayerCanActivate(this, &AMiniBenCharacter::LoadAndRestoreSelf_Implementation);
@@ -68,8 +71,12 @@ void AMiniBenCharacter::SignalEnemyKilled_Implementation(TSubclassOf<class AGame
 
 bool AMiniBenCharacter::CanBeTargeted_Implementation()
 {
-	//
-	return false;
+	return bCanPlayerBeTargeted;
+}
+
+UCameraComponent* AMiniBenCharacter::GetPlayerMainCamera_Implementation() const
+{
+	return MainCamera;
 }
 
 

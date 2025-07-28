@@ -4,17 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "QuestManager.generated.h"
+#include "Interfaces/PlayerInventoryInterface.h"
+#include "PlayerInventory.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
-class MINIBEN_API UQuestManager : public UActorComponent
+class MINIBEN_API UPlayerInventory : public UActorComponent, public IPlayerInventoryInterface
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UQuestManager();
+	UPlayerInventory();
 
 protected:
 	// Called when the game starts
@@ -23,4 +24,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+		
 };

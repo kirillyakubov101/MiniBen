@@ -4,23 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "PlayerComponentBroker.generated.h"
+#include "QuestManagerInterface.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(MinimalAPI, BlueprintType)
-class UPlayerComponentBrokerInterface : public UInterface
+UINTERFACE(MinimalAPI)
+class UQuestManagerInterface : public UInterface
 {
 	GENERATED_BODY()
 };
 
-
-class MINIBEN_API IPlayerComponentBrokerInterface
+/**
+ * 
+ */
+class MINIBEN_API IQuestManagerInterface
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "PlayerComponents")
-	class UCameraComponent* GetPlayerMainCamera() const;
-
 };

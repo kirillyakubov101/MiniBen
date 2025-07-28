@@ -7,11 +7,12 @@
 #include "../../PlayerActions/Public/Saveable.h"
 #include "Interfaces/KillHandlerInterface.h"
 #include "Interfaces/PlayerInterface.h"
+#include "Interfaces/PlayerComponentBroker.h"
 #include "MiniBenCharacter.generated.h"
 
 
 UCLASS()
-class MINIBEN_API AMiniBenCharacter : public ACharacter, public ISaveable, public IKillHandlerInterface, public IPlayerInterface
+class MINIBEN_API AMiniBenCharacter : public ACharacter, public ISaveable, public IKillHandlerInterface, public IPlayerInterface, public IPlayerComponentBrokerInterface
 {
 	GENERATED_BODY()
 
@@ -41,10 +42,21 @@ public:
 	// IKillHandlerInterface Interface
 	virtual void SignalEnemyKilled_Implementation(TSubclassOf<class AGameEntity_Enemy> EnemyClass);
 
-	// IPlayerInterface
+	// IPlayerInterface Interface
 	virtual bool CanBeTargeted_Implementation();
+
+	// IPlayerComponentBrokerInterface Interface
+	virtual UCameraComponent* GetPlayerMainCamera_Implementation() const;
+
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bCanPlayerBeTargeted;
+
+	UCameraComponent* MainCamera;
 
 private:
 	class UMiniBenGameInstance* GameInstance;
+	
 
 };
