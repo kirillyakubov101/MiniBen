@@ -8,11 +8,17 @@
 #include "Interfaces/KillHandlerInterface.h"
 #include "Interfaces/PlayerInterface.h"
 #include "Interfaces/PlayerComponentBroker.h"
+#include "Interfaces/PlayerActionPermissions.h"
 #include "MiniBenCharacter.generated.h"
 
 
 UCLASS()
-class MINIBEN_API AMiniBenCharacter : public ACharacter, public ISaveable, public IKillHandlerInterface, public IPlayerInterface, public IPlayerComponentBrokerInterface
+class MINIBEN_API AMiniBenCharacter :
+	public ACharacter,
+	public ISaveable,
+	public IKillHandlerInterface,
+	public IPlayerInterface,
+	public IPlayerComponentBrokerInterface
 {
 	GENERATED_BODY()
 
@@ -21,6 +27,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
 
 public:	
 	virtual void Tick(float DeltaTime) override;
@@ -46,17 +53,25 @@ public:
 	virtual bool CanBeTargeted_Implementation();
 
 	// IPlayerComponentBrokerInterface Interface
-	virtual UCameraComponent* GetPlayerMainCamera_Implementation() const;
+	virtual FVector GetPlayerCameraForward_Implementation() const;
+	virtual TScriptInterface<class IPlayerActionPermissions> GetPlayerActionPermissions_Implementation();
 
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCanPlayerBeTargeted;
 
-	UCameraComponent* MainCamera;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
+	class USpringArmComponent* CameraBoom;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
+	class UCameraComponent* MainCameraComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UPlayerActorPermissionsHandler* PlayerActorPermissionsHandler;
 
 private:
-	class UMiniBenGameInstance* GameInstance;
+	class UMiniBenGameInstance* GameInstance;	
 	
 
 };

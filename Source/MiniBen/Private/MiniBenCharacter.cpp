@@ -5,11 +5,20 @@
 #include "MiniBenGameInstance.h"
 #include "Camera/CameraComponent.h"
 #include "GameEventsBroker.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "PlayerComponents/PlayerActorPermissionsHandler.h"
 
 // Sets default values
 AMiniBenCharacter::AMiniBenCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	//Create Components
+	PlayerActorPermissionsHandler = CreateDefaultSubobject<UPlayerActorPermissionsHandler>(TEXT("PlayerPermissionsHandler"));
+	MainCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraMain"));
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	CameraBoom->SetupAttachment(RootComponent);
+	MainCameraComponent->SetupAttachment(CameraBoom);
 }
 
 
@@ -18,9 +27,7 @@ void AMiniBenCharacter::BeginPlay()
 	Super::BeginPlay();
 	GameInstance = Cast<UMiniBenGameInstance>(GetGameInstance());
 	check(GameInstance);
-
-	//GetCamera
-	MainCamera = Cast<UCameraComponent>(GetComponentByClass(UCameraComponent::StaticClass()));
+	
 
 	//Subscribe
 	GameEventsBroker::GetInst().BindToPlayerCanActivate(this, &AMiniBenCharacter::LoadAndRestoreSelf_Implementation);
@@ -74,9 +81,24 @@ bool AMiniBenCharacter::CanBeTargeted_Implementation()
 	return bCanPlayerBeTargeted;
 }
 
-UCameraComponent* AMiniBenCharacter::GetPlayerMainCamera_Implementation() const
+
+FVector AMiniBenCharacter::GetPlayerCameraForward_Implementation() const
 {
-	return MainCamera;
+	if (MainCameraComponent)
+	{
+		return MainCameraComponent->GetForwardVector();
+	}
+
+	// Fallback if camera not found
+	return FVector::ForwardVector;
+}
+
+TScriptInterface<IPlayerActionPermissions> AMiniBenCharacter::GetPlayerActionPermissions_Implementation()
+{
+	TScriptInterface<IPlayerActionPermissions> OutInterface;
+	OutInterface.SetObject(PlayerActorPermissionsHandler);
+	OutInterface.SetInterface(Cast<IPlayerActionPermissions>(PlayerActorPermissionsHandler));
+	return OutInterface;
 }
 
 
