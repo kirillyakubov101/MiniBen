@@ -101,6 +101,18 @@ TScriptInterface<IPlayerActionPermissions> AMiniBenCharacter::GetPlayerActionPer
 	return OutInterface;
 }
 
+IPlayerActionPermissions* AMiniBenCharacter::GetPlayerActionPermissionsNative()
+{
+	IPlayerActionPermissions* InterfacePtr = Cast<IPlayerActionPermissions>(PlayerActorPermissionsHandler);
+	if (!InterfacePtr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("PlayerActorPermissionsHandler on %s does not implement IPlayerActionPermissions!"), *GetName());
+		return nullptr;
+	}
+
+	return InterfacePtr;
+}
+
 
 
 

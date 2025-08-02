@@ -7,6 +7,8 @@
 #include "MyStructs.h"
 #include "PlayerActionPermissions.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnDynamicUpdateActionStateSignatureSignature);
+
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UPlayerActionPermissions : public UInterface
@@ -31,4 +33,6 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "PlayerActionPermissions")
 	bool CanPerformAction(EPlayerActions CharacterAction);
+
+	virtual FOnDynamicUpdateActionStateSignatureSignature& GetOnDynamicUpdateActionState() = 0;
 };

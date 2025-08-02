@@ -18,11 +18,10 @@ void UPlayerActorPermissionsHandler::BeginPlay()
 
 void UPlayerActorPermissionsHandler::DynamicStateUpdateSignal_Implementation()
 {
-	if (this->DynamicUpdateActionStateDelegate.IsBound())
+	if (this->OnDynamicUpdateActionStateDelegate.IsBound())
 	{
-		this->DynamicUpdateActionStateDelegate.Broadcast();
+		this->OnDynamicUpdateActionStateDelegate.Broadcast();
 	}
-	
 }
 
 void UPlayerActorPermissionsHandler::SetActionState_Implementation(EPlayerActions CharacterAction, bool State)
@@ -59,9 +58,46 @@ bool UPlayerActorPermissionsHandler::CanPerformAction_Implementation(EPlayerActi
 			ActionStates[EPlayerActions::PA_MidSheath] != true &&
 			ActionStates[EPlayerActions::PA_Stagger] != true;
 		break;
+
+	case EPlayerActions::PA_Attacking:
+		canPerform =
+			ActionStates[EPlayerActions::PA_Air] != true &&
+			ActionStates[EPlayerActions::PA_MidRolling] != true &&
+			ActionStates[EPlayerActions::PA_MidSheath] != true &&
+			ActionStates[EPlayerActions::PA_Stagger] != true;
+		break;
+
+	case EPlayerActions::PA_Dead:
+		canPerform = true;
+		break;
+
+
+	case EPlayerActions::PA_Sheath:
+		canPerform =
+			ActionStates[EPlayerActions::PA_MidRolling] != true &&
+			ActionStates[EPlayerActions::PA_MidSheath] != true &&
+			ActionStates[EPlayerActions::PA_Stagger] != true &&
+			ActionStates[EPlayerActions::PA_Attacking] != true;
+		break;
+
+	case EPlayerActions::PA_UnSheath:
+		canPerform =
+			ActionStates[EPlayerActions::PA_MidRolling] != true &&
+			ActionStates[EPlayerActions::PA_MidSheath] != true &&
+			ActionStates[EPlayerActions::PA_Stagger] != true &&
+			ActionStates[EPlayerActions::PA_Attacking] != true &&
+			ActionStates[EPlayerActions::PA_Sheath] == true;
+		break;
+		
 	}
 	return canPerform;
 }
+
+FOnDynamicUpdateActionStateSignatureSignature& UPlayerActorPermissionsHandler::GetOnDynamicUpdateActionState()
+{
+	return this->OnDynamicUpdateActionStateDelegate;
+}
+
 
 void UPlayerActorPermissionsHandler::InitializeActionStates()
 {

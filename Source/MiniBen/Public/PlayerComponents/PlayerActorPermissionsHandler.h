@@ -7,7 +7,6 @@
 #include "../Interfaces/PlayerActionPermissions.h"
 #include "PlayerActorPermissionsHandler.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDynamicUpdateActionStateSignature);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class MINIBEN_API UPlayerActorPermissionsHandler : public UActorComponent, public IPlayerActionPermissions
@@ -27,11 +26,9 @@ public:
 	virtual void SetActionState_Implementation(EPlayerActions CharacterAction, bool State);
 
 	virtual bool CanPerformAction_Implementation(EPlayerActions CharacterAction);
+	virtual FOnDynamicUpdateActionStateSignatureSignature& GetOnDynamicUpdateActionState() override;
 
 public:
-	UPROPERTY(BlueprintAssignable)
-	FOnDynamicUpdateActionStateSignature DynamicUpdateActionStateDelegate;
-
 	UPROPERTY(EditAnywhere)
 	TMap<EPlayerActions, bool> ActionStates;
 
@@ -39,4 +36,6 @@ public:
 private:
 	void InitializeActionStates();
 		
+private:
+	FOnDynamicUpdateActionStateSignatureSignature OnDynamicUpdateActionStateDelegate;
 };

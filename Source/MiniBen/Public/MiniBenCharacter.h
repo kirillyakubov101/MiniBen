@@ -55,7 +55,7 @@ public:
 	// IPlayerComponentBrokerInterface Interface
 	virtual FVector GetPlayerCameraForward_Implementation() const;
 	virtual TScriptInterface<class IPlayerActionPermissions> GetPlayerActionPermissions_Implementation();
-
+	virtual IPlayerActionPermissions* GetPlayerActionPermissionsNative() override;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -72,6 +72,4 @@ protected:
 
 private:
 	class UMiniBenGameInstance* GameInstance;	
-	
-
 };

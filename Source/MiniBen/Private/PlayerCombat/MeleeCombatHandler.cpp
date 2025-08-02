@@ -2,6 +2,8 @@
 
 
 #include "PlayerCombat/MeleeCombatHandler.h"
+#include "Interfaces/PlayerComponentBroker.h"
+#include "Interfaces/PlayerActionPermissions.h"
 
 // Sets default values for this component's properties
 UMeleeCombatHandler::UMeleeCombatHandler()
@@ -19,7 +21,24 @@ void UMeleeCombatHandler::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	IPlayerComponentBrokerInterface* Broker = Cast<IPlayerComponentBrokerInterface>(GetOwner());
+	if (Broker)
+	{
+		
+		IPlayerActionPermissions* Permissions = Broker->GetPlayerActionPermissionsNative();
+		if (Permissions)
+		{
+			Permissions->GetOnDynamicUpdateActionState().AddUObject(this, &UMeleeCombatHandler::ProccessDynamicActionSignal);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Log, TEXT("Permissions is null"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("Broker is null"));
+	}
 	
 }
 
