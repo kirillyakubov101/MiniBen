@@ -64,7 +64,9 @@ bool UPlayerActorPermissionsHandler::CanPerformAction_Implementation(EPlayerActi
 			ActionStates[EPlayerActions::PA_Air] != true &&
 			ActionStates[EPlayerActions::PA_MidRolling] != true &&
 			ActionStates[EPlayerActions::PA_MidSheath] != true &&
-			ActionStates[EPlayerActions::PA_Stagger] != true;
+			ActionStates[EPlayerActions::PA_Stagger] != true &&
+			ActionStates[EPlayerActions::PA_Sheath] == true &&
+			ActionStates[EPlayerActions::PA_UnSheath] != true;
 		break;
 
 	case EPlayerActions::PA_Dead:
