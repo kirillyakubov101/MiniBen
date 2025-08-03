@@ -7,18 +7,25 @@
 #include "GameEventsBroker.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "PlayerComponents/PlayerActorPermissionsHandler.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "PlayerComponents/LocomotionStateMachine.h"
 
 // Sets default values
 AMiniBenCharacter::AMiniBenCharacter()
+	:PlayerMovementState(EPlayerMovementState::MS_Normal), bCanPlayerMove(true)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
 	//Create Components
 	PlayerActorPermissionsHandler = CreateDefaultSubobject<UPlayerActorPermissionsHandler>(TEXT("PlayerPermissionsHandler"));
+
 	MainCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraMain"));
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	CameraBoom->SetupAttachment(RootComponent);
 	MainCameraComponent->SetupAttachment(CameraBoom);
+
+	//Locomotion
+	LocomotionStateMachine = CreateDefaultSubobject<ULocomotionStateMachine>(TEXT("LocomotionStateMachine"));
 }
 
 
@@ -111,6 +118,74 @@ IPlayerActionPermissions* AMiniBenCharacter::GetPlayerActionPermissionsNative()
 	}
 
 	return InterfacePtr;
+}
+
+void AMiniBenCharacter::SetCharMoveSpeed_Implementation(EPlayerMovementState NewMovementState)
+{
+	switch (NewMovementState)
+	{
+	case EPlayerMovementState::MS_Normal:
+		PlayerMaxWalkSpeed = 500.f;
+		break;
+	case EPlayerMovementState::MS_FistCombat:
+		PlayerMaxWalkSpeed = 120.f;
+		break;
+	case EPlayerMovementState::MS_OneHandedSwordCombat:
+		PlayerMaxWalkSpeed = 320.f;
+		break;
+	case EPlayerMovementState::MS_Locked:
+		PlayerMaxWalkSpeed = 0.f;
+		break;
+	}
+
+	GetCharacterMovement()->MaxWalkSpeed = PlayerMaxWalkSpeed;
+}
+
+EPlayerMovementState AMiniBenCharacter::GetCurrentLocomotionState_Implementation() const
+{
+	return PlayerMovementState;
+}
+
+void AMiniBenCharacter::ToggleMovement_Implementation(bool bCanMove)
+{
+	this->bCanPlayerMove = bCanMove;
+}
+
+ULocomotionStateMachine* AMiniBenCharacter::GetStateMachine_Implementation() const
+{
+	return this->LocomotionStateMachine;
+}
+
+TScriptInterface<IState> AMiniBenCharacter::GetNormalState_Implementation() const
+{
+	// Will be called from BP for now
+
+	return TScriptInterface<IState>();
+}
+
+EWeaponType AMiniBenCharacter::GetWeaponTypeBasedOnCombatState() const
+{
+	return EWeaponType();
+}
+
+TScriptInterface<IState> AMiniBenCharacter::GetOneHandedCombatState()
+{
+	return TScriptInterface<IState>();
+}
+
+TScriptInterface<IState> AMiniBenCharacter::GetFistCombatState()
+{
+	return TScriptInterface<IState>();
+}
+
+USkeletalMeshComponent* AMiniBenCharacter::GetCharacterSkeletalMesh_Implementation() const
+{
+	return nullptr;
+}
+
+UStaticMeshComponent* AMiniBenCharacter::GetLeftWeaponHolsterStaticMeshComp_Implementation() const
+{
+	return nullptr;
 }
 
 

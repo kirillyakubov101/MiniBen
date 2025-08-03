@@ -2,6 +2,9 @@
 
 
 #include "PlayerComponents/EquipmentHandler.h"
+#include "Data/WeaponDataAsset.h"
+#include "Engine/StreamableManager.h"
+#include "Engine/AssetManager.h"
 
 // Sets default values for this component's properties
 UEquipmentHandler::UEquipmentHandler()
@@ -11,6 +14,51 @@ UEquipmentHandler::UEquipmentHandler()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
+}
+
+void UEquipmentHandler::EquipWeapon(UWeaponDataAsset* NewWeapon)
+{
+	CurrentWeapon = NewWeapon;
+	TSoftObjectPtr<UStaticMesh> Mesh = CurrentWeapon->WeaponMesh;
+
+	//Notify Combat Handler !
+	FStreamableManager& Streamable = UAssetManager::GetStreamableManager();
+
+	if (Mesh.ToSoftObjectPath().IsValid())
+	{
+		auto handle = Streamable.RequestAsyncLoad(Mesh.ToSoftObjectPath(), FStreamableDelegate::CreateLambda([Mesh]()
+			{
+				if (Mesh.IsValid())
+				{
+					UStaticMesh* LoadedMesh = Mesh.Get();
+
+					//Apply the static mesh to player left holster for weapons | based on the weapon!
+				}
+			}));
+	}
+}
+
+UStaticMesh* UEquipmentHandler::GetCurrentWeaponMesh() const
+{
+	return nullptr;
+}
+
+bool UEquipmentHandler::IsWeaponReady() const
+{
+	return false;
+}
+
+void UEquipmentHandler::ReadyWeapon()
+{
+}
+
+void UEquipmentHandler::LowerWeapon()
+{
+}
+
+EWeaponType UEquipmentHandler::GetCurrentlyEquippedWeaponType() const
+{
+	return this->CurrentWeapon->WeaponType;
 }
 
 

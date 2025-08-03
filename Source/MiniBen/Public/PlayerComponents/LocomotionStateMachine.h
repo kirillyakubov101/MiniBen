@@ -28,6 +28,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SwitchState(EWeaponType WeaponType);
+
 private:
 	void InitStartState();
 	void TickState(float DeltaTime);

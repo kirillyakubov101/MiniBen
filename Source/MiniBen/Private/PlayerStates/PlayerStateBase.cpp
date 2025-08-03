@@ -13,14 +13,16 @@ UPlayerStateBase::UPlayerStateBase()
 	// ...
 }
 
-
-// Called when the game starts
-void UPlayerStateBase::BeginPlay()
+void UPlayerStateBase::EnterState_Implementation()
 {
-	Super::BeginPlay();
+}
 
-	// ...
-	
+void UPlayerStateBase::ExitState_Implementation()
+{
+}
+
+void UPlayerStateBase::TickState_Implementation(float DeltaTime)
+{
 }
 
 

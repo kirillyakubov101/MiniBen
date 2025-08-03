@@ -18,9 +18,7 @@ public:
 	UPlayerStateBase();
 
 protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
-
-
-		
+	virtual void EnterState_Implementation();
+	virtual void ExitState_Implementation();
+	virtual void TickState_Implementation(float DeltaTime);
 };

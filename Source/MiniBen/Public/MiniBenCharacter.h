@@ -9,6 +9,11 @@
 #include "Interfaces/PlayerInterface.h"
 #include "Interfaces/PlayerComponentBroker.h"
 #include "Interfaces/PlayerActionPermissions.h"
+#include "Interfaces/CharacterMovementInterface.h"
+#include "Interfaces/StateMachineInterface.h"
+#include "Interfaces/CombatStateInterface.h"
+#include "Interfaces/CharacterMeshInterface.h"
+#include "MyStructs.h"
 #include "MiniBenCharacter.generated.h"
 
 
@@ -18,7 +23,11 @@ class MINIBEN_API AMiniBenCharacter :
 	public ISaveable,
 	public IKillHandlerInterface,
 	public IPlayerInterface,
-	public IPlayerComponentBrokerInterface
+	public IPlayerComponentBrokerInterface,
+	public ICharacterMovementInterface,
+	public IStateMachineInterface,
+	public ICombatStateInterface,
+	public ICharacterMeshInterface
 {
 	GENERATED_BODY()
 
@@ -57,6 +66,24 @@ public:
 	virtual TScriptInterface<class IPlayerActionPermissions> GetPlayerActionPermissions_Implementation();
 	virtual IPlayerActionPermissions* GetPlayerActionPermissionsNative() override;
 
+	// ICharacterMovementInterface
+	void SetCharMoveSpeed_Implementation(EPlayerMovementState NewMovementState);
+	EPlayerMovementState GetCurrentLocomotionState_Implementation() const;
+	void ToggleMovement_Implementation(bool bCanMove);
+
+	// IStateMachineInterface
+	ULocomotionStateMachine* GetStateMachine_Implementation() const;
+	TScriptInterface<IState> GetNormalState_Implementation() const;
+
+	// ICombatStateInterface
+	EWeaponType GetWeaponTypeBasedOnCombatState() const;
+	TScriptInterface<IState> GetOneHandedCombatState();
+	TScriptInterface<IState> GetFistCombatState();
+
+	// ICharacterMeshInterface
+	USkeletalMeshComponent* GetCharacterSkeletalMesh_Implementation() const;
+	UStaticMeshComponent* GetLeftWeaponHolsterStaticMeshComp_Implementation() const;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCanPlayerBeTargeted;
@@ -69,6 +96,21 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class UPlayerActorPermissionsHandler* PlayerActorPermissionsHandler;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	class ULocomotionStateMachine* LocomotionStateMachine;
+
+	// ICharacterMovementInterface
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterMovementInterface")
+	bool bCanPlayerMove;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterMovementInterface")
+	EPlayerMovementState PlayerMovementState;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterMovementInterface")
+	float PlayerMaxWalkSpeed = 500.f;
+
+
 
 private:
 	class UMiniBenGameInstance* GameInstance;	
