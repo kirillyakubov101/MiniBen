@@ -2,7 +2,6 @@
 
 
 #include "PlayerComponents/LocomotionStateMachine.h"
-#include <Interfaces/StateMachineInterface.h>
 #include "Interfaces/CombatStateInterface.h"
 
 // Sets default values for this component's properties
@@ -49,6 +48,7 @@ void ULocomotionStateMachine::SwitchState_Implementation(EWeaponType WeaponType)
 		NewState = ICombatStateInterface::Execute_GetNormalState(GetOwner());
 		break;
 	}
+
 	SwitchStateProccess(NewState);
 }
 
@@ -56,15 +56,8 @@ void ULocomotionStateMachine::SwitchState_Implementation(EWeaponType WeaponType)
 
 void ULocomotionStateMachine::InitStartState()
 {
-	IStateMachineInterface* StateMachineInterface = Cast<IStateMachineInterface>(GetOwner());
-	if (StateMachineInterface)
-	{
-		this->CurrentState = ICombatStateInterface::Execute_GetNormalState(GetOwner());
-		if (this->CurrentState)
-		{
-			IState::Execute_EnterState(this->CurrentState.GetObject());
-		}
-	}
+	CurrentState = ICombatStateInterface::Execute_GetNormalState(GetOwner());
+	IState::Execute_EnterState(CurrentState.GetObject());
 }
 
 void ULocomotionStateMachine::TickState(float DeltaTime)

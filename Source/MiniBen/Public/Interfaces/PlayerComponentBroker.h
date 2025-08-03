@@ -34,6 +34,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
 	TScriptInterface<class IMeleeCombatInterface> GetMeleeCombatHandler();
 	virtual class IMeleeCombatInterface* GetMeleeCombatHandlerNative() = 0;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
+	TScriptInterface<class ILocomotionStateMachineInterface> GetStateMachine();
+	virtual class TScriptInterface<class ILocomotionStateMachineInterface> GetStateMachineNative() = 0;
 	
 
 };

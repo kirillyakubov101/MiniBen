@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PlayerCombat/MeleeCombatHandler.h"
+#include "PlayerComponents/MeleeCombatHandler.h"
 #include "Interfaces/PlayerComponentBroker.h"
 #include "Interfaces/PlayerActionPermissions.h"
 

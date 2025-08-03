@@ -6,7 +6,6 @@
 #include "Engine/StreamableManager.h"
 #include "Engine/AssetManager.h"
 #include <Interfaces/CharacterMeshInterface.h>
-#include <Interfaces/StateMachineInterface.h>
 #include "MiniBenCharacter.h"
 
 // Sets default values for this component's properties
@@ -27,6 +26,8 @@ void UEquipmentHandler::EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 
 	FStreamableManager& Streamable = UAssetManager::GetStreamableManager();
 	FSoftObjectPath MeshPath = Mesh.ToSoftObjectPath();
+
+	ICombatInterface::Execute_NotifyForNewReadyWeapon(GetOwner(), NewWeapon);
 
 	if (MeshPath.IsValid())
 	{
@@ -54,11 +55,6 @@ void UEquipmentHandler::EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 					UE_LOG(LogTemp, Warning, TEXT("StaticMeshComponent was null."));
 				}
 			}));
-	}
-
-	if(GetOwner()->GetClass()->ImplementsInterface(UPlayerComponentBrokerInterface::StaticClass()))
-	{
-		ICombatInterface::Execute_NotifyForNewReadyWeapon(GetOwner(), NewWeapon);
 	}
 }
 
@@ -100,16 +96,17 @@ void UEquipmentHandler::BeginPlay()
 {
 	Super::BeginPlay();
 
-
-	IStateMachineInterface* StateMachineInterface = Cast<IStateMachineInterface>(GetOwner());
-	if (!StateMachineInterface)
+	/*if (GetOwner()->GetClass()->ImplementsInterface(UPlayerComponentBrokerInterface::StaticClass()))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UEquipmentHandler: GetOwner does not implement StateMachineInterface"));
-		return;
+		LocomotionStateMachine = IPlayerComponentBrokerInterface::Execute_GetStateMachine(GetOwner());
+	}*/
+
+	IPlayerComponentBrokerInterface* Broker = Cast<IPlayerComponentBrokerInterface>(GetOwner());
+	if (Broker)
+	{
+		LocomotionStateMachine = Broker->GetStateMachineNative();
 	}
-
-	LocomotionStateMachine = IStateMachineInterface::Execute_GetStateMachine(GetOwner());
-
+	
 	if (!LocomotionStateMachine)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("LocomotionStateMachine IS nullptr"));

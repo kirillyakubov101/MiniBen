@@ -10,7 +10,6 @@
 #include "Interfaces/PlayerComponentBroker.h"
 #include "Interfaces/PlayerActionPermissions.h"
 #include "Interfaces/CharacterMovementInterface.h"
-#include "Interfaces/StateMachineInterface.h"
 #include "Interfaces/CombatStateInterface.h"
 #include "Interfaces/CharacterMeshInterface.h"
 #include "Interfaces/EquipmentInterface.h"
@@ -28,7 +27,6 @@ class MINIBEN_API AMiniBenCharacter :
 	public IPlayerInterface,
 	public IPlayerComponentBrokerInterface,
 	public ICharacterMovementInterface,
-	public IStateMachineInterface,
 	public ICombatStateInterface,
 	public ICharacterMeshInterface,
 	public ICombatInterface
@@ -67,19 +65,19 @@ public:
 
 	// IPlayerComponentBrokerInterface Interface
 	virtual FVector GetPlayerCameraForward_Implementation() const;
-	virtual TScriptInterface<class IPlayerActionPermissions> GetPlayerActionPermissions_Implementation();
+	TScriptInterface<class IPlayerActionPermissions> GetPlayerActionPermissions_Implementation();
 	virtual IPlayerActionPermissions* GetPlayerActionPermissionsNative() override;
+	TScriptInterface<class IEquipmentInterface> GetEquipmentHandler();
 	virtual IEquipmentInterface* GetEquipmentHandlerNative() override;
-	virtual TScriptInterface<class IMeleeCombatInterface> GetMeleeCombatHandler_Implementation();
+	TScriptInterface<class IMeleeCombatInterface> GetMeleeCombatHandler_Implementation();
 	virtual class IMeleeCombatInterface* GetMeleeCombatHandlerNative() override;
+	TScriptInterface<class ILocomotionStateMachineInterface> GetStateMachine_Implementation();
+	virtual TScriptInterface<class ILocomotionStateMachineInterface> GetStateMachineNative() override;
 
 	// ICharacterMovementInterface
 	void SetCharMoveSpeed_Implementation(EPlayerMovementState NewMovementState);
 	EPlayerMovementState GetCurrentLocomotionState_Implementation() const;
 	void ToggleMovement_Implementation(bool bCanMove);
-
-	// IStateMachineInterface
-	TScriptInterface<ILocomotionStateMachineInterface> GetStateMachine_Implementation() const;
 
 	// ICombatStateInterface
 	EWeaponType GetWeaponTypeBasedOnCombatState() const;
@@ -115,7 +113,7 @@ protected:
 	class UEquipmentHandler* EquipmentHandler;
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
-	ULocomotionStateMachine* LocomotionStateMachine;
+	class ULocomotionStateMachine* LocomotionStateMachine;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class UMeleeCombatHandler* MeleeCombatHandler;

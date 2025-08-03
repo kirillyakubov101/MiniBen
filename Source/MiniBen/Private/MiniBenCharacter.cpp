@@ -10,7 +10,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "PlayerComponents/LocomotionStateMachine.h"
 #include "PlayerComponents/EquipmentHandler.h"
-#include "PlayerCombat/MeleeCombatHandler.h"
+#include "PlayerComponents/MeleeCombatHandler.h"
 #include "Data/WeaponDataAsset.h"
 #include "MyStructs.h"
 
@@ -130,6 +130,11 @@ IPlayerActionPermissions* AMiniBenCharacter::GetPlayerActionPermissionsNative()
 	return InterfacePtr;
 }
 
+TScriptInterface<class IEquipmentInterface> AMiniBenCharacter::GetEquipmentHandler()
+{
+	return TScriptInterface<class IEquipmentInterface>();
+}
+
 IEquipmentInterface* AMiniBenCharacter::GetEquipmentHandlerNative()
 {
 	IEquipmentInterface* InterfacePtr = Cast<IEquipmentInterface>(EquipmentHandler);
@@ -157,6 +162,16 @@ IMeleeCombatInterface* AMiniBenCharacter::GetMeleeCombatHandlerNative()
 	}
 
 	return InterfacePtr;
+}
+
+TScriptInterface<ILocomotionStateMachineInterface> AMiniBenCharacter::GetStateMachine_Implementation()
+{
+	return LocomotionStateMachine;
+}
+
+TScriptInterface<ILocomotionStateMachineInterface> AMiniBenCharacter::GetStateMachineNative()
+{
+	return LocomotionStateMachine;
 }
 
 void AMiniBenCharacter::SetCharMoveSpeed_Implementation(EPlayerMovementState NewMovementState)
@@ -190,11 +205,6 @@ void AMiniBenCharacter::ToggleMovement_Implementation(bool bCanMove)
 	this->bCanPlayerMove = bCanMove;
 }
 
-
-TScriptInterface<ILocomotionStateMachineInterface> AMiniBenCharacter::GetStateMachine_Implementation() const
-{
-	return this->LocomotionStateMachine;
-}
 
 TScriptInterface<IState> AMiniBenCharacter::GetNormalState_Implementation() const
 {
