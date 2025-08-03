@@ -15,8 +15,10 @@
 #include "Interfaces/CharacterMeshInterface.h"
 #include "Interfaces/EquipmentInterface.h"
 #include "Interfaces/CombatInterface.h"
+#include "Interfaces/LocomotionStateMachineInterface.h"
 #include "MiniBenCharacter.generated.h"
 
+class UWeaponDataAsset;
 
 UCLASS()
 class MINIBEN_API AMiniBenCharacter :
@@ -68,6 +70,8 @@ public:
 	virtual TScriptInterface<class IPlayerActionPermissions> GetPlayerActionPermissions_Implementation();
 	virtual IPlayerActionPermissions* GetPlayerActionPermissionsNative() override;
 	virtual IEquipmentInterface* GetEquipmentHandlerNative() override;
+	virtual TScriptInterface<class IMeleeCombatInterface> GetMeleeCombatHandler_Implementation();
+	virtual class IMeleeCombatInterface* GetMeleeCombatHandlerNative() override;
 
 	// ICharacterMovementInterface
 	void SetCharMoveSpeed_Implementation(EPlayerMovementState NewMovementState);
@@ -75,13 +79,13 @@ public:
 	void ToggleMovement_Implementation(bool bCanMove);
 
 	// IStateMachineInterface
-	ULocomotionStateMachine* GetStateMachine_Implementation() const;
-	TScriptInterface<IState> GetNormalState_Implementation() const;
+	TScriptInterface<ILocomotionStateMachineInterface> GetStateMachine_Implementation() const;
 
 	// ICombatStateInterface
 	EWeaponType GetWeaponTypeBasedOnCombatState() const;
-	TScriptInterface<IState> GetOneHandedCombatState();
-	TScriptInterface<IState> GetFistCombatState();
+	TScriptInterface<IState> GetOneHandedCombatState() const;
+	TScriptInterface<IState> GetFistCombatState() const;
+	TScriptInterface<IState> GetNormalState_Implementation() const;
 
 	// ICharacterMeshInterface
 	USkeletalMeshComponent* GetCharacterSkeletalMesh_Implementation() const;
@@ -92,11 +96,12 @@ public:
 	FTransform GetRightHandTransform_Implementation() const;
 	void NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset* NewWeapon);
 
-
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCanPlayerBeTargeted;
 
+	//==============================Components=================================//
+	//--------------------------------------------------------------------------
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
 	class USpringArmComponent* CameraBoom;
 
@@ -112,7 +117,12 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	ULocomotionStateMachine* LocomotionStateMachine;
 
-	// ICharacterMovementInterface
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UMeleeCombatHandler* MeleeCombatHandler;
+
+	//-----------------------------------------------------------------------//
+	//======================================================================//
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterMovementInterface")
 	bool bCanPlayerMove;
 

@@ -28,5 +28,10 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	void AssignNewWeapon_Implementation(UWeaponDataAsset* WeaponData);
+	void AttackCommand_Implementation();
+	void RotateCharacterToFaceForward_Implementation(float DeltaTime);
+
+protected:
+
 };

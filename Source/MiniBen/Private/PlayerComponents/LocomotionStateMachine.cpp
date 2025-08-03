@@ -3,6 +3,7 @@
 
 #include "PlayerComponents/LocomotionStateMachine.h"
 #include <Interfaces/StateMachineInterface.h>
+#include "Interfaces/CombatStateInterface.h"
 
 // Sets default values for this component's properties
 ULocomotionStateMachine::ULocomotionStateMachine()
@@ -32,27 +33,33 @@ void ULocomotionStateMachine::TickComponent(float DeltaTime, ELevelTick TickType
 	TickState(DeltaTime);
 }
 
-void ULocomotionStateMachine::SwitchState(EWeaponType WeaponType)
+void ULocomotionStateMachine::SwitchState_Implementation(EWeaponType WeaponType)
 {
+	TScriptInterface<IState> NewState;
+
 	switch (WeaponType)
 	{
 	case EWeaponType::WT_Fists:
+		NewState = ICombatStateInterface::Execute_GetFistCombatState(GetOwner());
 		break;
 	case EWeaponType::WT_OneHandedWeapon:
+		NewState = ICombatStateInterface::Execute_GetOneHandedCombatState(GetOwner());
 		break;
 	case EWeaponType::WT_Unarmed:
+		NewState = ICombatStateInterface::Execute_GetNormalState(GetOwner());
 		break;
 	}
-
-	//Call the owner and let him know!
+	SwitchStateProccess(NewState);
 }
+
+
 
 void ULocomotionStateMachine::InitStartState()
 {
 	IStateMachineInterface* StateMachineInterface = Cast<IStateMachineInterface>(GetOwner());
 	if (StateMachineInterface)
 	{
-		this->CurrentState = IStateMachineInterface::Execute_GetNormalState(GetOwner());
+		this->CurrentState = ICombatStateInterface::Execute_GetNormalState(GetOwner());
 		if (this->CurrentState)
 		{
 			IState::Execute_EnterState(this->CurrentState.GetObject());
@@ -62,14 +69,17 @@ void ULocomotionStateMachine::InitStartState()
 
 void ULocomotionStateMachine::TickState(float DeltaTime)
 {
-	if (IsValid(CurrentState.GetObject()) && CurrentState.GetInterface() != nullptr)
-	{
-		IState::Execute_TickState(CurrentState.GetObject(), DeltaTime);
-	}
+	IState::Execute_TickState(CurrentState.GetObject(), DeltaTime);
 }
 
-void ULocomotionStateMachine::SwitchStateProccess()
+void ULocomotionStateMachine::SwitchStateProccess(TScriptInterface<IState> NewState)
 {
-	
+	if (IsValid(CurrentState.GetObject()))
+	{
+		IState::Execute_ExitState(CurrentState.GetObject());
+	}
+
+	CurrentState = NewState;
+	IState::Execute_EnterState(CurrentState.GetObject());
 }
 

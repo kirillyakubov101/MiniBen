@@ -27,7 +27,6 @@ public:
 	EWeaponType GetCurrentlyEquippedWeaponType_Implementation() const;
 	UWeaponDataAsset* GetCurrentWeapon_Implementation() const;
 
-
 protected:
 
 	virtual void BeginPlay() override;
@@ -39,7 +38,7 @@ protected:
 	UWeaponDataAsset* CurrentWeapon;
 
 private:
-	class ULocomotionStateMachine* LocomotionStateMachine;
+	class TScriptInterface<class ILocomotionStateMachineInterface> LocomotionStateMachine;
 	UStaticMesh* LoadedMesh = nullptr;
 
 };

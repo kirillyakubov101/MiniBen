@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include <Data/WeaponDataAsset.h>
 #include "MeleeCombatInterface.generated.h"
+
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
@@ -21,4 +23,13 @@ class MINIBEN_API IMeleeCombatInterface
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "MeleeCombat")
+	void AssignNewWeapon(UWeaponDataAsset* WeaponData);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "MeleeCombat")
+	void AttackCommand();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "MeleeCombat")
+	void RotateCharacterToFaceForward(float DeltaTime);
+
 };

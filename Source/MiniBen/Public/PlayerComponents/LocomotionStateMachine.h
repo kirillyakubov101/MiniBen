@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "MyStructs.h"
-#include "../Interfaces/State.h"
+#include "Interfaces/State.h"
+#include "Interfaces/LocomotionStateMachineInterface.h"
 #include "LocomotionStateMachine.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class MINIBEN_API ULocomotionStateMachine : public UActorComponent
+class MINIBEN_API ULocomotionStateMachine : public UActorComponent, public ILocomotionStateMachineInterface
 {
 	GENERATED_BODY()
 
@@ -26,13 +26,12 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION(BlueprintCallable)
-	void SwitchState(EWeaponType WeaponType);
+	void SwitchState_Implementation(EWeaponType WeaponType);
 
 private:
 	void InitStartState();
 	void TickState(float DeltaTime);
-	void SwitchStateProccess();
+	void SwitchStateProccess(TScriptInterface<IState> NewState);
 
 
 private:

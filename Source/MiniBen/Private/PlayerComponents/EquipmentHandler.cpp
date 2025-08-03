@@ -7,6 +7,7 @@
 #include "Engine/AssetManager.h"
 #include <Interfaces/CharacterMeshInterface.h>
 #include <Interfaces/StateMachineInterface.h>
+#include "MiniBenCharacter.h"
 
 // Sets default values for this component's properties
 UEquipmentHandler::UEquipmentHandler()
@@ -24,7 +25,6 @@ void UEquipmentHandler::EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 	CurrentWeapon = NewWeapon;
 	TSoftObjectPtr<UStaticMesh> Mesh = CurrentWeapon->WeaponMesh;
 
-	//Notify Combat Handler !
 	FStreamableManager& Streamable = UAssetManager::GetStreamableManager();
 	FSoftObjectPath MeshPath = Mesh.ToSoftObjectPath();
 
@@ -55,6 +55,11 @@ void UEquipmentHandler::EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 				}
 			}));
 	}
+
+	if(GetOwner()->GetClass()->ImplementsInterface(UPlayerComponentBrokerInterface::StaticClass()))
+	{
+		ICombatInterface::Execute_NotifyForNewReadyWeapon(GetOwner(), NewWeapon);
+	}
 }
 
 UStaticMesh* UEquipmentHandler::GetCurrentWeaponMesh_Implementation() const
@@ -71,14 +76,13 @@ void UEquipmentHandler::ReadyWeapon_Implementation()
 {
 	bIsWeaponSheathed = true;
 	EWeaponType WeaponType = CurrentWeapon->WeaponType;
-	LocomotionStateMachine->SwitchState(WeaponType);
+	ILocomotionStateMachineInterface::Execute_SwitchState(LocomotionStateMachine.GetObject(), WeaponType);
 }
 
 void UEquipmentHandler::LowerWeapon_Implementation()
 {
 	bIsWeaponSheathed = false;
-
-	LocomotionStateMachine->SwitchState(EWeaponType::WT_Unarmed);
+	ILocomotionStateMachineInterface::Execute_SwitchState(LocomotionStateMachine.GetObject(), EWeaponType::WT_Unarmed);
 }
 
 EWeaponType UEquipmentHandler::GetCurrentlyEquippedWeaponType_Implementation() const
@@ -90,7 +94,6 @@ UWeaponDataAsset* UEquipmentHandler::GetCurrentWeapon_Implementation() const
 {
 	return CurrentWeapon;
 }
-
 
 // Called when the game starts
 void UEquipmentHandler::BeginPlay()

@@ -51,3 +51,15 @@ void UMeleeCombatHandler::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
+void UMeleeCombatHandler::AssignNewWeapon_Implementation(UWeaponDataAsset* WeaponData)
+{
+}
+
+void UMeleeCombatHandler::AttackCommand_Implementation()
+{
+}
+
+void UMeleeCombatHandler::RotateCharacterToFaceForward_Implementation(float DeltaTime)
+{
+}
+

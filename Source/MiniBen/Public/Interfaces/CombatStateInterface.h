@@ -29,10 +29,13 @@ public:
 	EWeaponType GetWeaponTypeBasedOnCombatState() const;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "CombatState")
-	TScriptInterface<IState> GetOneHandedCombatState();
+	TScriptInterface<IState> GetOneHandedCombatState() const;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "CombatState")
-	TScriptInterface<IState> GetFistCombatState();
+	TScriptInterface<IState> GetFistCombatState() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "CombatState")
+	TScriptInterface<IState> GetNormalState() const;
 
 	//virtual IState* GetFistCombatState() const = 0;
 	//virtual IState* GetOneHandedCombatState() const = 0;

@@ -23,14 +23,7 @@ class MINIBEN_API IStateMachineInterface
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "StateMachine")
-	ULocomotionStateMachine* GetStateMachine() const;
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "StateMachine")
-	TScriptInterface<IState> GetNormalState() const;
-
-	/*virtual ULocomotionStateMachine* GetStateMachine() const = 0;
-	virtual IState* GetNormalState() const = 0;*/
+	TScriptInterface<ILocomotionStateMachineInterface> GetStateMachine() const;
 };

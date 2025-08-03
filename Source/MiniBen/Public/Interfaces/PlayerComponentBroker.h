@@ -30,6 +30,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
 	TScriptInterface<class IEquipmentInterface> GetEquipmentHandler();
 	virtual class IEquipmentInterface* GetEquipmentHandlerNative() = 0;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
+	TScriptInterface<class IMeleeCombatInterface> GetMeleeCombatHandler();
+	virtual class IMeleeCombatInterface* GetMeleeCombatHandlerNative() = 0;
 	
 
 };

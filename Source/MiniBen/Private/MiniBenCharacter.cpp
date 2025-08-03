@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "MiniBenCharacter.h"
@@ -10,6 +10,8 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "PlayerComponents/LocomotionStateMachine.h"
 #include "PlayerComponents/EquipmentHandler.h"
+#include "PlayerCombat/MeleeCombatHandler.h"
+#include "Data/WeaponDataAsset.h"
 #include "MyStructs.h"
 
 // Sets default values
@@ -31,6 +33,9 @@ AMiniBenCharacter::AMiniBenCharacter()
 
 	//EquipmentHandler
 	EquipmentHandler = CreateDefaultSubobject<UEquipmentHandler>(TEXT("EquipmentHandler"));
+
+	//MeleeCombatHandler
+	MeleeCombatHandler = CreateDefaultSubobject<UMeleeCombatHandler>(TEXT("MeleeCombatHandler"));
 }
 
 
@@ -137,6 +142,23 @@ IEquipmentInterface* AMiniBenCharacter::GetEquipmentHandlerNative()
 	return InterfacePtr;
 }
 
+TScriptInterface<class IMeleeCombatInterface> AMiniBenCharacter::GetMeleeCombatHandler_Implementation()
+{
+	return MeleeCombatHandler;
+}
+
+IMeleeCombatInterface* AMiniBenCharacter::GetMeleeCombatHandlerNative()
+{
+	IMeleeCombatInterface* InterfacePtr = Cast<IMeleeCombatInterface>(MeleeCombatHandler);
+	if (!InterfacePtr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("MeleeCombatHandler on %s does not implement IMeleeCombatInterface!"), *GetName());
+		return nullptr;
+	}
+
+	return InterfacePtr;
+}
+
 void AMiniBenCharacter::SetCharMoveSpeed_Implementation(EPlayerMovementState NewMovementState)
 {
 	switch (NewMovementState)
@@ -168,15 +190,14 @@ void AMiniBenCharacter::ToggleMovement_Implementation(bool bCanMove)
 	this->bCanPlayerMove = bCanMove;
 }
 
-ULocomotionStateMachine* AMiniBenCharacter::GetStateMachine_Implementation() const
+
+TScriptInterface<ILocomotionStateMachineInterface> AMiniBenCharacter::GetStateMachine_Implementation() const
 {
 	return this->LocomotionStateMachine;
 }
 
 TScriptInterface<IState> AMiniBenCharacter::GetNormalState_Implementation() const
 {
-	// Will be called from BP for now
-
 	return TScriptInterface<IState>();
 }
 
@@ -185,12 +206,12 @@ EWeaponType AMiniBenCharacter::GetWeaponTypeBasedOnCombatState() const
 	return EWeaponType();
 }
 
-TScriptInterface<IState> AMiniBenCharacter::GetOneHandedCombatState()
+TScriptInterface<IState> AMiniBenCharacter::GetOneHandedCombatState() const
 {
 	return TScriptInterface<IState>();
 }
 
-TScriptInterface<IState> AMiniBenCharacter::GetFistCombatState()
+TScriptInterface<IState> AMiniBenCharacter::GetFistCombatState() const
 {
 	return TScriptInterface<IState>();
 }
@@ -202,6 +223,34 @@ USkeletalMeshComponent* AMiniBenCharacter::GetCharacterSkeletalMesh_Implementati
 
 UStaticMeshComponent* AMiniBenCharacter::GetLeftWeaponHolsterStaticMeshComp_Implementation() const
 {
+	return nullptr;
+}
+
+
+FTransform AMiniBenCharacter::GetRightHandTransform_Implementation() const
+{
+	return FTransform();
+}
+
+void AMiniBenCharacter::NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset* NewWeapon)
+{
+	if (this->MeleeCombatHandler->GetClass()->ImplementsInterface(UMeleeCombatInterface::StaticClass()))
+	{
+		IMeleeCombatInterface::Execute_AssignNewWeapon(this->MeleeCombatHandler,NewWeapon);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("NotifyForNewReadyWeapon_Implementation -> error MeleeCombatHandler"));
+	}
+}
+
+UWeaponDataAsset* AMiniBenCharacter::GetCurrentWeapon_Implementation() const
+{
+	if (this->EquipmentHandler->GetClass()->ImplementsInterface(UEquipmentInterface::StaticClass()))
+	{
+		return IEquipmentInterface::Execute_GetCurrentWeapon(this->EquipmentHandler);
+	}
+	UE_LOG(LogTemp, Error, TEXT("GetCurrentWeapon_Implementation -> error EquipmentHandler" ));
 	return nullptr;
 }
 
