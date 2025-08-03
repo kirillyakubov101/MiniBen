@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Interfaces/MeleeCombatInterface.h"
 #include "MeleeCombatHandler.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
-class MINIBEN_API UMeleeCombatHandler : public UActorComponent
+class MINIBEN_API UMeleeCombatHandler : public UActorComponent, public IMeleeCombatInterface
 {
 	GENERATED_BODY()
 

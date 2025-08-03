@@ -4,52 +4,42 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include <MyStructs.h>
+#include "../Interfaces/EquipmentInterface.h"
 #include "EquipmentHandler.generated.h"
 
 
 class UWeaponDataAsset;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
-class MINIBEN_API UEquipmentHandler : public UActorComponent
+class MINIBEN_API UEquipmentHandler : public UActorComponent, public IEquipmentInterface
 {
 	GENERATED_BODY()
 
 public:	
 	UEquipmentHandler();
 
-	UFUNCTION(BlueprintCallable)
-	void EquipWeapon(UWeaponDataAsset* NewWeapon);
-
-	UFUNCTION(BlueprintPure)
-	UStaticMesh* GetCurrentWeaponMesh() const;
-
-	UFUNCTION(BlueprintPure)
-	bool IsWeaponReady() const;
-
-	UFUNCTION(BlueprintCallable)
-	void ReadyWeapon();
-
-	UFUNCTION(BlueprintCallable)
-	void LowerWeapon();
-
-	UFUNCTION(BlueprintPure)
-	EWeaponType GetCurrentlyEquippedWeaponType() const;
+	// IEquipmentInterface
+	void EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon);
+	UStaticMesh* GetCurrentWeaponMesh_Implementation() const;
+	bool IsWeaponReady_Implementation() const;
+	void ReadyWeapon_Implementation();
+	void LowerWeapon_Implementation();
+	EWeaponType GetCurrentlyEquippedWeaponType_Implementation() const;
+	UWeaponDataAsset* GetCurrentWeapon_Implementation() const;
 
 
 protected:
-	// Called when the game starts
+
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bIsWeaponSheathed;
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	UWeaponDataAsset* CurrentWeapon;
+
+private:
+	class ULocomotionStateMachine* LocomotionStateMachine;
+	UStaticMesh* LoadedMesh = nullptr;
 
 };

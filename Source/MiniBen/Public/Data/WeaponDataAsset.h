@@ -15,10 +15,6 @@ class MINIBEN_API UWeaponDataAsset : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 public:
-    // ItemType defines the category, such as "Collectable" or "Weapon"
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
-    FPrimaryAssetType WeaponAssetType = "Weapons";
-
     // Override the GetPrimaryAssetId function to return the asset ID based on ItemType and ItemID
     virtual FPrimaryAssetId GetPrimaryAssetId() const override
     {
@@ -57,6 +53,10 @@ public:
     float DamageAmount;
 
 protected:
+    // ItemType defines the category, such as "Collectable" or "Weapon"
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
+    FPrimaryAssetType WeaponAssetType = "Weapons";
+
     // ItemID can be any descriptive identifier, like "healing potion" or "mana potion"
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
     FName WeaponId;

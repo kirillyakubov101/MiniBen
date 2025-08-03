@@ -9,6 +9,8 @@
 #include "PlayerComponents/PlayerActorPermissionsHandler.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "PlayerComponents/LocomotionStateMachine.h"
+#include "PlayerComponents/EquipmentHandler.h"
+#include "MyStructs.h"
 
 // Sets default values
 AMiniBenCharacter::AMiniBenCharacter()
@@ -26,6 +28,9 @@ AMiniBenCharacter::AMiniBenCharacter()
 
 	//Locomotion
 	LocomotionStateMachine = CreateDefaultSubobject<ULocomotionStateMachine>(TEXT("LocomotionStateMachine"));
+
+	//EquipmentHandler
+	EquipmentHandler = CreateDefaultSubobject<UEquipmentHandler>(TEXT("EquipmentHandler"));
 }
 
 
@@ -114,6 +119,18 @@ IPlayerActionPermissions* AMiniBenCharacter::GetPlayerActionPermissionsNative()
 	if (!InterfacePtr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("PlayerActorPermissionsHandler on %s does not implement IPlayerActionPermissions!"), *GetName());
+		return nullptr;
+	}
+
+	return InterfacePtr;
+}
+
+IEquipmentInterface* AMiniBenCharacter::GetEquipmentHandlerNative()
+{
+	IEquipmentInterface* InterfacePtr = Cast<IEquipmentInterface>(EquipmentHandler);
+	if (!InterfacePtr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("EquipmentHandler on %s does not implement IEquipmentInterface!"), *GetName());
 		return nullptr;
 	}
 

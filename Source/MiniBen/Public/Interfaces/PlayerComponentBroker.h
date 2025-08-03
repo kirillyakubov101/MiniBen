@@ -25,6 +25,11 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
 	TScriptInterface<class IPlayerActionPermissions> GetPlayerActionPermissions();
-	virtual IPlayerActionPermissions* GetPlayerActionPermissionsNative() = 0;
+	virtual class IPlayerActionPermissions* GetPlayerActionPermissionsNative() = 0;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
+	TScriptInterface<class IEquipmentInterface> GetEquipmentHandler();
+	virtual class IEquipmentInterface* GetEquipmentHandlerNative() = 0;
+	
 
 };

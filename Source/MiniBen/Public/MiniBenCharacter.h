@@ -13,7 +13,8 @@
 #include "Interfaces/StateMachineInterface.h"
 #include "Interfaces/CombatStateInterface.h"
 #include "Interfaces/CharacterMeshInterface.h"
-#include "MyStructs.h"
+#include "Interfaces/EquipmentInterface.h"
+#include "Interfaces/CombatInterface.h"
 #include "MiniBenCharacter.generated.h"
 
 
@@ -27,7 +28,8 @@ class MINIBEN_API AMiniBenCharacter :
 	public ICharacterMovementInterface,
 	public IStateMachineInterface,
 	public ICombatStateInterface,
-	public ICharacterMeshInterface
+	public ICharacterMeshInterface,
+	public ICombatInterface
 {
 	GENERATED_BODY()
 
@@ -65,6 +67,7 @@ public:
 	virtual FVector GetPlayerCameraForward_Implementation() const;
 	virtual TScriptInterface<class IPlayerActionPermissions> GetPlayerActionPermissions_Implementation();
 	virtual IPlayerActionPermissions* GetPlayerActionPermissionsNative() override;
+	virtual IEquipmentInterface* GetEquipmentHandlerNative() override;
 
 	// ICharacterMovementInterface
 	void SetCharMoveSpeed_Implementation(EPlayerMovementState NewMovementState);
@@ -84,6 +87,12 @@ public:
 	USkeletalMeshComponent* GetCharacterSkeletalMesh_Implementation() const;
 	UStaticMeshComponent* GetLeftWeaponHolsterStaticMeshComp_Implementation() const;
 
+	// ICombatInterface
+	UWeaponDataAsset* GetCurrentWeapon_Implementation() const;
+	FTransform GetRightHandTransform_Implementation() const;
+	void NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset* NewWeapon);
+
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCanPlayerBeTargeted;
@@ -97,8 +106,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class UPlayerActorPermissionsHandler* PlayerActorPermissionsHandler;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UEquipmentHandler* EquipmentHandler;
+
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
-	class ULocomotionStateMachine* LocomotionStateMachine;
+	ULocomotionStateMachine* LocomotionStateMachine;
 
 	// ICharacterMovementInterface
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterMovementInterface")
