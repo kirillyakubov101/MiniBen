@@ -31,7 +31,24 @@ public:
 	void AssignNewWeapon_Implementation(UWeaponDataAsset* WeaponData);
 	void AttackCommand_Implementation();
 	void RotateCharacterToFaceForward_Implementation(float DeltaTime);
+	void EndSingleTargetTrace_Implementation();
+	void BeginSingleTargetTrace_Implementation();
+	void ComboEnd_Implementation();
+	void ComboNext_Implementation();
+
+	void PlayAttackSequanceEvent();
+	void TraceSingal();
+	void LoadAttackAnimations();
 
 protected:
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float RotationTowardsCameraForwardSpeed = 10.f;
 
+	int32 AmountOfAttacks;
+	UWeaponDataAsset* CurrentWeapon;
+	TArray<UAnimMontage*> ListOfAttacks;
+	int32 CurrentAttackIndex = 0;
+	bool bIsAttackMidway = false;
+	bool bIsAttackQueued = false;
+	FTimerHandle AttackTraceTimer;
 };

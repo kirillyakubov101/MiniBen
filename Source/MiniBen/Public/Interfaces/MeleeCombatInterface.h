@@ -32,4 +32,13 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "MeleeCombat")
 	void RotateCharacterToFaceForward(float DeltaTime);
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "MeleeCombat")
+	void EndSingleTargetTrace();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "MeleeCombat")
+	void BeginSingleTargetTrace();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "MeleeCombat")
+	void ComboEnd();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "MeleeCombat")
+	void ComboNext();
+
 };
