@@ -4,9 +4,13 @@
 #include "PlayerComponents/MeleeCombatHandler.h"
 #include "Interfaces/PlayerComponentBroker.h"
 #include "Interfaces/PlayerActionPermissions.h"
+#include "Engine/StreamableManager.h"
+#include "Engine/AssetManager.h"
+#include "Interfaces/CombatInterface.h"
 
 // Sets default values for this component's properties
 UMeleeCombatHandler::UMeleeCombatHandler()
+	:TraceChannel(ECollisionChannel::ECC_Visibility)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -28,7 +32,7 @@ void UMeleeCombatHandler::BeginPlay()
 		IPlayerActionPermissions* Permissions = Broker->GetPlayerActionPermissionsNative();
 		if (Permissions)
 		{
-			Permissions->GetOnDynamicUpdateActionState().AddUObject(this, &UMeleeCombatHandler::ProccessDynamicActionSignal);
+			Permissions->GetOnDynamicUpdateActionState().AddUObject(this, &UMeleeCombatHandler::ValidateStateContinue);
 		}
 		else
 		{
@@ -59,11 +63,23 @@ void UMeleeCombatHandler::TickComponent(float DeltaTime, ELevelTick TickType, FA
 void UMeleeCombatHandler::AssignNewWeapon_Implementation(UWeaponDataAsset* WeaponData)
 {
 	this->CurrentWeapon = WeaponData;
-
+	this->ListOfAttacks.Empty();
+	this->AmountOfAttacks = this->CurrentWeapon->ListOfAttacks.Num();
+	LoadAttackAnimations(this->CurrentWeapon->ListOfAttacks);
 }
 
 void UMeleeCombatHandler::AttackCommand_Implementation()
 {
+	if (bIsAttackMidway)
+	{
+		bIsAttackQueued = true;
+	}
+	else
+	{
+		bIsAttackMidway = true;
+		SetComponentTickEnabled(true);
+		PlayAttackSequanceEvent();
+	}
 }
 
 void UMeleeCombatHandler::RotateCharacterToFaceForward_Implementation(float DeltaTime)
@@ -133,14 +149,100 @@ void UMeleeCombatHandler::ComboNext_Implementation()
 
 void UMeleeCombatHandler::PlayAttackSequanceEvent()
 {
+
 }
 
 void UMeleeCombatHandler::TraceSingal()
 {
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(GetOwner());
+	FTransform RightHandTranform = ICombatInterface::Execute_GetRightHandTransform(GetOwner());
+	FVector Start = RightHandTranform.GetLocation();
+	FRotator RightHandRotation = RightHandTranform.GetRotation().Rotator();
+	FVector End = Start + (RightHandRotation.RotateVector(FVector::UpVector) * this->CurrentWeapon->AttackRange);
+	FHitResult HitResult;
+
+	bool bHit = GetWorld()->SweepSingleByChannel(
+		HitResult,
+		Start,
+		End,
+		FQuat::Identity,
+		this->TraceChannel,
+		FCollisionShape::MakeSphere(AttackCollisionSphere),
+		QueryParams
+	);
+
+	if (bHit)
+	{
+		EndSingleTargetTrace_Implementation();
+	}
+
+	FColor TraceColor = bHit ? FColor::Red : FColor::Green;
+	DrawDebugCapsule(GetWorld(), bHit ? HitResult.ImpactPoint : End, AttackCollisionSphere, AttackCollisionSphere, FQuat::Identity, TraceColor, false, 1.5f);
 }
 
-void UMeleeCombatHandler::LoadAttackAnimations()
+void UMeleeCombatHandler::LoadAttackAnimations(const TArray<TSoftObjectPtr<UAnimMontage>>& SoftListOfAnimations)
 {
+	TArray<FSoftObjectPath> AssetsToLoad;
 
+	for (const TSoftObjectPtr<UAnimMontage> SoftPtr : SoftListOfAnimations)
+	{
+		if (SoftPtr.IsNull()) { continue; }
+
+		//If the anim was loaded
+		if (SoftPtr.IsValid())
+		{
+			this->ListOfAttacks.Add(SoftPtr.Get()); // anim already loaded, no need to reload
+		}
+		else
+		{
+			AssetsToLoad.Add(SoftPtr.ToSoftObjectPath());
+		}
+	}
+
+	if (AssetsToLoad.Num() == 0)
+	{
+		// All already loaded
+		UE_LOG(LogTemp, Warning, TEXT("All animations already loaded. AssetsToLoad is empty"));
+		return;
+	}
+
+	FStreamableManager& Streamable = UAssetManager::GetStreamableManager();
+
+	Streamable.RequestAsyncLoad(
+		AssetsToLoad,
+		FStreamableDelegate::CreateUObject(this, &UMeleeCombatHandler::OnAttackAnimationsLoaded, SoftListOfAnimations),
+		FStreamableManager::AsyncLoadHighPriority
+	);
+}
+
+void UMeleeCombatHandler::OnAttackAnimationsLoaded(TArray<TSoftObjectPtr<UAnimMontage>> SoftListOfAnimations)
+{
+	// the animations are now loaded
+	for (const TSoftObjectPtr<UAnimMontage>& SoftPtr : SoftListOfAnimations)
+	{
+		UAnimMontage* AnimMontage = SoftPtr.Get();
+
+		if (AnimMontage != nullptr)
+		{
+			this->ListOfAttacks.Add(AnimMontage);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Failed to load anim montage: %s"), *SoftPtr.ToString());
+		}
+	}
+}
+
+void UMeleeCombatHandler::ValidateStateContinue()
+{
+	IPlayerComponentBrokerInterface* Broker = Cast<IPlayerComponentBrokerInterface>(GetOwner());
+
+	TScriptInterface<IPlayerActionPermissions> Permissions = IPlayerComponentBrokerInterface::Execute_GetPlayerActionPermissions(GetOwner());
+	bool CanStillAttack = IPlayerActionPermissions::Execute_CanPerformAction(Permissions.GetObject(), EPlayerActions::PA_Attacking);
+	if (!CanStillAttack)
+	{
+		this->ComboEnd_Implementation();
+	}
 }
 

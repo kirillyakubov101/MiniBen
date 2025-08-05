@@ -21,8 +21,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
-	void ProccessDynamicActionSignal();
+
 
 public:	
 	// Called every frame
@@ -38,17 +37,32 @@ public:
 
 	void PlayAttackSequanceEvent();
 	void TraceSingal();
-	void LoadAttackAnimations();
+	void LoadAttackAnimations(const TArray<TSoftObjectPtr<UAnimMontage>>& SoftListOfAnimations);
+	void OnAttackAnimationsLoaded(TArray<TSoftObjectPtr<UAnimMontage>> SoftListOfAnimations);
+
+	void ValidateStateContinue();
 
 protected:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	float RotationTowardsCameraForwardSpeed = 10.f;
 
 	int32 AmountOfAttacks;
+
+	UPROPERTY()
 	UWeaponDataAsset* CurrentWeapon;
+
+	UPROPERTY(VisibleAnywhere)
 	TArray<UAnimMontage*> ListOfAttacks;
+
 	int32 CurrentAttackIndex = 0;
 	bool bIsAttackMidway = false;
 	bool bIsAttackQueued = false;
+	float AttackCollisionSphere = 10.f;
+
+	UPROPERTY()
 	FTimerHandle AttackTraceTimer;
+
+private:
+	ECollisionChannel TraceChannel;
+
 };

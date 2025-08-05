@@ -54,45 +54,45 @@ public:
 	void HandlePlayerDeath();
 
 	// ISaveable Interface
-	virtual void SaveAndRecordSelf_Implementation();
-	virtual void LoadAndRestoreSelf_Implementation();
+	virtual void SaveAndRecordSelf_Implementation() override;
+	virtual void LoadAndRestoreSelf_Implementation() override;
 
 	// IKillHandlerInterface Interface
-	virtual void SignalEnemyKilled_Implementation(TSubclassOf<class AGameEntity_Enemy> EnemyClass);
+	virtual void SignalEnemyKilled_Implementation(TSubclassOf<class AGameEntity_Enemy> EnemyClass) override;
 
 	// IPlayerInterface Interface
-	virtual bool CanBeTargeted_Implementation();
+	virtual bool CanBeTargeted_Implementation() override;
 
 	// IPlayerComponentBrokerInterface Interface
-	virtual FVector GetPlayerCameraForward_Implementation() const;
-	TScriptInterface<class IPlayerActionPermissions> GetPlayerActionPermissions_Implementation();
+	virtual FVector GetPlayerCameraForward_Implementation() const override;
+	virtual TScriptInterface<class IPlayerActionPermissions> GetPlayerActionPermissions_Implementation() override;
 	virtual IPlayerActionPermissions* GetPlayerActionPermissionsNative() override;
-	TScriptInterface<class IEquipmentInterface> GetEquipmentHandler();
+	virtual TScriptInterface<class IEquipmentInterface> GetEquipmentHandler();
 	virtual IEquipmentInterface* GetEquipmentHandlerNative() override;
-	TScriptInterface<class IMeleeCombatInterface> GetMeleeCombatHandler_Implementation();
+	virtual TScriptInterface<class IMeleeCombatInterface> GetMeleeCombatHandler_Implementation() override;
 	virtual class IMeleeCombatInterface* GetMeleeCombatHandlerNative() override;
-	TScriptInterface<class ILocomotionStateMachineInterface> GetStateMachine_Implementation();
+	virtual TScriptInterface<class ILocomotionStateMachineInterface> GetStateMachine_Implementation() override;
 	virtual TScriptInterface<class ILocomotionStateMachineInterface> GetStateMachineNative() override;
 
 	// ICharacterMovementInterface
-	void SetCharMoveSpeed_Implementation(EPlayerMovementState NewMovementState);
-	EPlayerMovementState GetCurrentLocomotionState_Implementation() const;
-	void ToggleMovement_Implementation(bool bCanMove);
+	virtual void SetCharMoveSpeed_Implementation(EPlayerMovementState NewMovementState) override;
+	virtual EPlayerMovementState GetCurrentLocomotionState_Implementation() const;
+	virtual void ToggleMovement_Implementation(bool bCanMove);
 
 	// ICombatStateInterface
-	EWeaponType GetWeaponTypeBasedOnCombatState() const;
-	TScriptInterface<IState> GetOneHandedCombatState() const;
-	TScriptInterface<IState> GetFistCombatState() const;
-	TScriptInterface<IState> GetNormalState_Implementation() const;
+	virtual EWeaponType GetWeaponTypeBasedOnCombatState() const;
+	virtual TScriptInterface<IState> GetOneHandedCombatState() const;
+	virtual TScriptInterface<IState> GetFistCombatState() const;
+	virtual TScriptInterface<IState> GetNormalState_Implementation() const;
 
 	// ICharacterMeshInterface
-	USkeletalMeshComponent* GetCharacterSkeletalMesh_Implementation() const;
-	UStaticMeshComponent* GetLeftWeaponHolsterStaticMeshComp_Implementation() const;
+	virtual USkeletalMeshComponent* GetCharacterSkeletalMesh_Implementation() const;
+	virtual UStaticMeshComponent* GetLeftWeaponHolsterStaticMeshComp_Implementation() const;
 
 	// ICombatInterface
-	UWeaponDataAsset* GetCurrentWeapon_Implementation() const;
-	FTransform GetRightHandTransform_Implementation() const;
-	void NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset* NewWeapon);
+	virtual UWeaponDataAsset* GetCurrentWeapon_Implementation() const override;
+	virtual FTransform GetRightHandTransform_Implementation() const override;
+	virtual void NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset* NewWeapon) override;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

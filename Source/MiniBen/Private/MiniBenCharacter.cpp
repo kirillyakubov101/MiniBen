@@ -244,14 +244,7 @@ FTransform AMiniBenCharacter::GetRightHandTransform_Implementation() const
 
 void AMiniBenCharacter::NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 {
-	if (this->MeleeCombatHandler->GetClass()->ImplementsInterface(UMeleeCombatInterface::StaticClass()))
-	{
-		IMeleeCombatInterface::Execute_AssignNewWeapon(this->MeleeCombatHandler,NewWeapon);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("NotifyForNewReadyWeapon_Implementation -> error MeleeCombatHandler"));
-	}
+	IMeleeCombatInterface::Execute_AssignNewWeapon(this->MeleeCombatHandler, NewWeapon);
 }
 
 UWeaponDataAsset* AMiniBenCharacter::GetCurrentWeapon_Implementation() const
