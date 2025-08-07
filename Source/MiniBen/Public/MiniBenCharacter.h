@@ -5,11 +5,31 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "../../PlayerActions/Public/Saveable.h"
+#include "Interfaces/KillHandlerInterface.h"
+#include "Interfaces/PlayerInterface.h"
+#include "Interfaces/PlayerComponentBroker.h"
+#include "Interfaces/PlayerActionPermissions.h"
+#include "Interfaces/CharacterMovementInterface.h"
+#include "Interfaces/CombatStateInterface.h"
+#include "Interfaces/CharacterMeshInterface.h"
+#include "Interfaces/EquipmentInterface.h"
+#include "Interfaces/CombatInterface.h"
+#include "Interfaces/LocomotionStateMachineInterface.h"
 #include "MiniBenCharacter.generated.h"
 
+class UWeaponDataAsset;
 
 UCLASS()
-class MINIBEN_API AMiniBenCharacter : public ACharacter, public ISaveable
+class MINIBEN_API AMiniBenCharacter :
+	public ACharacter,
+	public ISaveable,
+	public IKillHandlerInterface,
+	public IPlayerInterface,
+	public IPlayerComponentBrokerInterface,
+	public ICharacterMovementInterface,
+	public ICombatStateInterface,
+	public ICharacterMeshInterface,
+	public ICombatInterface
 {
 	GENERATED_BODY()
 
@@ -18,6 +38,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
 
 public:	
 	virtual void Tick(float DeltaTime) override;
@@ -33,10 +54,84 @@ public:
 	void HandlePlayerDeath();
 
 	// ISaveable Interface
-	virtual void SaveAndRecordSelf_Implementation();
-	virtual void LoadAndRestoreSelf_Implementation();
+	virtual void SaveAndRecordSelf_Implementation() override;
+	virtual void LoadAndRestoreSelf_Implementation() override;
+
+	// IKillHandlerInterface Interface
+	virtual void SignalEnemyKilled_Implementation(TSubclassOf<class AGameEntity_Enemy> EnemyClass) override;
+
+	// IPlayerInterface Interface
+	virtual bool CanBeTargeted_Implementation() override;
+
+	// IPlayerComponentBrokerInterface Interface
+	virtual FVector GetPlayerCameraForward_Implementation() const override;
+	virtual TScriptInterface<class IPlayerActionPermissions> GetPlayerActionPermissions_Implementation() override;
+	virtual IPlayerActionPermissions* GetPlayerActionPermissionsNative() override;
+	virtual TScriptInterface<class IEquipmentInterface> GetEquipmentHandler();
+	virtual IEquipmentInterface* GetEquipmentHandlerNative() override;
+	virtual TScriptInterface<class IMeleeCombatInterface> GetMeleeCombatHandler_Implementation() override;
+	virtual class IMeleeCombatInterface* GetMeleeCombatHandlerNative() override;
+	virtual TScriptInterface<class ILocomotionStateMachineInterface> GetStateMachine_Implementation() override;
+	virtual TScriptInterface<class ILocomotionStateMachineInterface> GetStateMachineNative() override;
+
+	// ICharacterMovementInterface
+	virtual void SetCharMoveSpeed_Implementation(EPlayerMovementState NewMovementState) override;
+	virtual EPlayerMovementState GetCurrentLocomotionState_Implementation() const;
+	virtual void ToggleMovement_Implementation(bool bCanMove);
+
+	// ICombatStateInterface
+	virtual EWeaponType GetWeaponTypeBasedOnCombatState() const;
+	virtual TScriptInterface<IState> GetOneHandedCombatState() const;
+	virtual TScriptInterface<IState> GetFistCombatState() const;
+	virtual TScriptInterface<IState> GetNormalState_Implementation() const;
+
+	// ICharacterMeshInterface
+	virtual USkeletalMeshComponent* GetCharacterSkeletalMesh_Implementation() const;
+	virtual UStaticMeshComponent* GetLeftWeaponHolsterStaticMeshComp_Implementation() const;
+
+	// ICombatInterface
+	virtual UWeaponDataAsset* GetCurrentWeapon_Implementation() const override;
+	//virtual FTransform GetRightHandTransform_Implementation() const override;
+	virtual void NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset* NewWeapon) override;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bCanPlayerBeTargeted;
+
+	//==============================Components=================================//
+	//--------------------------------------------------------------------------
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
+	class USpringArmComponent* CameraBoom;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Camera)
+	class UCameraComponent* MainCameraComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UPlayerActorPermissionsHandler* PlayerActorPermissionsHandler;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UEquipmentHandler* EquipmentHandler;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	class ULocomotionStateMachine* LocomotionStateMachine;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UMeleeCombatHandler* MeleeCombatHandler;
+
+	//-----------------------------------------------------------------------//
+	//======================================================================//
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterMovementInterface")
+	bool bCanPlayerMove;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterMovementInterface")
+	EPlayerMovementState PlayerMovementState;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterMovementInterface")
+	float PlayerMaxWalkSpeed = 500.f;
+
+
 
 private:
-	class UMiniBenGameInstance* GameInstance;
-
+	class UMiniBenGameInstance* GameInstance;	
 };

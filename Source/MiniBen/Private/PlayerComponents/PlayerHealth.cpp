@@ -16,11 +16,38 @@ UPlayerHealth::UPlayerHealth()
 void UPlayerHealth::BeginPlay()
 {
 	Super::BeginPlay();
+
+	this->CurrentPlayerHealth = this->MaxPlayerHealth;
 }
 
 void UPlayerHealth::NotifyPlayerDeath()
 {
 	GameEventsBroker::GetInst().BroadcastPlayerDeath();
+}
+
+void UPlayerHealth::DecreaseHealth(float DamageAmount)
+{
+	CurrentPlayerHealth = FMath::Max(0.f, CurrentPlayerHealth - DamageAmount);
+
+	if (IsDead())
+	{
+		//implement deathState
+		UseDeathState();
+	}
+	else if(ShouldStaggerPlayer())
+	{
+		UseStaggerState();
+	}
+}
+
+bool UPlayerHealth::IsDead()
+{
+	return this->CurrentPlayerHealth <= 0.f;
+}
+
+bool UPlayerHealth::ShouldStaggerPlayer()
+{
+	return FMath::FRand() <= this->ChanceToStaggerPlayer;
 }
 
 

@@ -7,6 +7,41 @@
 #include "MyStructs.generated.h"
 
 //ENUMS
+
+UENUM(BlueprintType)
+enum class EPlayerActions : uint8
+{
+	PA_None				UMETA(DisplayName = "None"),
+	PA_MidRolling		UMETA(DisplayName = "MidRolling"),
+	PA_Attacking		UMETA(DisplayName = "Attacking"),
+	PA_Sheath			UMETA(DisplayName = "Sheath"),
+	PA_UnSheath			UMETA(DisplayName = "UnSheath"),
+	PA_Stagger			UMETA(DisplayName = "Stagger"),
+	PA_Dead				UMETA(DisplayName = "Dead"),
+	PA_Air				UMETA(DisplayName = "Air"),
+	PA_MidSheath		UMETA(DisplayName = "MidSheath"),
+};
+
+
+UENUM(BlueprintType)
+enum class EWeaponType : uint8
+{
+	WT_Fists				UMETA(DisplayName = "Fists"),
+	WT_OneHandedWeapon		UMETA(DisplayName = "OneHandedWeapon"),
+	WT_TwoHandedWeapon      UMETA(DisplayName = "TwoHandedWeapon"),
+	WT_Bow					UMETA(DisplayName = "Bow"),
+	WT_Unarmed				UMETA(DisplayName = "Unarmed"),
+};
+
+UENUM(BlueprintType)
+enum class EPlayerMovementState : uint8
+{
+	MS_Normal					 UMETA(DisplayName = "Normal"),
+	MS_FistCombat			     UMETA(DisplayName = "FistCombat"),
+	MS_OneHandedSwordCombat      UMETA(DisplayName = "OneHandedSwordCombat"),
+	MS_Locked					 UMETA(DisplayName = "Locked"),
+};
+
 UENUM(BlueprintType)
 enum class EQuestType : uint8
 {
@@ -27,6 +62,39 @@ enum class EQuestGiverState : uint8
 
 
 //STRUCTS
+
+USTRUCT(BlueprintType)
+struct FEnemyKillQuest
+{
+public:
+	GENERATED_BODY()
+
+	FEnemyKillQuest():AmountToKill(0)
+	{
+	}
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+	TSubclassOf<AGameEntity_Enemy> EnemyToKillClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+	int32 AmountToKill;
+};
+
+USTRUCT(BlueprintType)
+struct FItemGatherQuest
+{
+public:
+	GENERATED_BODY()
+
+	FItemGatherQuest() :AmountToGather(0)
+	{
+	}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+	TSubclassOf<AItem> ItemToGatherClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, SaveGame)
+	int32 AmountToGather;
+};
 
 USTRUCT(BlueprintType)
 struct FPlayerTransformData
@@ -50,9 +118,6 @@ struct FSaveableWorldItem
 	GENERATED_BODY()
 
 public:
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
-	//bool ShouldBeRemoved;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	FGuid Guid;
 
@@ -168,11 +233,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	EQuestType QuestType;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TMap<TSubclassOf<AGameEntity_Enemy>, int32> TargetsToKill;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FEnemyKillQuest TargetsToKill;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TMap<TSubclassOf<AItem>, int32> TargetsToGather;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FItemGatherQuest TargetsToGather;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 ExpReward;
