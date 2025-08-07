@@ -91,7 +91,7 @@ public:
 
 	// ICombatInterface
 	virtual UWeaponDataAsset* GetCurrentWeapon_Implementation() const override;
-	virtual FTransform GetRightHandTransform_Implementation() const override;
+	//virtual FTransform GetRightHandTransform_Implementation() const override;
 	virtual void NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset* NewWeapon) override;
 
 protected:

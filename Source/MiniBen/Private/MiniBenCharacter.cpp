@@ -236,12 +236,6 @@ UStaticMeshComponent* AMiniBenCharacter::GetLeftWeaponHolsterStaticMeshComp_Impl
 	return nullptr;
 }
 
-
-FTransform AMiniBenCharacter::GetRightHandTransform_Implementation() const
-{
-	return FTransform();
-}
-
 void AMiniBenCharacter::NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 {
 	IMeleeCombatInterface::Execute_AssignNewWeapon(this->MeleeCombatHandler, NewWeapon);

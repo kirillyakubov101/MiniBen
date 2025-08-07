@@ -7,6 +7,7 @@
 #include "Engine/StreamableManager.h"
 #include "Engine/AssetManager.h"
 #include "Interfaces/CombatInterface.h"
+#include "Interfaces/CharacterMeshInterface.h"
 
 // Sets default values for this component's properties
 UMeleeCombatHandler::UMeleeCombatHandler()
@@ -55,8 +56,8 @@ void UMeleeCombatHandler::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	if (bIsAttackMidway)
 	{
 		RotateCharacterToFaceForward_Implementation(DeltaTime);
+		
 	}
-
 	
 }
 
@@ -149,7 +150,18 @@ void UMeleeCombatHandler::ComboNext_Implementation()
 
 void UMeleeCombatHandler::PlayAttackSequanceEvent()
 {
+	USkeletalMeshComponent* OwnerSkeletalMesh = ICharacterMeshInterface::Execute_GetCharacterSkeletalMesh(GetOwner());
+	UAnimInstance* AnimInstance = OwnerSkeletalMesh->GetAnimInstance();
+	if (ListOfAttacks.IsValidIndex(CurrentAttackIndex))
+	{
+		UAnimMontage* MontageToPlay = ListOfAttacks[CurrentAttackIndex];
 
+		if (MontageToPlay)
+		{
+			AnimInstance->Montage_Play(MontageToPlay);
+		}
+	}
+	
 }
 
 void UMeleeCombatHandler::TraceSingal()
@@ -171,14 +183,14 @@ void UMeleeCombatHandler::TraceSingal()
 		FCollisionShape::MakeSphere(AttackCollisionSphere),
 		QueryParams
 	);
-
+	//DrawDebugCapsule(GetWorld(), Start, this->CurrentWeapon->AttackRange, 5.f, RightHandRotation.Quaternion(), !bHit ? FColor::Red : FColor::Green, true, 1.f);
 	if (bHit)
 	{
+		
 		EndSingleTargetTrace_Implementation();
 	}
 
-	FColor TraceColor = bHit ? FColor::Red : FColor::Green;
-	DrawDebugCapsule(GetWorld(), bHit ? HitResult.ImpactPoint : End, AttackCollisionSphere, AttackCollisionSphere, FQuat::Identity, TraceColor, false, 1.5f);
+
 }
 
 void UMeleeCombatHandler::LoadAttackAnimations(const TArray<TSoftObjectPtr<UAnimMontage>>& SoftListOfAnimations)

@@ -79,7 +79,8 @@ bool UPlayerActorPermissionsHandler::CanPerformAction_Implementation(EPlayerActi
 			ActionStates[EPlayerActions::PA_MidRolling] != true &&
 			ActionStates[EPlayerActions::PA_MidSheath] != true &&
 			ActionStates[EPlayerActions::PA_Stagger] != true &&
-			ActionStates[EPlayerActions::PA_Attacking] != true;
+			ActionStates[EPlayerActions::PA_Attacking] != true &&
+			ActionStates[EPlayerActions::PA_Sheath] != true;
 		break;
 
 	case EPlayerActions::PA_UnSheath:

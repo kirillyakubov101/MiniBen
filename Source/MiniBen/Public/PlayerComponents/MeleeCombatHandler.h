@@ -30,6 +30,7 @@ public:
 	void AssignNewWeapon_Implementation(UWeaponDataAsset* WeaponData);
 	void AttackCommand_Implementation();
 	void RotateCharacterToFaceForward_Implementation(float DeltaTime);
+
 	void EndSingleTargetTrace_Implementation();
 	void BeginSingleTargetTrace_Implementation();
 	void ComboEnd_Implementation();
