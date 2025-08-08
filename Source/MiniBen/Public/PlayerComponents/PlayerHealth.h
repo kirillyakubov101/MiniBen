@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "../Interfaces/PlayerHealthInterface.h"
 #include "PlayerHealth.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable )
-class MINIBEN_API UPlayerHealth : public UActorComponent
+class MINIBEN_API UPlayerHealth : public UActorComponent, public IPlayerHealthInterface
 {
 	GENERATED_BODY()
 
@@ -26,9 +27,6 @@ protected:
 	void DecreaseHealth(float DamageAmount);
 
 	UFUNCTION(BlueprintPure, Category = "Health")
-	bool IsDead();
-
-	UFUNCTION(BlueprintPure, Category = "Health")
 	bool ShouldStaggerPlayer();
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
@@ -36,6 +34,8 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void UseDeathState();
+
+	virtual bool IsDead_Implementation() override;
 
 protected:
 

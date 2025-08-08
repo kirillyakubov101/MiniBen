@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "../Entities/GameEntity_Enemy.h"
 #include "KillHandlerInterface.generated.h"
 
 // This class does not need to be modified.
@@ -21,5 +22,5 @@ class MINIBEN_API IKillHandlerInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "KillHandler")
-	void SignalEnemyKilled(TSubclassOf<class AGameEntity_Enemy> EnemyClass);
+	void SignalEnemyKilled(TSubclassOf<AGameEntity_Enemy> EnemyClass);
 };

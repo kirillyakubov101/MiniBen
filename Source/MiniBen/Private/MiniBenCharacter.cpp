@@ -13,6 +13,8 @@
 #include "PlayerComponents/MeleeCombatHandler.h"
 #include "Data/WeaponDataAsset.h"
 #include "MyStructs.h"
+#include "PlayerComponents/KillsHandler.h"
+#include "PlayerComponents//PlayerHealth.h"
 
 // Sets default values
 AMiniBenCharacter::AMiniBenCharacter()
@@ -36,6 +38,10 @@ AMiniBenCharacter::AMiniBenCharacter()
 
 	//MeleeCombatHandler
 	MeleeCombatHandler = CreateDefaultSubobject<UMeleeCombatHandler>(TEXT("MeleeCombatHandler"));
+
+	//KillsHandleer
+	KillsHandler = CreateDefaultSubobject<UKillsHandler>(TEXT("KillsHandler"));
+
 }
 
 
@@ -44,6 +50,13 @@ void AMiniBenCharacter::BeginPlay()
 	Super::BeginPlay();
 	GameInstance = Cast<UMiniBenGameInstance>(GetGameInstance());
 	check(GameInstance);
+
+	//PlayerHealth
+	auto PlayerHealthComponents = GetComponentsByInterface(UPlayerHealthInterface::StaticClass());
+	if (PlayerHealthComponents.Num() > 0)
+	{
+		PlayerHealth = Cast<UPlayerHealth>(PlayerHealthComponents[0]);
+	}
 	
 
 	//Subscribe
@@ -86,11 +99,6 @@ void AMiniBenCharacter::LoadAndRestoreSelf_Implementation()
 	SetActorTransform(GameInstance->GetWorldDataSave()->PlayerTransformData.PlayerTransform);
 	ISaveable::Execute_LoadAndRestoreSelf(this);
 	//inventory and quests should be loaded here as well
-}
-
-void AMiniBenCharacter::SignalEnemyKilled_Implementation(TSubclassOf<class AGameEntity_Enemy> EnemyClass)
-{
-	//
 }
 
 bool AMiniBenCharacter::CanBeTargeted_Implementation()
@@ -174,6 +182,26 @@ TScriptInterface<ILocomotionStateMachineInterface> AMiniBenCharacter::GetStateMa
 	return LocomotionStateMachine;
 }
 
+TScriptInterface<class IPlayerHealthInterface> AMiniBenCharacter::GetPlayerHealthHandler_Implementation()
+{
+	return PlayerHealth;
+}
+
+TScriptInterface<class IPlayerHealthInterface> AMiniBenCharacter::GetPlayerHealthHandlerNative()
+{
+	return PlayerHealth;
+}
+
+TScriptInterface<class IKillHandlerInterface> AMiniBenCharacter::GetKillsHandler_Implementation()
+{
+	return KillsHandler;
+}
+
+TScriptInterface<class IKillHandlerInterface> AMiniBenCharacter::GetKillsHandlerNative()
+{
+	return KillsHandler;
+}
+
 void AMiniBenCharacter::SetCharMoveSpeed_Implementation(EPlayerMovementState NewMovementState)
 {
 	switch (NewMovementState)
@@ -239,6 +267,11 @@ UStaticMeshComponent* AMiniBenCharacter::GetLeftWeaponHolsterStaticMeshComp_Impl
 void AMiniBenCharacter::NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 {
 	IMeleeCombatInterface::Execute_AssignNewWeapon(this->MeleeCombatHandler, NewWeapon);
+}
+
+void AMiniBenCharacter::TakeDamageNative(AActor* Inst, float DamageAmount, FVector HitLocation)
+{
+	//
 }
 
 UWeaponDataAsset* AMiniBenCharacter::GetCurrentWeapon_Implementation() const

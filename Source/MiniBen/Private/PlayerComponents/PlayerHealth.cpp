@@ -29,7 +29,7 @@ void UPlayerHealth::DecreaseHealth(float DamageAmount)
 {
 	CurrentPlayerHealth = FMath::Max(0.f, CurrentPlayerHealth - DamageAmount);
 
-	if (IsDead())
+	if (IsDead_Implementation())
 	{
 		//implement deathState
 		UseDeathState();
@@ -40,7 +40,7 @@ void UPlayerHealth::DecreaseHealth(float DamageAmount)
 	}
 }
 
-bool UPlayerHealth::IsDead()
+bool UPlayerHealth::IsDead_Implementation()
 {
 	return this->CurrentPlayerHealth <= 0.f;
 }

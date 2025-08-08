@@ -273,7 +273,7 @@ public:
 	TSubclassOf<AQuestStarter> QuestStarterClass;
 };
 
-USTRUCT(BlueprintType) //TODO: remove later
+USTRUCT(BlueprintType)
 struct FActiveQuestInfo
 {
 	GENERATED_BODY()

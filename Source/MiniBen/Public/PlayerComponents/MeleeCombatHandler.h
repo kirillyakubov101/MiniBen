@@ -37,7 +37,7 @@ public:
 	void ComboNext_Implementation();
 
 	void PlayAttackSequanceEvent();
-	void TraceSingal();
+	void TraceSingel();
 	void LoadAttackAnimations(const TArray<TSoftObjectPtr<UAnimMontage>>& SoftListOfAnimations);
 	void OnAttackAnimationsLoaded(TArray<TSoftObjectPtr<UAnimMontage>> SoftListOfAnimations);
 
