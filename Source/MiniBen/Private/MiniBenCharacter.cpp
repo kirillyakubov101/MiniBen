@@ -6,15 +6,17 @@
 #include "Camera/CameraComponent.h"
 #include "GameEventsBroker.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "PlayerComponents/PlayerActorPermissionsHandler.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "PlayerComponents/PlayerActorPermissionsHandler.h"
 #include "PlayerComponents/LocomotionStateMachine.h"
 #include "PlayerComponents/EquipmentHandler.h"
 #include "PlayerComponents/MeleeCombatHandler.h"
-#include "Data/WeaponDataAsset.h"
-#include "MyStructs.h"
+#include "PlayerComponents/PlayerInventory.h"
+#include "PlayerComponents/QuestManager.h"
 #include "PlayerComponents/KillsHandler.h"
 #include "PlayerComponents//PlayerHealth.h"
+#include "Data/WeaponDataAsset.h"
+#include "MyStructs.h"
 
 // Sets default values
 AMiniBenCharacter::AMiniBenCharacter()
@@ -51,17 +53,35 @@ void AMiniBenCharacter::BeginPlay()
 	GameInstance = Cast<UMiniBenGameInstance>(GetGameInstance());
 	check(GameInstance);
 
+	GetAndAssignPlayerComponents();
+
+	//Subscribe
+	GameEventsBroker::GetInst().BindToPlayerCanActivate(this, &AMiniBenCharacter::LoadAndRestoreSelf_Implementation);
+	GameEventsBroker::GetInst().BindToPlayerDeath(this, &AMiniBenCharacter::HandlePlayerDeath);
+}
+
+void AMiniBenCharacter::GetAndAssignPlayerComponents()
+{
 	//PlayerHealth
 	auto PlayerHealthComponents = GetComponentsByInterface(UPlayerHealthInterface::StaticClass());
 	if (PlayerHealthComponents.Num() > 0)
 	{
 		PlayerHealth = Cast<UPlayerHealth>(PlayerHealthComponents[0]);
 	}
-	
 
-	//Subscribe
-	GameEventsBroker::GetInst().BindToPlayerCanActivate(this, &AMiniBenCharacter::LoadAndRestoreSelf_Implementation);
-	GameEventsBroker::GetInst().BindToPlayerDeath(this, &AMiniBenCharacter::HandlePlayerDeath);
+	//PlayerInventory
+	auto PlayerInventoryComponent = GetComponentsByInterface(UPlayerInventoryInterface::StaticClass());
+	if (PlayerInventoryComponent.Num() > 0)
+	{
+		PlayerInventory = Cast<UPlayerInventory>(PlayerInventoryComponent[0]);
+	}
+
+	//QuestManager
+	auto PlayerQuestComponent = GetComponentsByInterface(UQuestManagerInterface::StaticClass());
+	if (PlayerQuestComponent.Num() > 0)
+	{
+		QuestManager = Cast<UQuestManager>(PlayerQuestComponent[0]);
+	}
 }
 
 

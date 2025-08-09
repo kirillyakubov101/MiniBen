@@ -7,6 +7,8 @@
 #include "../Entities/GameEntity_Enemy.h"
 #include "KillHandlerInterface.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyKilledDelegate, TSubclassOf<AGameEntity_Enemy>, EnemyClass);
+
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI, BlueprintType)
 class UKillHandlerInterface : public UInterface

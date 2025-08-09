@@ -13,6 +13,7 @@
 #include "Interfaces/CharacterMeshInterface.h"
 #include "Interfaces/EquipmentInterface.h"
 #include "Interfaces/CombatInterface.h"
+#include "Interfaces/Damageable.h"
 #include "Interfaces/LocomotionStateMachineInterface.h"
 #include "MiniBenCharacter.generated.h"
 
@@ -37,6 +38,8 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+	void GetAndAssignPlayerComponents();
 
 
 public:	
@@ -125,8 +128,14 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class UPlayerHealth* PlayerHealth;
-	
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UPlayerInventory* PlayerInventory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UQuestManager* QuestManager;
+	
+	
 	//-----------------------------------------------------------------------//
 	//======================================================================//
 

@@ -21,3 +21,4 @@ void UKillsHandler::SignalEnemyKilled_Implementation(TSubclassOf<AGameEntity_Ene
 	this->OnEnemyKilledDelegate.Broadcast(EnemyClass);
 }
 
+
