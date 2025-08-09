@@ -3,8 +3,10 @@
 #include "CoreMinimal.h"
 #include "Items/Item.h"
 #include "Quests/QuestStarter.h"
-#include "Entities/GameEntity_Enemy.h"
 #include "MyStructs.generated.h"
+
+class AGameEntity_Enemy;
+
 
 //ENUMS
 
@@ -273,7 +275,7 @@ public:
 	TSubclassOf<AQuestStarter> QuestStarterClass;
 };
 
-USTRUCT(BlueprintType) //TODO: remove later
+USTRUCT(BlueprintType)
 struct FActiveQuestInfo
 {
 	GENERATED_BODY()

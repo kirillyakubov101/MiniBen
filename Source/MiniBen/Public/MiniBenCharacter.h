@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "../../PlayerActions/Public/Saveable.h"
-#include "Interfaces/KillHandlerInterface.h"
 #include "Interfaces/PlayerInterface.h"
 #include "Interfaces/PlayerComponentBroker.h"
 #include "Interfaces/PlayerActionPermissions.h"
@@ -14,6 +13,7 @@
 #include "Interfaces/CharacterMeshInterface.h"
 #include "Interfaces/EquipmentInterface.h"
 #include "Interfaces/CombatInterface.h"
+#include "Interfaces/Damageable.h"
 #include "Interfaces/LocomotionStateMachineInterface.h"
 #include "MiniBenCharacter.generated.h"
 
@@ -23,13 +23,13 @@ UCLASS()
 class MINIBEN_API AMiniBenCharacter :
 	public ACharacter,
 	public ISaveable,
-	public IKillHandlerInterface,
 	public IPlayerInterface,
 	public IPlayerComponentBrokerInterface,
 	public ICharacterMovementInterface,
 	public ICombatStateInterface,
 	public ICharacterMeshInterface,
-	public ICombatInterface
+	public ICombatInterface,
+	public IDamageable
 {
 	GENERATED_BODY()
 
@@ -38,6 +38,8 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+	void GetAndAssignPlayerComponents();
 
 
 public:	
@@ -57,9 +59,6 @@ public:
 	virtual void SaveAndRecordSelf_Implementation() override;
 	virtual void LoadAndRestoreSelf_Implementation() override;
 
-	// IKillHandlerInterface Interface
-	virtual void SignalEnemyKilled_Implementation(TSubclassOf<class AGameEntity_Enemy> EnemyClass) override;
-
 	// IPlayerInterface Interface
 	virtual bool CanBeTargeted_Implementation() override;
 
@@ -73,6 +72,14 @@ public:
 	virtual class IMeleeCombatInterface* GetMeleeCombatHandlerNative() override;
 	virtual TScriptInterface<class ILocomotionStateMachineInterface> GetStateMachine_Implementation() override;
 	virtual TScriptInterface<class ILocomotionStateMachineInterface> GetStateMachineNative() override;
+	virtual TScriptInterface<class IPlayerHealthInterface> GetPlayerHealthHandler_Implementation() override;
+	virtual class TScriptInterface<class IPlayerHealthInterface> GetPlayerHealthHandlerNative() override;
+	virtual TScriptInterface<class IKillHandlerInterface> GetKillsHandler_Implementation() override;
+	virtual class TScriptInterface<class IKillHandlerInterface> GetKillsHandlerNative() override;
+	virtual TScriptInterface<class IQuestManagerInterface> GetQuestManager_Implementation() override;
+	virtual class TScriptInterface<class IQuestManagerInterface> GetQuestManagerNative() override;
+	virtual TScriptInterface<class IPlayerInventoryInterface> GetPlayerInventory_Implementation() override;
+	virtual class TScriptInterface<class IPlayerInventoryInterface> GetPlayerInventoryNative() override;
 
 	// ICharacterMovementInterface
 	virtual void SetCharMoveSpeed_Implementation(EPlayerMovementState NewMovementState) override;
@@ -91,8 +98,10 @@ public:
 
 	// ICombatInterface
 	virtual UWeaponDataAsset* GetCurrentWeapon_Implementation() const override;
-	//virtual FTransform GetRightHandTransform_Implementation() const override;
 	virtual void NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset* NewWeapon) override;
+
+	// IDamageable
+	void TakeDamageNative(AActor* Instigator, float DamageAmount, FVector HitLocation) override;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -118,6 +127,19 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class UMeleeCombatHandler* MeleeCombatHandler;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UKillsHandler* KillsHandler;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UPlayerHealth* PlayerHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UPlayerInventory* PlayerInventory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UQuestManager* QuestManager;
+	
+	
 	//-----------------------------------------------------------------------//
 	//======================================================================//
 

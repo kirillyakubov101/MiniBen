@@ -5,12 +5,11 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "../Entities/GameEntity_Enemy.h"
+#include "../Interfaces/KillHandlerInterface.h"
 #include "KillsHandler.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyKilledDelegate, TSubclassOf<AGameEntity_Enemy>, EnemyClass);
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable )
-class MINIBEN_API UKillsHandler : public UActorComponent
+class MINIBEN_API UKillsHandler : public UActorComponent, public IKillHandlerInterface
 {
 	GENERATED_BODY()
 
@@ -27,6 +26,5 @@ protected:
 	FOnEnemyKilledDelegate OnEnemyKilledDelegate;
 
 public:	
-	UFUNCTION(BlueprintCallable)
-	void SignalEnemyKilled(TSubclassOf<AGameEntity_Enemy> EnemyClass);
+	void SignalEnemyKilled_Implementation(TSubclassOf<AGameEntity_Enemy> EnemyClass);
 };

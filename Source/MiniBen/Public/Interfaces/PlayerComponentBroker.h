@@ -38,6 +38,22 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
 	TScriptInterface<class ILocomotionStateMachineInterface> GetStateMachine();
 	virtual class TScriptInterface<class ILocomotionStateMachineInterface> GetStateMachineNative() = 0;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
+	TScriptInterface<class IPlayerHealthInterface> GetPlayerHealthHandler();
+	virtual class TScriptInterface<class IPlayerHealthInterface> GetPlayerHealthHandlerNative() = 0;
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
+	TScriptInterface<class IKillHandlerInterface> GetKillsHandler();
+	virtual class TScriptInterface<class IKillHandlerInterface> GetKillsHandlerNative() = 0;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
+	TScriptInterface<class IQuestManagerInterface> GetQuestManager();
+	virtual class TScriptInterface<class IQuestManagerInterface> GetQuestManagerNative() = 0;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
+	TScriptInterface<class IPlayerInventoryInterface> GetPlayerInventory();
+	virtual class TScriptInterface<class IPlayerInventoryInterface> GetPlayerInventoryNative() = 0;
 	
 
 };

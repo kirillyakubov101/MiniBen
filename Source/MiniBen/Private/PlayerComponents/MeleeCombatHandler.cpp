@@ -114,7 +114,7 @@ void UMeleeCombatHandler::BeginSingleTargetTrace_Implementation()
 		GetWorld()->GetTimerManager().SetTimer(
 			AttackTraceTimer,
 			this,
-			&UMeleeCombatHandler::TraceSingal,
+			&UMeleeCombatHandler::TraceSingel,
 			0.01f,
 			true
 		);
@@ -164,7 +164,7 @@ void UMeleeCombatHandler::PlayAttackSequanceEvent()
 	
 }
 
-void UMeleeCombatHandler::TraceSingal()
+void UMeleeCombatHandler::TraceSingel()
 {
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(GetOwner());
@@ -184,13 +184,16 @@ void UMeleeCombatHandler::TraceSingal()
 		QueryParams
 	);
 	//DrawDebugCapsule(GetWorld(), Start, this->CurrentWeapon->AttackRange, 5.f, RightHandRotation.Quaternion(), !bHit ? FColor::Red : FColor::Green, true, 1.f);
+	
 	if (bHit)
 	{
-		
-		EndSingleTargetTrace_Implementation();
+		bool isDamageable = HitResult.GetActor()->GetClass()->ImplementsInterface(UDamageable::StaticClass());
+		if (isDamageable)
+		{
+			IDamageable::Execute_TakeDamage(HitResult.GetActor(), GetOwner(), CurrentWeapon->DamageAmount, HitResult.ImpactPoint);
+			EndSingleTargetTrace_Implementation();
+		}
 	}
-
-
 }
 
 void UMeleeCombatHandler::LoadAttackAnimations(const TArray<TSoftObjectPtr<UAnimMontage>>& SoftListOfAnimations)
