@@ -76,6 +76,10 @@ public:
 	virtual class TScriptInterface<class IPlayerHealthInterface> GetPlayerHealthHandlerNative() override;
 	virtual TScriptInterface<class IKillHandlerInterface> GetKillsHandler_Implementation() override;
 	virtual class TScriptInterface<class IKillHandlerInterface> GetKillsHandlerNative() override;
+	virtual TScriptInterface<class IQuestManagerInterface> GetQuestManager_Implementation() override;
+	virtual class TScriptInterface<class IQuestManagerInterface> GetQuestManagerNative() override;
+	virtual TScriptInterface<class IPlayerInventoryInterface> GetPlayerInventory_Implementation() override;
+	virtual class TScriptInterface<class IPlayerInventoryInterface> GetPlayerInventoryNative() override;
 
 	// ICharacterMovementInterface
 	virtual void SetCharMoveSpeed_Implementation(EPlayerMovementState NewMovementState) override;

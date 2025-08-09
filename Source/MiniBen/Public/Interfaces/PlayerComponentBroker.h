@@ -46,6 +46,14 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
 	TScriptInterface<class IKillHandlerInterface> GetKillsHandler();
 	virtual class TScriptInterface<class IKillHandlerInterface> GetKillsHandlerNative() = 0;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
+	TScriptInterface<class IQuestManagerInterface> GetQuestManager();
+	virtual class TScriptInterface<class IQuestManagerInterface> GetQuestManagerNative() = 0;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
+	TScriptInterface<class IPlayerInventoryInterface> GetPlayerInventory();
+	virtual class TScriptInterface<class IPlayerInventoryInterface> GetPlayerInventoryNative() = 0;
 	
 
 };

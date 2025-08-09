@@ -222,6 +222,26 @@ TScriptInterface<class IKillHandlerInterface> AMiniBenCharacter::GetKillsHandler
 	return KillsHandler;
 }
 
+TScriptInterface<class IQuestManagerInterface> AMiniBenCharacter::GetQuestManager_Implementation()
+{
+	return QuestManager;
+}
+
+TScriptInterface<class IQuestManagerInterface> AMiniBenCharacter::GetQuestManagerNative()
+{
+	return QuestManager;
+}
+
+TScriptInterface<class IPlayerInventoryInterface> AMiniBenCharacter::GetPlayerInventory_Implementation()
+{
+	return PlayerInventory;
+}
+
+TScriptInterface<class IPlayerInventoryInterface> AMiniBenCharacter::GetPlayerInventoryNative()
+{
+	return PlayerInventory;
+}
+
 void AMiniBenCharacter::SetCharMoveSpeed_Implementation(EPlayerMovementState NewMovementState)
 {
 	switch (NewMovementState)
