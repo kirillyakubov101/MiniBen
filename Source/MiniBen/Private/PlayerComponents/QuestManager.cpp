@@ -32,3 +32,19 @@ void UQuestManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	// ..
 }
 
+void UQuestManager::AddNewQuestWithId_Implementation(FName QuestId)
+{
+}
+
+void UQuestManager::CompleteQuestWithId_Implementation(FName QuestId)
+{
+}
+
+void UQuestManager::TrackKilledEnemyByClass_Implementation(TSubclassOf<class AGameEntity_Enemy> EnemyClass)
+{
+}
+
+void UQuestManager::TrackCollectedItemByClass_Implementation(TSubclassOf<class AItem> ItemClass)
+{
+}
+

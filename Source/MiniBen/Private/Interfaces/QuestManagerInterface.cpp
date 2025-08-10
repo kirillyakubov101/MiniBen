@@ -2,5 +2,3 @@
 
 
 #include "Interfaces/QuestManagerInterface.h"
-
-// Add default functionality here for any IQuestManagerInterface functions that are not pure virtual.

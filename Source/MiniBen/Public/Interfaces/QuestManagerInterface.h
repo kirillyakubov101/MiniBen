@@ -7,7 +7,7 @@
 #include "QuestManagerInterface.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(MinimalAPI)
+UINTERFACE(MinimalAPI,BlueprintType)
 class UQuestManagerInterface : public UInterface
 {
 	GENERATED_BODY()
@@ -20,6 +20,16 @@ class MINIBEN_API IQuestManagerInterface
 {
 	GENERATED_BODY()
 
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "QuestManager")
+	void AddNewQuestWithId(FName QuestId);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "QuestManager")
+	void CompleteQuestWithId(FName QuestId);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "QuestManager")
+	void TrackKilledEnemyByClass(TSubclassOf<class AGameEntity_Enemy> EnemyClass);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "QuestManager")
+	void TrackCollectedItemByClass(TSubclassOf<class AItem> ItemClass);
 };
