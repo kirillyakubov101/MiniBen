@@ -62,26 +62,50 @@ void AMiniBenCharacter::BeginPlay()
 
 void AMiniBenCharacter::GetAndAssignPlayerComponents()
 {
-	//PlayerHealth
-	auto PlayerHealthComponents = GetComponentsByInterface(UPlayerHealthInterface::StaticClass());
-	if (PlayerHealthComponents.Num() > 0)
+	for (auto* Component : GetComponents())
 	{
-		PlayerHealth = Cast<UPlayerHealth>(PlayerHealthComponents[0]);
+		// Check if component implements PlayerHealthInterface
+		if (Component->Implements<UPlayerHealthInterface>())
+		{
+			PlayerHealth = Cast<UPlayerHealth>(Component);
+			continue;  // optional if you only want one component per interface
+		}
+
+		// Check if component implements PlayerInventoryInterface
+		if (Component->Implements<UPlayerInventoryInterface>())
+		{
+			PlayerInventory = Cast<UPlayerInventory>(Component);
+			continue;
+		}
+
+		// Check if component implements QuestManagerInterface
+		if (Component->Implements<UQuestManagerInterface>())
+		{
+			QuestManager = Cast<UQuestManager>(Component);
+			continue;
+		}
 	}
 
-	//PlayerInventory
-	auto PlayerInventoryComponent = GetComponentsByInterface(UPlayerInventoryInterface::StaticClass());
-	if (PlayerInventoryComponent.Num() > 0)
-	{
-		PlayerInventory = Cast<UPlayerInventory>(PlayerInventoryComponent[0]);
-	}
+		////PlayerHealth
+		//auto PlayerHealthComponents = GetComponentsByInterface(UPlayerHealthInterface::StaticClass());
+		//if (PlayerHealthComponents.Num() > 0)
+		//{
+		//	PlayerHealth = Cast<UPlayerHealth>(PlayerHealthComponents[0]);
+		//}
 
-	//QuestManager
-	auto PlayerQuestComponent = GetComponentsByInterface(UQuestManagerInterface::StaticClass());
-	if (PlayerQuestComponent.Num() > 0)
-	{
-		QuestManager = Cast<UQuestManager>(PlayerQuestComponent[0]);
-	}
+		////PlayerInventory
+		//auto PlayerInventoryComponent = GetComponentsByInterface(UPlayerInventoryInterface::StaticClass());
+		//if (PlayerInventoryComponent.Num() > 0)
+		//{
+		//	PlayerInventory = Cast<UPlayerInventory>(PlayerInventoryComponent[0]);
+		//}
+
+		////QuestManager
+		//auto PlayerQuestComponent = GetComponentsByInterface(UQuestManagerInterface::StaticClass());
+		//if (PlayerQuestComponent.Num() > 0)
+		//{
+		//	QuestManager = Cast<UQuestManager>(PlayerQuestComponent[0]);
+		//}
 }
 
 

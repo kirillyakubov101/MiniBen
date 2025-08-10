@@ -7,7 +7,7 @@
 #include "CharacterMeshInterface.generated.h"
 
 // This class does not need to be modified.
-UINTERFACE(MinimalAPI)
+UINTERFACE(MinimalAPI, BlueprintType)
 class UCharacterMeshInterface : public UInterface
 {
 	GENERATED_BODY()
