@@ -2,6 +2,8 @@
 
 
 #include "PlayerComponents/QuestManager.h"
+#include "Interfaces/KillHandlerInterface.h"
+#include "Interfaces/PlayerComponentBroker.h"
 
 // Sets default values for this component's properties
 UQuestManager::UQuestManager()
@@ -19,18 +21,10 @@ void UQuestManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	//Direct sub to the static delegate
+	IKillHandlerInterface::OnEnemyKilledDelegate.AddUObject(this, &UQuestManager::HandleEnemyKilled);
 }
 
-
-// Called every frame
-void UQuestManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ..
-}
 
 void UQuestManager::AddNewQuestWithId_Implementation(FName QuestId)
 {
@@ -46,5 +40,10 @@ void UQuestManager::TrackKilledEnemyByClass_Implementation(TSubclassOf<class AGa
 
 void UQuestManager::TrackCollectedItemByClass_Implementation(TSubclassOf<class AItem> ItemClass)
 {
+}
+
+void UQuestManager::HandleEnemyKilled(TSubclassOf<class AGameEntity_Enemy> EnemyClass)
+{
+	IQuestManagerInterface::Execute_TrackKilledEnemyByClass(this, EnemyClass);
 }
 

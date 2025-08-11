@@ -18,7 +18,12 @@ void UKillsHandler::BeginPlay()
 
 void UKillsHandler::SignalEnemyKilled_Implementation(TSubclassOf<AGameEntity_Enemy> EnemyClass)
 {
-	this->OnEnemyKilledDelegate.Broadcast(EnemyClass);
+	this->SignalEnemyKilledSignalEnemyKilledNative(EnemyClass);
+}
+
+void UKillsHandler::SignalEnemyKilledSignalEnemyKilledNative(TSubclassOf<AGameEntity_Enemy> EnemyClass)
+{
+	OnEnemyKilledDelegate.Broadcast(EnemyClass);
 }
 
 

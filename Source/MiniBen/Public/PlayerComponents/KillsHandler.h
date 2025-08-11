@@ -21,10 +21,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-protected:
-	UPROPERTY(BlueprintAssignable)
-	FOnEnemyKilledDelegate OnEnemyKilledDelegate;
+public:
 
-public:	
 	void SignalEnemyKilled_Implementation(TSubclassOf<AGameEntity_Enemy> EnemyClass);
+	virtual void SignalEnemyKilledSignalEnemyKilledNative(TSubclassOf<AGameEntity_Enemy> EnemyClass) override;
 };

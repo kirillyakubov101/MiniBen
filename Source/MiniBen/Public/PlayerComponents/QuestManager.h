@@ -21,10 +21,11 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 	virtual void AddNewQuestWithId_Implementation(FName QuestId) override;
 	virtual void CompleteQuestWithId_Implementation(FName QuestId) override;
 	virtual void TrackKilledEnemyByClass_Implementation(TSubclassOf<class AGameEntity_Enemy> EnemyClass) override;
 	virtual void TrackCollectedItemByClass_Implementation(TSubclassOf<class AItem> ItemClass) override;
+
+private:
+	void HandleEnemyKilled(TSubclassOf<class AGameEntity_Enemy> EnemyClass);
 };
