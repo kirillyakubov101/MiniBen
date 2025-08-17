@@ -45,6 +45,7 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	UFUNCTION(BlueprintCallable)
 	void SavePlayerInventory(const TMap<FName, int32>& inventory);
@@ -103,6 +104,10 @@ public:
 	// IDamageable
 	void TakeDamageNative(AActor* Instigator, float DamageAmount, FVector HitLocation) override;
 
+
+protected:
+	void HandlePlayerActivated();
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCanPlayerBeTargeted;
@@ -138,6 +143,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class UQuestManager* QuestManager;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UAbilityHandler* AbilityHandler;
 	
 	
 	//-----------------------------------------------------------------------//

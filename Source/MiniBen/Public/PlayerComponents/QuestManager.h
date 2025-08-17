@@ -20,11 +20,29 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-public:	
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	// ISaveable Interface
+	virtual void SaveAndRecordSelf_Implementation() override;
+	virtual void LoadAndRestoreSelf_Implementation() override;
 
+public:	
 	virtual void AddNewQuestWithId_Implementation(FName QuestId) override;
 	virtual void CompleteQuestWithId_Implementation(FName QuestId) override;
 	virtual void TrackKilledEnemyByClass_Implementation(TSubclassOf<class AGameEntity_Enemy> EnemyClass) override;
 	virtual void TrackCollectedItemByClass_Implementation(TSubclassOf<class AItem> ItemClass) override;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest", SaveGame)
+	TArray<FName> ListOfActiveQuests;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest", SaveGame)
+	TArray<FName> ListOfPendingCompletedQuests;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest", SaveGame)
+	TArray<FName> ListOfCompletedQuests;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest", SaveGame)
+	TMap<FName, class UQuestProgressWrapper*> MapOfProgress;
+
+private:
+	void HandleEnemyKilled(TSubclassOf<class AGameEntity_Enemy> EnemyClass);
+	class UMiniBenGameInstance* GameInstance;
 };

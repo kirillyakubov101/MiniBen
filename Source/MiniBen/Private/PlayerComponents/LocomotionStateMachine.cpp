@@ -62,6 +62,7 @@ void ULocomotionStateMachine::InitStartState()
 
 void ULocomotionStateMachine::TickState(float DeltaTime)
 {
+	if(IsValid(CurrentState.GetObject()))
 	IState::Execute_TickState(CurrentState.GetObject(), DeltaTime);
 }
 
@@ -72,7 +73,8 @@ void ULocomotionStateMachine::SwitchStateProccess(TScriptInterface<IState> NewSt
 		IState::Execute_ExitState(CurrentState.GetObject());
 	}
 
-	CurrentState = NewState;
+	CurrentState.SetInterface(NewState.GetInterface());
+	CurrentState.SetObject(NewState.GetObject());
 	IState::Execute_EnterState(CurrentState.GetObject());
 }
 

@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Items/Item.h"
 #include "Quests/QuestStarter.h"
+#include "GameplayTagContainer.h"
 #include "MyStructs.generated.h"
 
 class AGameEntity_Enemy;
@@ -66,6 +67,58 @@ enum class EQuestGiverState : uint8
 //STRUCTS
 
 USTRUCT(BlueprintType)
+struct FGlobalQuestData
+{
+	GENERATED_BODY()
+
+public:
+	FGlobalQuestData() {}
+	FGlobalQuestData(const TArray<FName>& ActiveQuests, const TArray<FName>& PendingQuests, const TArray<FName>& CompletedQuests)
+		:ListOfActiveQuests(ActiveQuests), ListOfPendingCompletedQuests(PendingQuests), ListOfCompletedQuests(CompletedQuests)
+	{
+	}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	TArray<FName> ListOfActiveQuests;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	TArray<FName> ListOfPendingCompletedQuests;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	TArray<FName> ListOfCompletedQuests;
+};
+
+
+USTRUCT(BlueprintType)
+struct FActiveQuestProgress
+{
+	GENERATED_BODY()
+
+public:
+	FActiveQuestProgress() {}
+	FActiveQuestProgress(FName questId, int32 progressAmount = 0, int32 requirementAmount = 0, UClass* targetClass = nullptr, UClass* questProgressWrapperClass = nullptr)
+		:QuestId(questId), TargetClass(targetClass), QuestProgressWrapperClass(questProgressWrapperClass), ProgressAmount(progressAmount), RequirementAmount(requirementAmount)
+	{
+	}
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	FName QuestId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	UClass* TargetClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	UClass* QuestProgressWrapperClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	int32 ProgressAmount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	int32 RequirementAmount;
+};
+
+
+USTRUCT(BlueprintType)
 struct FEnemyKillQuest
 {
 public:
@@ -99,6 +152,22 @@ public:
 };
 
 USTRUCT(BlueprintType)
+struct FPlayerAbilities
+{
+public:
+	GENERATED_BODY()
+
+public:
+
+	FPlayerAbilities()
+	{
+	}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerAbilities", SaveGame)
+	TMap<FGameplayTag, bool> Abilities;
+};
+
+USTRUCT(BlueprintType)
 struct FPlayerTransformData
 {
 public:
@@ -106,7 +175,8 @@ public:
 
 public:
 
-	FPlayerTransformData()
+	FPlayerTransformData(FTransform Transform = FTransform())
+		:PlayerTransform(Transform)
 	{
 	}
 
@@ -124,7 +194,7 @@ public:
 	FGuid Guid;
 
 	FSaveableWorldItem()
-		:/*ShouldBeRemoved(false), */Guid(FGuid())
+		:Guid(FGuid())
 	{
 	}
 
@@ -313,6 +383,15 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	TMap<FString, FWorldDataSave> AllLevels;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	FGlobalQuestData GlobalQuestData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	TMap<FGameplayTag, bool> PlayerAbilities;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	TMap<FName, FActiveQuestProgress> ActiveQuestsProgress;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	bool bHasSaved;

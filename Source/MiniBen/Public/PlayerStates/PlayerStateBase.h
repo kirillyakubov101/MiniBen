@@ -17,6 +17,8 @@ public:
 	// Sets default values for this component's properties
 	UPlayerStateBase();
 
+	void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 protected:
 	virtual void EnterState_Implementation();
 	virtual void ExitState_Implementation();

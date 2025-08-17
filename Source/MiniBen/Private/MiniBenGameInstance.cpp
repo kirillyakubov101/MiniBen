@@ -191,6 +191,11 @@ void UMiniBenGameInstance::RestoreSublevels()
         // Start processing the queue
         ProcessNextSublevel();
     }
+    else
+    {
+        //first time visit the level "bHasLevelBeenInitialized" is false
+        NotifyPlayerToSelfRestore();
+    }
 }
 
 const TMap<FGuid, FSaveableWorldItem> UMiniBenGameInstance::GetMapOfWorldItems() const
@@ -231,9 +236,7 @@ void UMiniBenGameInstance::ProcessNextSublevel()
     // If the queue is empty, we're done
     if (SublevelQueue.IsEmpty())
     {
-        //All sublevels processed
-        //Let the player know that he can load and activate self
-        GameEventsBroker::GetInst().BroadcastPlayerCanActivate();
+        NotifyPlayerToSelfRestore();
         return;
     }
 
@@ -262,34 +265,64 @@ void UMiniBenGameInstance::ProcessNextSublevel()
         }
     }
 }
+//Actors load and record themselves no need for manual load per actor
+//void UMiniBenGameInstance::RestoreSaveableActorsForAllSublevels()
+//{
+//    UCustomWorldSubsystem* CustomWorldSubsystem = GetWorld()->GetSubsystem<UCustomWorldSubsystem>();
+//    
+//
+//    if (this->CurrentWorldDataSave && CustomWorldSubsystem && CurrentWorldDataSave->bHasLevelBeenInitialized)
+//    {
+//        TArray<ULevelStreaming*> AllSubLevels = CustomWorldSubsystem->GetAllSubLevels(GetWorld());
+//      
+//        // Populate the queue with sublevels to load/unload
+//        for (ULevelStreaming* ele : AllSubLevels)
+//        {
+//            if (ele->IsLevelVisible())
+//            {
+//                for (AActor* actor : ele->GetLoadedLevel()->Actors)
+//                {
+//                    if (actor->Implements<USaveable>())
+//                    {
+//                        ISaveable::Execute_LoadAndRestoreSelf(actor);
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
-void UMiniBenGameInstance::RestoreSaveableActorsForAllSublevels()
+void UMiniBenGameInstance::NotifyPlayerToSelfRestore()
 {
-    UCustomWorldSubsystem* CustomWorldSubsystem = GetWorld()->GetSubsystem<UCustomWorldSubsystem>();
-    
-
-    if (this->CurrentWorldDataSave && CustomWorldSubsystem && CurrentWorldDataSave->bHasLevelBeenInitialized)
-    {
-        TArray<ULevelStreaming*> AllSubLevels = CustomWorldSubsystem->GetAllSubLevels(GetWorld());
-      
-        // Populate the queue with sublevels to load/unload
-        for (ULevelStreaming* ele : AllSubLevels)
-        {
-            if (ele->IsLevelVisible())
-            {
-                for (AActor* actor : ele->GetLoadedLevel()->Actors)
-                {
-                    if (actor->Implements<USaveable>())
-                    {
-                        ISaveable::Execute_LoadAndRestoreSelf(actor);
-                    }
-                }
-            }
-        }
-    }
+    //All sublevels processed or never initialized
+    //Let the player know that he can load and activate self
+    GameEventsBroker::GetInst().BroadcastPlayerCanActivate();
 }
 
+void UMiniBenGameInstance::SetGlobalQuestData(const FGlobalQuestData& GlobalQuestData)
+{
+    this->MainSaveData.GlobalQuestData = GlobalQuestData;
+}
 
+void UMiniBenGameInstance::SavePlayerInventory(const TMap<FName, int32>& inventory)
+{
+    this->MainSaveData.PlayerInventory = inventory;
+}
+
+void UMiniBenGameInstance::SavePlayerTransform(const FPlayerTransformData& PlayerTransformData)
+{
+    this->CurrentWorldDataSave->PlayerTransformData = PlayerTransformData;
+}
+
+void UMiniBenGameInstance::SavePlayerAbilities(const TMap<FGameplayTag, bool>& PlayerAbilities)
+{
+    this->MainSaveData.PlayerAbilities = PlayerAbilities;
+}
+
+void UMiniBenGameInstance::SaveQuestsProgress(const TMap<FName, FActiveQuestProgress>& Progress)
+{
+    this->MainSaveData.ActiveQuestsProgress = Progress;
+}
 
 void UMiniBenGameInstance::SetCurrentWorldDataSave()
 {

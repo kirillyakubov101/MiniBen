@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "GameplayTagContainer.h"
+#include "../../../PlayerActions/Public/Saveable.h"
 #include "AbilityHandler.generated.h"
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class MINIBEN_API UAbilityHandler : public UActorComponent
+class MINIBEN_API UAbilityHandler : public UActorComponent, public ISaveable
 {
 	GENERATED_BODY()
 

@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "../Entities/GameEntity_Enemy.h"
 #include "KillHandlerInterface.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnEnemyKilledDelegate, TSubclassOf<AGameEntity_Enemy>, EnemyClass);
+class AGameEntity_Enemy;
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnEnemyKilledDelegate, TSubclassOf<AGameEntity_Enemy>);
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI, BlueprintType)
@@ -23,6 +24,10 @@ class MINIBEN_API IKillHandlerInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "KillHandler")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "PlayerComponents")
 	void SignalEnemyKilled(TSubclassOf<AGameEntity_Enemy> EnemyClass);
+
+	virtual void SignalEnemyKilledSignalEnemyKilledNative(TSubclassOf<AGameEntity_Enemy> EnemyClass) = 0;
+
+	static FOnEnemyKilledDelegate OnEnemyKilledDelegate;
 };

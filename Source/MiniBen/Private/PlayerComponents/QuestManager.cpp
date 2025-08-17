@@ -2,6 +2,10 @@
 
 
 #include "PlayerComponents/QuestManager.h"
+#include "Interfaces/KillHandlerInterface.h"
+#include "Interfaces/PlayerComponentBroker.h"
+#include "MiniBenGameInstance.h"
+#include "Quests/QuestProgressWrapper.h"
 
 // Sets default values for this component's properties
 UQuestManager::UQuestManager()
@@ -19,18 +23,55 @@ void UQuestManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	//Direct sub to the static delegate
+	IKillHandlerInterface::OnEnemyKilledDelegate.AddUObject(this, &UQuestManager::HandleEnemyKilled);
+
+	GameInstance = Cast<UMiniBenGameInstance>(GetOwner()->GetGameInstance());
+	check(GameInstance);
 }
 
-
-// Called every frame
-void UQuestManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UQuestManager::SaveAndRecordSelf_Implementation()
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	// Global Quest Save Data
+	FGlobalQuestData GlobalQuestData(this->ListOfActiveQuests, this->ListOfPendingCompletedQuests, this->ListOfCompletedQuests);
+	GameInstance->SetGlobalQuestData(GlobalQuestData);
 
-	// ..
+	// Progress Wrappers
+	if (!MapOfProgress.IsEmpty())
+	{
+		TMap<FName, FActiveQuestProgress> Progress;
+		for (const auto& element : MapOfProgress)
+		{
+			UQuestProgressWrapper* ProgressWrapper = element.Value;
+			FActiveQuestProgress ActiveQuestProgress(ProgressWrapper->CurrentQuestId, ProgressWrapper->CurrentAmount, ProgressWrapper->Requirement, ProgressWrapper->TargetClass, ProgressWrapper->GetClass());
+			Progress.Add(ProgressWrapper->CurrentQuestId,ActiveQuestProgress);
+		}
+
+		GameInstance->SaveQuestsProgress(Progress);
+	}
 }
+
+void UQuestManager::LoadAndRestoreSelf_Implementation()
+{
+	// Global Quest Save Data
+	FGlobalQuestData GlobalQuestData = GameInstance->GetGlobalQuestData();
+	this->ListOfActiveQuests = GlobalQuestData.ListOfActiveQuests;
+	this->ListOfPendingCompletedQuests = GlobalQuestData.ListOfPendingCompletedQuests;
+	this->ListOfCompletedQuests = GlobalQuestData.ListOfCompletedQuests;
+
+	// Progress Wrappers
+	const auto& Progress = GameInstance->GetActiveQuestProgress();
+	
+	for (const auto& element : Progress)
+	{
+		FActiveQuestProgress ActiveQuestProgress = element.Value;
+		UQuestProgressWrapper* QuestProgressWrapper = NewObject<UQuestProgressWrapper>(this, ActiveQuestProgress.QuestProgressWrapperClass);
+		QuestProgressWrapper->InitStartValuesOfQuestProgressWrapper(ActiveQuestProgress.QuestId, ActiveQuestProgress.TargetClass, ActiveQuestProgress.ProgressAmount, ActiveQuestProgress.RequirementAmount);
+		MapOfProgress.Add(element.Key, QuestProgressWrapper);
+	}
+
+}
+
 
 void UQuestManager::AddNewQuestWithId_Implementation(FName QuestId)
 {
@@ -46,5 +87,10 @@ void UQuestManager::TrackKilledEnemyByClass_Implementation(TSubclassOf<class AGa
 
 void UQuestManager::TrackCollectedItemByClass_Implementation(TSubclassOf<class AItem> ItemClass)
 {
+}
+
+void UQuestManager::HandleEnemyKilled(TSubclassOf<class AGameEntity_Enemy> EnemyClass)
+{
+	IQuestManagerInterface::Execute_TrackKilledEnemyByClass(this, EnemyClass);
 }
 
