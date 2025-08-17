@@ -9,6 +9,16 @@ GameEventsBroker& GameEventsBroker::GetInst()
 	return Instance;
 }
 
+void GameEventsBroker::UnBindPlayerCanActivate(UObject* Owner)
+{
+	this->OnPlayerCanActivate.RemoveAll(Owner);
+}
+
+void GameEventsBroker::UnBindPlayerDeath(UObject* Owner)
+{
+	this->OnPlayerDeath.RemoveAll(Owner);
+}
+
 GameEventsBroker::~GameEventsBroker()
 {
 	this->OnPlayerCanActivate.Clear();

@@ -78,6 +78,7 @@ public:
 
 	void ProcessNextSublevel();
 	void RestoreSaveableActorsForAllSublevels(); //i need this only for the game load NOT the bridge levelstreaming
+	void NotifyPlayerToSelfRestore();
 	
 
 public:
@@ -85,8 +86,16 @@ public:
 	TSubclassOf<class USaveGameContainer> SaveGameContainerClass;
 
 public:
-	FWorldDataSave* GetWorldDataSave() const { return this->CurrentWorldDataSave; }
-	TMap<FName, int32>& GetPlayerInventory() { return this->MainSaveData.PlayerInventory; }
+	//Getters
+	//FWorldDataSave* GetWorldDataSave() const { return this->CurrentWorldDataSave; }
+	const FPlayerTransformData& GetPlayerTransformData() const { return this->CurrentWorldDataSave->PlayerTransformData; }
+	const TMap<FName, int32>& GetPlayerInventory() const { return this->MainSaveData.PlayerInventory; }
+	const FGlobalQuestData& GetGlobalQuestData() const { return this->MainSaveData.GlobalQuestData; }
+
+	//Setters
+	void SetGlobalQuestData(const FGlobalQuestData& GlobalQuestData);
+	void SavePlayerInventory(const TMap<FName,int32>& inventory);
+	void SavePlayerTransform(const FPlayerTransformData& PlayerTransformData);
 
 
 protected:

@@ -56,7 +56,7 @@ void AMiniBenCharacter::BeginPlay()
 	GetAndAssignPlayerComponents();
 
 	//Subscribe
-	GameEventsBroker::GetInst().BindToPlayerCanActivate(this, &AMiniBenCharacter::LoadAndRestoreSelf_Implementation);
+	GameEventsBroker::GetInst().BindToPlayerCanActivate(this, &AMiniBenCharacter::HandlePlayerActivated);
 	GameEventsBroker::GetInst().BindToPlayerDeath(this, &AMiniBenCharacter::HandlePlayerDeath);
 }
 
@@ -122,9 +122,17 @@ void AMiniBenCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 }
 
+void AMiniBenCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	GameEventsBroker::GetInst().UnBindPlayerCanActivate(this);
+	GameEventsBroker::GetInst().UnBindPlayerDeath(this);
+	UE_LOG(LogTemp, Warning, TEXT("REMOVING PLAYER VIA ENDPLAY"));
+}
+
 void AMiniBenCharacter::SavePlayerInventory(const TMap<FName, int32>& inventory)
 {
-	GameInstance->GetPlayerInventory() = inventory;
+	GameInstance->SavePlayerInventory(inventory);
 }
 
 void AMiniBenCharacter::RestorePlayerInventory(TMap<FName, int32>& Outinventory)
@@ -134,15 +142,15 @@ void AMiniBenCharacter::RestorePlayerInventory(TMap<FName, int32>& Outinventory)
 
 void AMiniBenCharacter::SaveAndRecordSelf_Implementation()
 {
-	GameInstance->GetWorldDataSave()->PlayerTransformData.PlayerTransform = GetActorTransform();
-	//inventory and quests should be saved here as well
+	FPlayerTransformData PlayerTransformData(GetActorTransform());
+	GameInstance->SavePlayerTransform(PlayerTransformData);
+	ISaveable::Execute_SaveAndRecordSelf(this->QuestManager);
 }
 
 void AMiniBenCharacter::LoadAndRestoreSelf_Implementation()
 {
-	SetActorTransform(GameInstance->GetWorldDataSave()->PlayerTransformData.PlayerTransform);
-	ISaveable::Execute_LoadAndRestoreSelf(this);
-	//inventory and quests should be loaded here as well
+	SetActorTransform(GameInstance->GetPlayerTransformData().PlayerTransform);
+	ISaveable::Execute_LoadAndRestoreSelf(this->QuestManager);
 }
 
 bool AMiniBenCharacter::CanBeTargeted_Implementation()
@@ -336,6 +344,12 @@ void AMiniBenCharacter::NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset*
 void AMiniBenCharacter::TakeDamageNative(AActor* Inst, float DamageAmount, FVector HitLocation)
 {
 	//
+}
+
+void AMiniBenCharacter::HandlePlayerActivated()
+{
+	UE_LOG(LogTemp, Warning, TEXT("HandlePlayerActivated was called by broker"));
+	ISaveable::Execute_LoadAndRestoreSelf(this);
 }
 
 UWeaponDataAsset* AMiniBenCharacter::GetCurrentWeapon_Implementation() const

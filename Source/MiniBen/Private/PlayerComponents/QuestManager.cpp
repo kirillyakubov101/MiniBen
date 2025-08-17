@@ -4,6 +4,7 @@
 #include "PlayerComponents/QuestManager.h"
 #include "Interfaces/KillHandlerInterface.h"
 #include "Interfaces/PlayerComponentBroker.h"
+#include "MiniBenGameInstance.h"
 
 // Sets default values for this component's properties
 UQuestManager::UQuestManager()
@@ -23,6 +24,23 @@ void UQuestManager::BeginPlay()
 
 	//Direct sub to the static delegate
 	IKillHandlerInterface::OnEnemyKilledDelegate.AddUObject(this, &UQuestManager::HandleEnemyKilled);
+
+	GameInstance = Cast<UMiniBenGameInstance>(GetOwner()->GetGameInstance());
+	check(GameInstance);
+}
+
+void UQuestManager::SaveAndRecordSelf_Implementation()
+{
+	FGlobalQuestData GlobalQuestData(this->ListOfActiveQuests, this->ListOfPendingCompletedQuests, this->ListOfCompletedQuests);
+	GameInstance->SetGlobalQuestData(GlobalQuestData);
+}
+
+void UQuestManager::LoadAndRestoreSelf_Implementation()
+{
+	FGlobalQuestData GlobalQuestData = GameInstance->GetGlobalQuestData();
+	this->ListOfActiveQuests = GlobalQuestData.ListOfActiveQuests;
+	this->ListOfPendingCompletedQuests = GlobalQuestData.ListOfPendingCompletedQuests;
+	this->ListOfCompletedQuests = GlobalQuestData.ListOfCompletedQuests;
 }
 
 

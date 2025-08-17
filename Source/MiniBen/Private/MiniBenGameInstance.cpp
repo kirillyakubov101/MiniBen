@@ -191,6 +191,11 @@ void UMiniBenGameInstance::RestoreSublevels()
         // Start processing the queue
         ProcessNextSublevel();
     }
+    else
+    {
+        //first time visit the level "bHasLevelBeenInitialized" is false
+        NotifyPlayerToSelfRestore();
+    }
 }
 
 const TMap<FGuid, FSaveableWorldItem> UMiniBenGameInstance::GetMapOfWorldItems() const
@@ -231,9 +236,7 @@ void UMiniBenGameInstance::ProcessNextSublevel()
     // If the queue is empty, we're done
     if (SublevelQueue.IsEmpty())
     {
-        //All sublevels processed
-        //Let the player know that he can load and activate self
-        GameEventsBroker::GetInst().BroadcastPlayerCanActivate();
+        NotifyPlayerToSelfRestore();
         return;
     }
 
@@ -289,7 +292,27 @@ void UMiniBenGameInstance::RestoreSaveableActorsForAllSublevels()
     }
 }
 
+void UMiniBenGameInstance::NotifyPlayerToSelfRestore()
+{
+    //All sublevels processed or never initialized
+    //Let the player know that he can load and activate self
+    GameEventsBroker::GetInst().BroadcastPlayerCanActivate();
+}
 
+void UMiniBenGameInstance::SetGlobalQuestData(const FGlobalQuestData& GlobalQuestData)
+{
+    this->MainSaveData.GlobalQuestData = GlobalQuestData;
+}
+
+void UMiniBenGameInstance::SavePlayerInventory(const TMap<FName, int32>& inventory)
+{
+    this->MainSaveData.PlayerInventory = inventory;
+}
+
+void UMiniBenGameInstance::SavePlayerTransform(const FPlayerTransformData& PlayerTransformData)
+{
+    this->CurrentWorldDataSave->PlayerTransformData = PlayerTransformData;
+}
 
 void UMiniBenGameInstance::SetCurrentWorldDataSave()
 {

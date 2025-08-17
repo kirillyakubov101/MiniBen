@@ -19,6 +19,9 @@ public:
 	// OnPlayerDeath
 	void BroadcastPlayerDeath() { OnPlayerDeath.Broadcast(); }
 
+	void UnBindPlayerCanActivate(UObject* Owner);
+	void UnBindPlayerDeath(UObject* Owner);
+
 	template<typename UserClass, typename FuncType>
 	void BindToPlayerCanActivate(UserClass* Object, FuncType Func)
 	{
