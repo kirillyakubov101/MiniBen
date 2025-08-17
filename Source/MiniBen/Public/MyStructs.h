@@ -90,6 +90,31 @@ public:
 
 
 USTRUCT(BlueprintType)
+struct FActiveQuestProgress
+{
+	GENERATED_BODY()
+
+public:
+	FActiveQuestProgress() {}
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	FName QuestId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	UClass* TargetClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	UClass* QuestProgressWrapperClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	int32 ProgressAmount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	int32 RequirementAmount;
+};
+
+
+USTRUCT(BlueprintType)
 struct FEnemyKillQuest
 {
 public:
@@ -357,6 +382,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	FGlobalQuestData GlobalQuestData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	TMap<FName, FActiveQuestProgress> ActiveQuestsProgress;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	bool bHasSaved;

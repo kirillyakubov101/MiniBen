@@ -31,15 +31,15 @@ public:
 	virtual void TrackCollectedItemByClass_Implementation(TSubclassOf<class AItem> ItemClass) override;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest", SaveGame)
 	TArray<FName> ListOfActiveQuests;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest", SaveGame)
 	TArray<FName> ListOfPendingCompletedQuests;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest", SaveGame)
 	TArray<FName> ListOfCompletedQuests;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest", SaveGame)
 	TMap<FName, class UQuestProgressWrapper*> MapOfProgress;
 
 private:

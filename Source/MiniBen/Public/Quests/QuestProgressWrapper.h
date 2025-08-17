@@ -16,5 +16,18 @@ class MINIBEN_API UQuestProgressWrapper : public UObject
 
 public:
 	virtual void BeginDestroy() override;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	FName CurrentQuestId;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	UClass* TargetClass;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	int32 CurrentAmount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	int32 Requirement;
 	
 };
