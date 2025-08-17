@@ -5,6 +5,7 @@
 #include "Interfaces/KillHandlerInterface.h"
 #include "Interfaces/PlayerComponentBroker.h"
 #include "MiniBenGameInstance.h"
+#include "Quests/QuestProgressWrapper.h"
 
 // Sets default values for this component's properties
 UQuestManager::UQuestManager()
@@ -31,16 +32,44 @@ void UQuestManager::BeginPlay()
 
 void UQuestManager::SaveAndRecordSelf_Implementation()
 {
+	// Global Quest Save Data
 	FGlobalQuestData GlobalQuestData(this->ListOfActiveQuests, this->ListOfPendingCompletedQuests, this->ListOfCompletedQuests);
 	GameInstance->SetGlobalQuestData(GlobalQuestData);
+
+	// Progress Wrappers
+	if (!MapOfProgress.IsEmpty())
+	{
+		TMap<FName, FActiveQuestProgress> Progress;
+		for (const auto& element : MapOfProgress)
+		{
+			UQuestProgressWrapper* ProgressWrapper = element.Value;
+			FActiveQuestProgress ActiveQuestProgress(ProgressWrapper->CurrentQuestId, ProgressWrapper->CurrentAmount, ProgressWrapper->Requirement, ProgressWrapper->TargetClass, ProgressWrapper->GetClass());
+			Progress.Add(ProgressWrapper->CurrentQuestId,ActiveQuestProgress);
+		}
+
+		GameInstance->SaveQuestsProgress(Progress);
+	}
 }
 
 void UQuestManager::LoadAndRestoreSelf_Implementation()
 {
+	// Global Quest Save Data
 	FGlobalQuestData GlobalQuestData = GameInstance->GetGlobalQuestData();
 	this->ListOfActiveQuests = GlobalQuestData.ListOfActiveQuests;
 	this->ListOfPendingCompletedQuests = GlobalQuestData.ListOfPendingCompletedQuests;
 	this->ListOfCompletedQuests = GlobalQuestData.ListOfCompletedQuests;
+
+	// Progress Wrappers
+	const auto& Progress = GameInstance->GetActiveQuestProgress();
+	
+	for (const auto& element : Progress)
+	{
+		FActiveQuestProgress ActiveQuestProgress = element.Value;
+		UQuestProgressWrapper* QuestProgressWrapper = NewObject<UQuestProgressWrapper>(this, ActiveQuestProgress.QuestProgressWrapperClass);
+		QuestProgressWrapper->InitStartValuesOfQuestProgressWrapper(ActiveQuestProgress.QuestId, ActiveQuestProgress.TargetClass, ActiveQuestProgress.ProgressAmount, ActiveQuestProgress.RequirementAmount);
+		MapOfProgress.Add(element.Key, QuestProgressWrapper);
+	}
+
 }
 
 

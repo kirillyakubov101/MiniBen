@@ -265,32 +265,32 @@ void UMiniBenGameInstance::ProcessNextSublevel()
         }
     }
 }
-
-void UMiniBenGameInstance::RestoreSaveableActorsForAllSublevels()
-{
-    UCustomWorldSubsystem* CustomWorldSubsystem = GetWorld()->GetSubsystem<UCustomWorldSubsystem>();
-    
-
-    if (this->CurrentWorldDataSave && CustomWorldSubsystem && CurrentWorldDataSave->bHasLevelBeenInitialized)
-    {
-        TArray<ULevelStreaming*> AllSubLevels = CustomWorldSubsystem->GetAllSubLevels(GetWorld());
-      
-        // Populate the queue with sublevels to load/unload
-        for (ULevelStreaming* ele : AllSubLevels)
-        {
-            if (ele->IsLevelVisible())
-            {
-                for (AActor* actor : ele->GetLoadedLevel()->Actors)
-                {
-                    if (actor->Implements<USaveable>())
-                    {
-                        ISaveable::Execute_LoadAndRestoreSelf(actor);
-                    }
-                }
-            }
-        }
-    }
-}
+//Actors load and record themselves no need for manual load per actor
+//void UMiniBenGameInstance::RestoreSaveableActorsForAllSublevels()
+//{
+//    UCustomWorldSubsystem* CustomWorldSubsystem = GetWorld()->GetSubsystem<UCustomWorldSubsystem>();
+//    
+//
+//    if (this->CurrentWorldDataSave && CustomWorldSubsystem && CurrentWorldDataSave->bHasLevelBeenInitialized)
+//    {
+//        TArray<ULevelStreaming*> AllSubLevels = CustomWorldSubsystem->GetAllSubLevels(GetWorld());
+//      
+//        // Populate the queue with sublevels to load/unload
+//        for (ULevelStreaming* ele : AllSubLevels)
+//        {
+//            if (ele->IsLevelVisible())
+//            {
+//                for (AActor* actor : ele->GetLoadedLevel()->Actors)
+//                {
+//                    if (actor->Implements<USaveable>())
+//                    {
+//                        ISaveable::Execute_LoadAndRestoreSelf(actor);
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 void UMiniBenGameInstance::NotifyPlayerToSelfRestore()
 {
@@ -312,6 +312,16 @@ void UMiniBenGameInstance::SavePlayerInventory(const TMap<FName, int32>& invento
 void UMiniBenGameInstance::SavePlayerTransform(const FPlayerTransformData& PlayerTransformData)
 {
     this->CurrentWorldDataSave->PlayerTransformData = PlayerTransformData;
+}
+
+void UMiniBenGameInstance::SavePlayerAbilities(const TMap<FGameplayTag, bool>& PlayerAbilities)
+{
+    this->MainSaveData.PlayerAbilities = PlayerAbilities;
+}
+
+void UMiniBenGameInstance::SaveQuestsProgress(const TMap<FName, FActiveQuestProgress>& Progress)
+{
+    this->MainSaveData.ActiveQuestsProgress = Progress;
 }
 
 void UMiniBenGameInstance::SetCurrentWorldDataSave()

@@ -96,6 +96,10 @@ struct FActiveQuestProgress
 
 public:
 	FActiveQuestProgress() {}
+	FActiveQuestProgress(FName questId, int32 progressAmount = 0, int32 requirementAmount = 0, UClass* targetClass = nullptr, UClass* questProgressWrapperClass = nullptr)
+		:QuestId(questId), TargetClass(targetClass), QuestProgressWrapperClass(questProgressWrapperClass), ProgressAmount(progressAmount), RequirementAmount(requirementAmount)
+	{
+	}
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable | Quest", SaveGame)
 	FName QuestId;
@@ -382,6 +386,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	FGlobalQuestData GlobalQuestData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
+	TMap<FGameplayTag, bool> PlayerAbilities;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Saveable", SaveGame)
 	TMap<FName, FActiveQuestProgress> ActiveQuestsProgress;

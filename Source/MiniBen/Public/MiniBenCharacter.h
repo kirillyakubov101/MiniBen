@@ -143,6 +143,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class UQuestManager* QuestManager;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UAbilityHandler* AbilityHandler;
 	
 	
 	//-----------------------------------------------------------------------//

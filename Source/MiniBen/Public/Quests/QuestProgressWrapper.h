@@ -16,8 +16,9 @@ class MINIBEN_API UQuestProgressWrapper : public UObject
 
 public:
 	virtual void BeginDestroy() override;
+	void InitStartValuesOfQuestProgressWrapper(FName CurrentQuestId, UClass* TargetClass, int32 CurrentAmount, int32 Requirement, UClass* WrapperClass = nullptr);
 
-protected:
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	FName CurrentQuestId;
 
@@ -29,5 +30,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
 	int32 Requirement;
+
+protected:
+	UFUNCTION(BlueprintCallable)
+	virtual void InitializeProgressWrapper();
 	
 };

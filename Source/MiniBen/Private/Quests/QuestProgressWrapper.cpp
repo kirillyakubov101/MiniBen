@@ -9,3 +9,17 @@ void UQuestProgressWrapper::BeginDestroy()
 
 	Super::BeginDestroy();
 }
+
+void UQuestProgressWrapper::InitStartValuesOfQuestProgressWrapper(FName currentQuestId, UClass* targetClass, int32 currentAmount, int32 requirement, UClass* wrapperClass)
+{
+	this->CurrentQuestId = currentQuestId;
+	this->TargetClass = targetClass;
+	this->CurrentAmount = currentAmount;
+	this->Requirement = requirement;
+}
+
+
+void UQuestProgressWrapper::InitializeProgressWrapper()
+{
+	UE_LOG(LogTemp, Warning, TEXT("InitializeProgressWrapper base called"));
+}

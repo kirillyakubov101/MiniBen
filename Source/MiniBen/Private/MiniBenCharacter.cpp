@@ -15,6 +15,7 @@
 #include "PlayerComponents/QuestManager.h"
 #include "PlayerComponents/KillsHandler.h"
 #include "PlayerComponents//PlayerHealth.h"
+#include "PlayerComponents/AbilityHandler.h"
 #include "Data/WeaponDataAsset.h"
 #include "MyStructs.h"
 
@@ -43,6 +44,9 @@ AMiniBenCharacter::AMiniBenCharacter()
 
 	//KillsHandleer
 	KillsHandler = CreateDefaultSubobject<UKillsHandler>(TEXT("KillsHandler"));
+
+	//AbilityHandler
+	AbilityHandler = CreateDefaultSubobject<UAbilityHandler>(TEXT("AbilityHandler"));
 
 }
 
@@ -144,12 +148,14 @@ void AMiniBenCharacter::SaveAndRecordSelf_Implementation()
 {
 	FPlayerTransformData PlayerTransformData(GetActorTransform());
 	GameInstance->SavePlayerTransform(PlayerTransformData);
+	GameInstance->SavePlayerAbilities(AbilityHandler->Abilities);
 	ISaveable::Execute_SaveAndRecordSelf(this->QuestManager);
 }
 
 void AMiniBenCharacter::LoadAndRestoreSelf_Implementation()
 {
 	SetActorTransform(GameInstance->GetPlayerTransformData().PlayerTransform);
+	AbilityHandler->Abilities = GameInstance->GetPlayerAbilities();
 	ISaveable::Execute_LoadAndRestoreSelf(this->QuestManager);
 }
 

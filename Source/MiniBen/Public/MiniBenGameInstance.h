@@ -77,7 +77,6 @@ public:
 	const TMap<FGuid, FSavealbeWorldEnemy> GetMapOfWorldEnemies() const;
 
 	void ProcessNextSublevel();
-	void RestoreSaveableActorsForAllSublevels(); //i need this only for the game load NOT the bridge levelstreaming
 	void NotifyPlayerToSelfRestore();
 	
 
@@ -87,15 +86,18 @@ public:
 
 public:
 	//Getters
-	//FWorldDataSave* GetWorldDataSave() const { return this->CurrentWorldDataSave; }
 	const FPlayerTransformData& GetPlayerTransformData() const { return this->CurrentWorldDataSave->PlayerTransformData; }
 	const TMap<FName, int32>& GetPlayerInventory() const { return this->MainSaveData.PlayerInventory; }
 	const FGlobalQuestData& GetGlobalQuestData() const { return this->MainSaveData.GlobalQuestData; }
+	const TMap<FGameplayTag, bool>& GetPlayerAbilities() const { return this->MainSaveData.PlayerAbilities; }
+	const TMap<FName, FActiveQuestProgress>& GetActiveQuestProgress() const { return this->MainSaveData.ActiveQuestsProgress; }
 
 	//Setters
 	void SetGlobalQuestData(const FGlobalQuestData& GlobalQuestData);
 	void SavePlayerInventory(const TMap<FName,int32>& inventory);
 	void SavePlayerTransform(const FPlayerTransformData& PlayerTransformData);
+	void SavePlayerAbilities(const TMap<FGameplayTag, bool>& PlayerAbilities);
+	void SaveQuestsProgress(const TMap<FName,FActiveQuestProgress>& Progress);
 
 
 protected:
@@ -128,5 +130,7 @@ private:
 	UFUNCTION(BlueprintPure, Category = "Save")
 	bool IsCurrentLevelGameLevel() const;
 
+	
 
+	//void RestoreSaveableActorsForAllSublevels(); //DEPRECATED
 };
