@@ -6,6 +6,7 @@
 
 DECLARE_MULTICAST_DELEGATE(FOnPlayerCanActivate);
 DECLARE_MULTICAST_DELEGATE(FOnPlayerDeath);
+DECLARE_MULTICAST_DELEGATE(FOnPlayerLocomotionStateChanged);
 
 
 class MINIBEN_API GameEventsBroker
@@ -19,8 +20,12 @@ public:
 	// OnPlayerDeath
 	void BroadcastPlayerDeath() { OnPlayerDeath.Broadcast(); }
 
+	// OnPlayerLocomotionStateChanged
+	void BroadcastPlayerLocomotionStateChanged(){}
+
 	void UnBindPlayerCanActivate(UObject* Owner);
 	void UnBindPlayerDeath(UObject* Owner);
+	void UnBindPlayerLocomotionStateChanged(UObject* Owner);
 
 	template<typename UserClass, typename FuncType>
 	void BindToPlayerCanActivate(UserClass* Object, FuncType Func)
@@ -34,6 +39,12 @@ public:
 		OnPlayerDeath.AddUObject(Object, Func);
 	}
 
+	template<typename UserClass, typename FuncType>
+	void BindToPlayerLocomotionStateChanged(UserClass* Object, FuncType Func)
+	{
+		OnPlayerLocomotionStateChanged.AddUObject(Object, Func);
+	}
+
 private:
 	GameEventsBroker() {}
 	GameEventsBroker(const GameEventsBroker&) = delete;
@@ -44,5 +55,5 @@ private:
 private:
 	FOnPlayerCanActivate OnPlayerCanActivate;
 	FOnPlayerDeath OnPlayerDeath;
-
+	FOnPlayerLocomotionStateChanged OnPlayerLocomotionStateChanged;
 };
