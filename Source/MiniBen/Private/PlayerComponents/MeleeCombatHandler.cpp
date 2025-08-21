@@ -8,6 +8,7 @@
 #include "Engine/AssetManager.h"
 #include "Interfaces/CombatInterface.h"
 #include "Interfaces/CharacterMeshInterface.h"
+#include "Interfaces/Damageable.h"
 
 // Sets default values for this component's properties
 UMeleeCombatHandler::UMeleeCombatHandler()

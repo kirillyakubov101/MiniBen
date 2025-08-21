@@ -92,6 +92,7 @@ public:
 	virtual TScriptInterface<IState> GetOneHandedCombatState() const;
 	virtual TScriptInterface<IState> GetFistCombatState() const;
 	virtual TScriptInterface<IState> GetNormalState_Implementation() const;
+	virtual TScriptInterface<IState> GetRangedCombatState_Implementation() const;
 
 	// ICharacterMeshInterface
 	virtual USkeletalMeshComponent* GetCharacterSkeletalMesh_Implementation() const;

@@ -317,6 +317,11 @@ TScriptInterface<IState> AMiniBenCharacter::GetNormalState_Implementation() cons
 	return TScriptInterface<IState>();
 }
 
+TScriptInterface<IState> AMiniBenCharacter::GetRangedCombatState_Implementation() const
+{
+	return TScriptInterface<IState>();
+}
+
 EWeaponType AMiniBenCharacter::GetWeaponTypeBasedOnCombatState() const
 {
 	return EWeaponType();
