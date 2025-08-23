@@ -352,7 +352,7 @@ UStaticMeshComponent* AMiniBenCharacter::GetBackWeaponStaticMeshComp_Implementat
 	return nullptr;
 }
 
-void AMiniBenCharacter::NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset* NewWeapon)
+void AMiniBenCharacter::NotifyForNewReadyMeleeWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 {
 	IMeleeCombatInterface::Execute_AssignNewWeapon(this->MeleeCombatHandler, NewWeapon);
 }

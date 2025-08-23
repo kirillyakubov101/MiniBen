@@ -26,10 +26,18 @@ void UEquipmentHandler::EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 
 	FStreamableManager& Streamable = UAssetManager::GetStreamableManager();
 	FSoftObjectPath MeshPath = Mesh.ToSoftObjectPath();
-
-	ICombatInterface::Execute_NotifyForNewReadyWeapon(GetOwner(), NewWeapon);
-
 	ICharacterMeshInterface* CharacterMeshInterface = Cast<ICharacterMeshInterface>(GetOwner());
+
+	switch (NewWeapon->WeaponType)
+	{
+		case EWeaponType::WT_Fists:
+		case EWeaponType::WT_OneHandedWeapon:
+			ICombatInterface::Execute_NotifyForNewReadyMeleeWeapon(GetOwner(), NewWeapon);
+			break;
+		case EWeaponType::WT_Bow:
+			//TODO: Ranged weapon equip notification
+			break;
+	}
 
 	switch (CurrentWeapon->InactiveEquipmentSocket)
 	{
@@ -40,6 +48,9 @@ void UEquipmentHandler::EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 		InactiveStaticMeshComp = ICharacterMeshInterface::Execute_GetBackWeaponStaticMeshComp(GetOwner());
 		break;
 	case EEquipmentSockets::ES_None:
+		return;
+
+	 default:
 		return;
 	}
 
