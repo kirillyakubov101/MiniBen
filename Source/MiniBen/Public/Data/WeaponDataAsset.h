@@ -52,6 +52,12 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
     float DamageAmount;
 
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+    EEquipmentSockets ActiveEquipmentSocket;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+    EEquipmentSockets InactiveEquipmentSocket;
+
 protected:
     // ItemType defines the category, such as "Collectable" or "Weapon"
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")

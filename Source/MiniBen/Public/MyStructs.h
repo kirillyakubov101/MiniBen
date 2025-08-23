@@ -23,6 +23,18 @@ enum class EPlayerActions : uint8
 	PA_Dead				UMETA(DisplayName = "Dead"),
 	PA_Air				UMETA(DisplayName = "Air"),
 	PA_MidSheath		UMETA(DisplayName = "MidSheath"),
+	PA_Equip			UMETA(DisplayName = "Equip"),
+};
+
+UENUM(BlueprintType)
+enum class EEquipmentSockets : uint8
+{
+	ES_None				UMETA(DisplayName = "None"),
+	ES_LeftHand			UMETA(DisplayName = "LeftHand"),
+	ES_RightHand		UMETA(DisplayName = "RightHand"),
+	ES_LeftHip			UMETA(DisplayName = "LeftHip"),
+	ES_RightHip			UMETA(DisplayName = "RightHip"),
+	ES_Back				UMETA(DisplayName = "Back"),
 };
 
 

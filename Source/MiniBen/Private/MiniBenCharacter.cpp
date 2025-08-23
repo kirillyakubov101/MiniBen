@@ -322,7 +322,7 @@ TScriptInterface<IState> AMiniBenCharacter::GetRangedCombatState_Implementation(
 	return TScriptInterface<IState>();
 }
 
-EWeaponType AMiniBenCharacter::GetWeaponTypeBasedOnCombatState() const
+EWeaponType AMiniBenCharacter::GetWeaponTypeBasedOnCombatState_Implementation() const
 {
 	return EWeaponType();
 }
@@ -332,7 +332,7 @@ TScriptInterface<IState> AMiniBenCharacter::GetOneHandedCombatState() const
 	return TScriptInterface<IState>();
 }
 
-TScriptInterface<IState> AMiniBenCharacter::GetFistCombatState() const
+TScriptInterface<IState> AMiniBenCharacter::GetFistCombatState_Implementation() const
 {
 	return TScriptInterface<IState>();
 }
@@ -343,6 +343,11 @@ USkeletalMeshComponent* AMiniBenCharacter::GetCharacterSkeletalMesh_Implementati
 }
 
 UStaticMeshComponent* AMiniBenCharacter::GetLeftWeaponHolsterStaticMeshComp_Implementation() const
+{
+	return nullptr;
+}
+
+UStaticMeshComponent* AMiniBenCharacter::GetBackWeaponStaticMeshComp_Implementation() const
 {
 	return nullptr;
 }

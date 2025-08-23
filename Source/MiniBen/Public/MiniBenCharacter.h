@@ -88,15 +88,16 @@ public:
 	virtual void ToggleMovement_Implementation(bool bCanMove);
 
 	// ICombatStateInterface
-	virtual EWeaponType GetWeaponTypeBasedOnCombatState() const;
+	virtual EWeaponType GetWeaponTypeBasedOnCombatState_Implementation() const;
 	virtual TScriptInterface<IState> GetOneHandedCombatState() const;
-	virtual TScriptInterface<IState> GetFistCombatState() const;
-	virtual TScriptInterface<IState> GetNormalState_Implementation() const;
-	virtual TScriptInterface<IState> GetRangedCombatState_Implementation() const;
+	virtual TScriptInterface<IState> GetFistCombatState_Implementation() const;
+	virtual TScriptInterface<IState> GetNormalState_Implementation() const override;
+	virtual TScriptInterface<IState> GetRangedCombatState_Implementation() const override;
 
 	// ICharacterMeshInterface
 	virtual USkeletalMeshComponent* GetCharacterSkeletalMesh_Implementation() const;
 	virtual UStaticMeshComponent* GetLeftWeaponHolsterStaticMeshComp_Implementation() const;
+	virtual UStaticMeshComponent* GetBackWeaponStaticMeshComp_Implementation() const;
 
 	// ICombatInterface
 	virtual UWeaponDataAsset* GetCurrentWeapon_Implementation() const override;

@@ -46,4 +46,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipmentInterface")
 	void UnequipWeapon();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipmentInterface")
+	bool IsNoWeaponAssigned() const;
 };
