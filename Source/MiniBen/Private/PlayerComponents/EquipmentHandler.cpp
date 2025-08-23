@@ -91,6 +91,11 @@ UWeaponDataAsset* UEquipmentHandler::GetCurrentWeapon_Implementation() const
 	return CurrentWeapon;
 }
 
+void UEquipmentHandler::UnequipWeapon_Implementation()
+{
+
+}
+
 // Called when the game starts
 void UEquipmentHandler::BeginPlay()
 {

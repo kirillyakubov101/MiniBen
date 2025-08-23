@@ -26,6 +26,7 @@ public:
 	void LowerWeapon_Implementation();
 	EWeaponType GetCurrentlyEquippedWeaponType_Implementation() const;
 	UWeaponDataAsset* GetCurrentWeapon_Implementation() const;
+	void UnequipWeapon_Implementation();
 
 protected:
 
