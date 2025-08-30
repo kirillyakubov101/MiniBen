@@ -296,6 +296,13 @@ void AMiniBenCharacter::SetCharMoveSpeed_Implementation(EPlayerMovementState New
 	case EPlayerMovementState::MS_Locked:
 		PlayerMaxWalkSpeed = 0.f;
 		break;
+	case EPlayerMovementState::MS_RangedCombat:
+		PlayerMaxWalkSpeed = 450.f;
+		break;
+
+	default:
+		PlayerMaxWalkSpeed = 0.f;
+	
 	}
 
 	GetCharacterMovement()->MaxWalkSpeed = PlayerMaxWalkSpeed;
@@ -360,6 +367,14 @@ void AMiniBenCharacter::NotifyForNewReadyMeleeWeapon_Implementation(UWeaponDataA
 void AMiniBenCharacter::TakeDamageNative(AActor* Inst, float DamageAmount, FVector HitLocation)
 {
 	//
+}
+
+void AMiniBenCharacter::SwitchEquipmentOwner_BackToLeftHand_Implementation()
+{
+}
+
+void AMiniBenCharacter::SwitchEquipmentOwner_LeftHandToBack_Implementation()
+{
 }
 
 void AMiniBenCharacter::HandlePlayerActivated()

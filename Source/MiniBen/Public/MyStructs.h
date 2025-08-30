@@ -55,6 +55,7 @@ enum class EPlayerMovementState : uint8
 	MS_FistCombat			     UMETA(DisplayName = "FistCombat"),
 	MS_OneHandedSwordCombat      UMETA(DisplayName = "OneHandedSwordCombat"),
 	MS_Locked					 UMETA(DisplayName = "Locked"),
+	MS_RangedCombat				 UMETA(DisplayName = "RangedCombat"),
 };
 
 UENUM(BlueprintType)

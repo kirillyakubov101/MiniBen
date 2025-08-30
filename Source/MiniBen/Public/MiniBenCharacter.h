@@ -15,6 +15,7 @@
 #include "Interfaces/CombatInterface.h"
 #include "Interfaces/Damageable.h"
 #include "Interfaces/LocomotionStateMachineInterface.h"
+#include "Interfaces/EquipHelperInterface.h"
 #include "MiniBenCharacter.generated.h"
 
 class UWeaponDataAsset;
@@ -29,7 +30,8 @@ class MINIBEN_API AMiniBenCharacter :
 	public ICombatStateInterface,
 	public ICharacterMeshInterface,
 	public ICombatInterface,
-	public IDamageable
+	public IDamageable,
+	public IEquipHelperInterface
 {
 	GENERATED_BODY()
 
@@ -104,7 +106,11 @@ public:
 	virtual void NotifyForNewReadyMeleeWeapon_Implementation(UWeaponDataAsset* NewWeapon) override;
 
 	// IDamageable
-	void TakeDamageNative(AActor* Instigator, float DamageAmount, FVector HitLocation) override;
+	virtual void TakeDamageNative(AActor* Instigator, float DamageAmount, FVector HitLocation) override;
+
+	// IEquipHelperInterface
+	virtual void SwitchEquipmentOwner_BackToLeftHand_Implementation() override;
+	virtual void SwitchEquipmentOwner_LeftHandToBack_Implementation() override;
 
 
 protected:
