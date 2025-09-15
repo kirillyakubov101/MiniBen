@@ -27,6 +27,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "CharacterMesh")
 	UStaticMeshComponent* GetLeftWeaponHolsterStaticMeshComp() const;
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "CharacterMesh")
+	UStaticMeshComponent* GetBackWeaponStaticMeshComp() const;
+
 	//virtual USkeletalMeshComponent* GetSkeletalMeshComponent() const = 0;
 	//virtual UStaticMeshComponent* GetLeftWeaponHolsterStaticMeshComp() const = 0;
 };

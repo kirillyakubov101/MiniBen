@@ -26,8 +26,34 @@ void UEquipmentHandler::EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 
 	FStreamableManager& Streamable = UAssetManager::GetStreamableManager();
 	FSoftObjectPath MeshPath = Mesh.ToSoftObjectPath();
+	ICharacterMeshInterface* CharacterMeshInterface = Cast<ICharacterMeshInterface>(GetOwner());
 
-	ICombatInterface::Execute_NotifyForNewReadyWeapon(GetOwner(), NewWeapon);
+	switch (NewWeapon->WeaponType)
+	{
+		case EWeaponType::WT_Fists:
+		case EWeaponType::WT_OneHandedWeapon:
+			ICombatInterface::Execute_NotifyForNewReadyMeleeWeapon(GetOwner(), NewWeapon);
+			break;
+		case EWeaponType::WT_Bow:
+			//TODO: Ranged weapon equip notification
+			break;
+	}
+
+	switch (CurrentWeapon->InactiveEquipmentSocket)
+	{
+	case EEquipmentSockets::ES_LeftHip:
+		InactiveStaticMeshComp = ICharacterMeshInterface::Execute_GetLeftWeaponHolsterStaticMeshComp(GetOwner());
+		break;
+	case EEquipmentSockets::ES_Back:
+		InactiveStaticMeshComp = ICharacterMeshInterface::Execute_GetBackWeaponStaticMeshComp(GetOwner());
+		break;
+	case EEquipmentSockets::ES_None:
+		return;
+
+	 default:
+		return;
+	}
+
 
 	if (MeshPath.IsValid())
 	{
@@ -41,18 +67,14 @@ void UEquipmentHandler::EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 					return;
 				}
 
-				ICharacterMeshInterface* CharacterMeshInterface = Cast<ICharacterMeshInterface>(GetOwner());
-				check(CharacterMeshInterface);
 
-				UStaticMeshComponent* StaticMesh = ICharacterMeshInterface::Execute_GetLeftWeaponHolsterStaticMeshComp(GetOwner());
-
-				if (StaticMesh)
+				if (ensure(InactiveStaticMeshComp.IsValid()))
 				{
-					StaticMesh->SetStaticMesh(LoadedMesh);
+					InactiveStaticMeshComp->SetStaticMesh(LoadedMesh);
 				}
 				else
 				{
-					UE_LOG(LogTemp, Warning, TEXT("StaticMeshComponent was null."));
+					UE_LOG(LogTemp, Warning, TEXT("InactiveStaticMeshComp was noy valid."));
 				}
 			}));
 	}
@@ -89,6 +111,21 @@ EWeaponType UEquipmentHandler::GetCurrentlyEquippedWeaponType_Implementation() c
 UWeaponDataAsset* UEquipmentHandler::GetCurrentWeapon_Implementation() const
 {
 	return CurrentWeapon;
+}
+
+void UEquipmentHandler::UnequipWeapon_Implementation()
+{
+	this->CurrentWeapon = nullptr;
+	this->LowerWeapon_Implementation();
+	if (this->InactiveStaticMeshComp.IsValid())
+	{
+		InactiveStaticMeshComp->SetStaticMesh(nullptr);
+	}
+}
+
+bool UEquipmentHandler::IsNoWeaponAssigned_Implementation() const
+{
+	return CurrentWeapon == nullptr;
 }
 
 // Called when the game starts

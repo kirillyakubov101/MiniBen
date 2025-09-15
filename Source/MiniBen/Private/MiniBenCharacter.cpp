@@ -296,6 +296,13 @@ void AMiniBenCharacter::SetCharMoveSpeed_Implementation(EPlayerMovementState New
 	case EPlayerMovementState::MS_Locked:
 		PlayerMaxWalkSpeed = 0.f;
 		break;
+	case EPlayerMovementState::MS_RangedCombat:
+		PlayerMaxWalkSpeed = 450.f;
+		break;
+
+	default:
+		PlayerMaxWalkSpeed = 0.f;
+	
 	}
 
 	GetCharacterMovement()->MaxWalkSpeed = PlayerMaxWalkSpeed;
@@ -317,7 +324,12 @@ TScriptInterface<IState> AMiniBenCharacter::GetNormalState_Implementation() cons
 	return TScriptInterface<IState>();
 }
 
-EWeaponType AMiniBenCharacter::GetWeaponTypeBasedOnCombatState() const
+TScriptInterface<IState> AMiniBenCharacter::GetRangedCombatState_Implementation() const
+{
+	return TScriptInterface<IState>();
+}
+
+EWeaponType AMiniBenCharacter::GetWeaponTypeBasedOnCombatState_Implementation() const
 {
 	return EWeaponType();
 }
@@ -327,7 +339,7 @@ TScriptInterface<IState> AMiniBenCharacter::GetOneHandedCombatState() const
 	return TScriptInterface<IState>();
 }
 
-TScriptInterface<IState> AMiniBenCharacter::GetFistCombatState() const
+TScriptInterface<IState> AMiniBenCharacter::GetFistCombatState_Implementation() const
 {
 	return TScriptInterface<IState>();
 }
@@ -342,7 +354,12 @@ UStaticMeshComponent* AMiniBenCharacter::GetLeftWeaponHolsterStaticMeshComp_Impl
 	return nullptr;
 }
 
-void AMiniBenCharacter::NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset* NewWeapon)
+UStaticMeshComponent* AMiniBenCharacter::GetBackWeaponStaticMeshComp_Implementation() const
+{
+	return nullptr;
+}
+
+void AMiniBenCharacter::NotifyForNewReadyMeleeWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 {
 	IMeleeCombatInterface::Execute_AssignNewWeapon(this->MeleeCombatHandler, NewWeapon);
 }
@@ -350,6 +367,14 @@ void AMiniBenCharacter::NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset*
 void AMiniBenCharacter::TakeDamageNative(AActor* Inst, float DamageAmount, FVector HitLocation)
 {
 	//
+}
+
+void AMiniBenCharacter::SwitchEquipmentOwner_BackToLeftHand_Implementation()
+{
+}
+
+void AMiniBenCharacter::SwitchEquipmentOwner_LeftHandToBack_Implementation()
+{
 }
 
 void AMiniBenCharacter::HandlePlayerActivated()

@@ -15,6 +15,7 @@
 #include "Interfaces/CombatInterface.h"
 #include "Interfaces/Damageable.h"
 #include "Interfaces/LocomotionStateMachineInterface.h"
+#include "Interfaces/EquipHelperInterface.h"
 #include "MiniBenCharacter.generated.h"
 
 class UWeaponDataAsset;
@@ -29,7 +30,8 @@ class MINIBEN_API AMiniBenCharacter :
 	public ICombatStateInterface,
 	public ICharacterMeshInterface,
 	public ICombatInterface,
-	public IDamageable
+	public IDamageable,
+	public IEquipHelperInterface
 {
 	GENERATED_BODY()
 
@@ -88,21 +90,27 @@ public:
 	virtual void ToggleMovement_Implementation(bool bCanMove);
 
 	// ICombatStateInterface
-	virtual EWeaponType GetWeaponTypeBasedOnCombatState() const;
+	virtual EWeaponType GetWeaponTypeBasedOnCombatState_Implementation() const;
 	virtual TScriptInterface<IState> GetOneHandedCombatState() const;
-	virtual TScriptInterface<IState> GetFistCombatState() const;
-	virtual TScriptInterface<IState> GetNormalState_Implementation() const;
+	virtual TScriptInterface<IState> GetFistCombatState_Implementation() const;
+	virtual TScriptInterface<IState> GetNormalState_Implementation() const override;
+	virtual TScriptInterface<IState> GetRangedCombatState_Implementation() const override;
 
 	// ICharacterMeshInterface
 	virtual USkeletalMeshComponent* GetCharacterSkeletalMesh_Implementation() const;
 	virtual UStaticMeshComponent* GetLeftWeaponHolsterStaticMeshComp_Implementation() const;
+	virtual UStaticMeshComponent* GetBackWeaponStaticMeshComp_Implementation() const;
 
 	// ICombatInterface
 	virtual UWeaponDataAsset* GetCurrentWeapon_Implementation() const override;
-	virtual void NotifyForNewReadyWeapon_Implementation(UWeaponDataAsset* NewWeapon) override;
+	virtual void NotifyForNewReadyMeleeWeapon_Implementation(UWeaponDataAsset* NewWeapon) override;
 
 	// IDamageable
-	void TakeDamageNative(AActor* Instigator, float DamageAmount, FVector HitLocation) override;
+	virtual void TakeDamageNative(AActor* Instigator, float DamageAmount, FVector HitLocation) override;
+
+	// IEquipHelperInterface
+	virtual void SwitchEquipmentOwner_BackToLeftHand_Implementation() override;
+	virtual void SwitchEquipmentOwner_LeftHandToBack_Implementation() override;
 
 
 protected:

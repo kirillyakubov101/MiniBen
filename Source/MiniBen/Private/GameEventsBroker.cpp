@@ -19,9 +19,15 @@ void GameEventsBroker::UnBindPlayerDeath(UObject* Owner)
 	this->OnPlayerDeath.RemoveAll(Owner);
 }
 
+void GameEventsBroker::UnBindPlayerLocomotionStateChanged(UObject* Owner)
+{
+	this->OnPlayerLocomotionStateChanged.RemoveAll(Owner);
+}
+
 GameEventsBroker::~GameEventsBroker()
 {
 	this->OnPlayerCanActivate.Clear();
 	this->OnPlayerDeath.Clear();
+	this->OnPlayerLocomotionStateChanged.Clear();
 }
 

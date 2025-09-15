@@ -37,7 +37,6 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "CombatState")
 	TScriptInterface<IState> GetNormalState() const;
 
-	//virtual IState* GetFistCombatState() const = 0;
-	//virtual IState* GetOneHandedCombatState() const = 0;
-	//virtual EWeaponType* GetWeaponTypeBasedOnCombatStateNative() const = 0;
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "CombatState")
+	TScriptInterface<IState> GetRangedCombatState() const;
 };

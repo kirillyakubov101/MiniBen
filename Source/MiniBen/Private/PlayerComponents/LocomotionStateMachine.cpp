@@ -47,6 +47,9 @@ void ULocomotionStateMachine::SwitchState_Implementation(EWeaponType WeaponType)
 	case EWeaponType::WT_Unarmed:
 		NewState = ICombatStateInterface::Execute_GetNormalState(GetOwner());
 		break;
+	case EWeaponType::WT_Bow:
+		NewState = ICombatStateInterface::Execute_GetRangedCombatState(GetOwner());
+		break;
 	}
 
 	SwitchStateProccess(NewState);

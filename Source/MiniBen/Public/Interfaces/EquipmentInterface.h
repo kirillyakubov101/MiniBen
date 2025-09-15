@@ -43,4 +43,10 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipmentInterface")
 	UWeaponDataAsset* GetCurrentWeapon() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipmentInterface")
+	void UnequipWeapon();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipmentInterface")
+	bool IsNoWeaponAssigned() const;
 };

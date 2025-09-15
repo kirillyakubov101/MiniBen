@@ -19,13 +19,15 @@ public:
 	UEquipmentHandler();
 
 	// IEquipmentInterface
-	void EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon);
-	UStaticMesh* GetCurrentWeaponMesh_Implementation() const;
-	bool IsWeaponReady_Implementation() const;
-	void ReadyWeapon_Implementation();
-	void LowerWeapon_Implementation();
-	EWeaponType GetCurrentlyEquippedWeaponType_Implementation() const;
-	UWeaponDataAsset* GetCurrentWeapon_Implementation() const;
+	virtual void EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon) override;
+	virtual UStaticMesh* GetCurrentWeaponMesh_Implementation() const override;
+	virtual bool IsWeaponReady_Implementation() const;
+	virtual void ReadyWeapon_Implementation();
+	virtual void LowerWeapon_Implementation();
+	virtual EWeaponType GetCurrentlyEquippedWeaponType_Implementation() const override;
+	virtual UWeaponDataAsset* GetCurrentWeapon_Implementation() const override;
+	virtual void UnequipWeapon_Implementation() override;
+	virtual bool IsNoWeaponAssigned_Implementation() const override;
 
 protected:
 
@@ -39,6 +41,10 @@ protected:
 
 private:
 	class TScriptInterface<class ILocomotionStateMachineInterface> LocomotionStateMachine;
+
+	UPROPERTY()
 	UStaticMesh* LoadedMesh = nullptr;
+
+	TWeakObjectPtr<UStaticMeshComponent> InactiveStaticMeshComp;
 
 };

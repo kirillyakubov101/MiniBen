@@ -100,6 +100,17 @@ bool UPlayerActorPermissionsHandler::CanPerformAction_Implementation(EPlayerActi
 			ActionStates[EPlayerActions::PA_Sheath] == true &&
 			ActionStates[EPlayerActions::PA_Air] != true;
 		break;
+
+	case EPlayerActions::PA_Equip:
+		canPerform =
+			ActionStates[EPlayerActions::PA_MidRolling] != true &&
+			ActionStates[EPlayerActions::PA_MidSheath] != true &&
+			ActionStates[EPlayerActions::PA_Stagger] != true &&
+			ActionStates[EPlayerActions::PA_Sheath] != true &&
+			ActionStates[EPlayerActions::PA_Air] != true &&
+			ActionStates[EPlayerActions::PA_UnSheath] == true &&
+			ActionStates[EPlayerActions::PA_Attacking] != true;
+		break;
 		
 	}
 	return canPerform;

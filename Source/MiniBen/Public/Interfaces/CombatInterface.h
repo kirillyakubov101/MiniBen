@@ -30,5 +30,5 @@ public:
 	FTransform GetRightHandTransform() const;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "CombatInterface")
-	void NotifyForNewReadyWeapon(UWeaponDataAsset* NewWeapon);
+	void NotifyForNewReadyMeleeWeapon(UWeaponDataAsset* NewWeapon);
 };
