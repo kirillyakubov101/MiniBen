@@ -54,6 +54,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
 	TScriptInterface<class IPlayerInventoryInterface> GetPlayerInventory();
 	virtual class TScriptInterface<class IPlayerInventoryInterface> GetPlayerInventoryNative() = 0;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "PlayerComponents")
+	TScriptInterface<class IRangedCombatInterface> GetPlayerRangedCombatHandler();
+	//TODO: MOVE TO NATIVE virtual class TScriptInterface<class IPlayerInventoryInterface> GetPlayerRangedCombatHandlerNative() = 0;
 	
 
 };

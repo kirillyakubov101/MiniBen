@@ -8,7 +8,10 @@
 #include <Interfaces/CharacterMeshInterface.h>
 #include "MiniBenCharacter.h"
 
-// Sets default values for this component's properties
+/// <summary>
+/// actor component that handles equipping and unequipping weapons for a character
+/// </summary>
+
 UEquipmentHandler::UEquipmentHandler()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
@@ -35,7 +38,7 @@ void UEquipmentHandler::EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 			ICombatInterface::Execute_NotifyForNewReadyMeleeWeapon(GetOwner(), NewWeapon);
 			break;
 		case EWeaponType::WT_Bow:
-			//TODO: Ranged weapon equip notification
+			ICombatInterface::Execute_NotifyForNewReadyRangedWeapon(GetOwner(), NewWeapon);
 			break;
 	}
 
@@ -128,15 +131,9 @@ bool UEquipmentHandler::IsNoWeaponAssigned_Implementation() const
 	return CurrentWeapon == nullptr;
 }
 
-// Called when the game starts
 void UEquipmentHandler::BeginPlay()
 {
 	Super::BeginPlay();
-
-	/*if (GetOwner()->GetClass()->ImplementsInterface(UPlayerComponentBrokerInterface::StaticClass()))
-	{
-		LocomotionStateMachine = IPlayerComponentBrokerInterface::Execute_GetStateMachine(GetOwner());
-	}*/
 
 	IPlayerComponentBrokerInterface* Broker = Cast<IPlayerComponentBrokerInterface>(GetOwner());
 	if (Broker)

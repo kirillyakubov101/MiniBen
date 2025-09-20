@@ -8,7 +8,9 @@
 #include "CombatInterface.generated.h"
 
 
-// This class does not need to be modified.
+/// <summary>
+/// Interface for combat-related functionalities, including weapon management and combat actions.
+/// </summary>
 UINTERFACE(MinimalAPI)
 class UCombatInterface : public UInterface
 {
@@ -31,4 +33,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "CombatInterface")
 	void NotifyForNewReadyMeleeWeapon(UWeaponDataAsset* NewWeapon);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "CombatInterface")
+	void NotifyForNewReadyRangedWeapon(UWeaponDataAsset* NewWeapon);
 };

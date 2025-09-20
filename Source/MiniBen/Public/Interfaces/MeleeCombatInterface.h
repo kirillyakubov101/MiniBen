@@ -8,7 +8,9 @@
 #include "MeleeCombatInterface.generated.h"
 
 
-// This class does not need to be modified.
+/// <summary>
+/// Interface for melee combat functionalities, including weapon assignment and attack commands.
+/// </summary>
 UINTERFACE(MinimalAPI)
 class UMeleeCombatInterface : public UInterface
 {

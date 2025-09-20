@@ -19,7 +19,7 @@ void URangedCombatHandler::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	// TODO: sub to the OnDynamicUpdateActionStateDelegate of the PlayerActionPermissions to Update attack state
 	
 }
 
