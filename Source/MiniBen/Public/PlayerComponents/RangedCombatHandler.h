@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Interfaces/RangedCombatInterface.h"
 #include "RangedCombatHandler.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class MINIBEN_API URangedCombatHandler : public UActorComponent
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
+class MINIBEN_API URangedCombatHandler : public UActorComponent, public IRangedCombatInterface
 {
 	GENERATED_BODY()
 
@@ -24,5 +25,9 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsAttacking = false;
 		
 };

@@ -104,6 +104,8 @@ public:
 	// ICombatInterface
 	virtual UWeaponDataAsset* GetCurrentWeapon_Implementation() const override;
 	virtual void NotifyForNewReadyMeleeWeapon_Implementation(UWeaponDataAsset* NewWeapon) override;
+	virtual void NotifyForNewReadyRangedWeapon_Implementation(UWeaponDataAsset* NewWeapon) override;
+	
 
 	// IDamageable
 	virtual void TakeDamageNative(AActor* Instigator, float DamageAmount, FVector HitLocation) override;

@@ -364,6 +364,12 @@ void AMiniBenCharacter::NotifyForNewReadyMeleeWeapon_Implementation(UWeaponDataA
 	IMeleeCombatInterface::Execute_AssignNewWeapon(this->MeleeCombatHandler, NewWeapon);
 }
 
+void AMiniBenCharacter::NotifyForNewReadyRangedWeapon_Implementation(UWeaponDataAsset* NewWeapon)
+{
+	// TODO: Implement Ranged Combat Handler and call its AssignNewWeapon method here
+	/*IMeleeCombatInterface::Execute_AssignNewWeapon(this->Ranged, NewWeapon);*/
+}
+
 void AMiniBenCharacter::TakeDamageNative(AActor* Inst, float DamageAmount, FVector HitLocation)
 {
 	//

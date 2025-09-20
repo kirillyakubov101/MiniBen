@@ -10,7 +10,9 @@
 
 
 
-
+/// <summary>
+/// game instance that manages saving and loading of the game
+/// </summary>
 UCLASS()
 class MINIBEN_API UMiniBenGameInstance : public UGameInstance
 {
