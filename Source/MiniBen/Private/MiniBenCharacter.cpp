@@ -300,7 +300,7 @@ void AMiniBenCharacter::SetCharMoveSpeed_Implementation(EPlayerMovementState New
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 		break;
 	case EPlayerMovementState::MS_RangedCombat:
-		PlayerMaxWalkSpeed = 450.f;
+		PlayerMaxWalkSpeed = 300.f;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
 		break;
 
