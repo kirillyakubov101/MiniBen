@@ -286,18 +286,22 @@ void AMiniBenCharacter::SetCharMoveSpeed_Implementation(EPlayerMovementState New
 	{
 	case EPlayerMovementState::MS_Normal:
 		PlayerMaxWalkSpeed = 500.f;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
 		break;
 	case EPlayerMovementState::MS_FistCombat:
 		PlayerMaxWalkSpeed = 120.f;
 		break;
 	case EPlayerMovementState::MS_OneHandedSwordCombat:
 		PlayerMaxWalkSpeed = 320.f;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
 		break;
 	case EPlayerMovementState::MS_Locked:
 		PlayerMaxWalkSpeed = 0.f;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
 		break;
 	case EPlayerMovementState::MS_RangedCombat:
-		PlayerMaxWalkSpeed = 450.f;
+		PlayerMaxWalkSpeed = 300.f;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
 		break;
 
 	default:
