@@ -24,10 +24,13 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void SetIsAttackingInRangedForm_Implementation(bool bNewIsAttackingInRangedForm) override;
 
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsAttacking = false;
+
+	void ValidateStateContinue();
 		
 };

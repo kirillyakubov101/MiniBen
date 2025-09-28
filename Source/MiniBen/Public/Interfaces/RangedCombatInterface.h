@@ -35,7 +35,4 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "RangedCombatInterface")
 	void AttackCommand();
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "MeleeCombat")
-	void RotateCharacterToFaceForward(float DeltaTime);
 };
