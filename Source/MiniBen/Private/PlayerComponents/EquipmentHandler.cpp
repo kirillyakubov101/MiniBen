@@ -21,14 +21,32 @@ UEquipmentHandler::UEquipmentHandler()
 	// ...
 }
 
+void UEquipmentHandler::BeginPlay()
+{
+	Super::BeginPlay();
+
+	IPlayerComponentBrokerInterface* Broker = Cast<IPlayerComponentBrokerInterface>(GetOwner());
+	if (Broker)
+	{
+		LocomotionStateMachine = Broker->GetStateMachineNative();
+	}
+
+	if (!LocomotionStateMachine)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("LocomotionStateMachine IS nullptr"));
+	}
+
+}
+
 void UEquipmentHandler::EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 {
 	if (!NewWeapon) return;
+	LoadedSkeletalMeshWeapon = nullptr;
 	CurrentWeapon = NewWeapon;
-	TSoftObjectPtr<UStaticMesh> Mesh = CurrentWeapon->WeaponMesh;
+	TSoftObjectPtr<USkeletalMesh> SkeletalMesh = CurrentWeapon->WeaponSkeletalMesh;
 
 	FStreamableManager& Streamable = UAssetManager::GetStreamableManager();
-	FSoftObjectPath MeshPath = Mesh.ToSoftObjectPath();
+	FSoftObjectPath MeshPath = SkeletalMesh.ToSoftObjectPath();
 	ICharacterMeshInterface* CharacterMeshInterface = Cast<ICharacterMeshInterface>(GetOwner());
 
 	switch (NewWeapon->WeaponType)
@@ -45,10 +63,10 @@ void UEquipmentHandler::EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 	switch (CurrentWeapon->InactiveEquipmentSocket)
 	{
 	case EEquipmentSockets::ES_LeftHip:
-		InactiveStaticMeshComp = ICharacterMeshInterface::Execute_GetLeftWeaponHolsterStaticMeshComp(GetOwner());
+		RestingSkeletalMeshComp = ICharacterMeshInterface::Execute_GetLeftWeaponHolsterSkeletalMeshComp(GetOwner());
 		break;
 	case EEquipmentSockets::ES_Back:
-		InactiveStaticMeshComp = ICharacterMeshInterface::Execute_GetBackWeaponStaticMeshComp(GetOwner());
+		RestingSkeletalMeshComp = ICharacterMeshInterface::Execute_GetBackHolsterSkeletalMeshComp(GetOwner());
 		break;
 	case EEquipmentSockets::ES_None:
 		return;
@@ -62,18 +80,18 @@ void UEquipmentHandler::EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 	{
 		Streamable.RequestAsyncLoad(MeshPath, FStreamableDelegate::CreateLambda([this, MeshPath]()
 			{
-				LoadedMesh = Cast<UStaticMesh>(MeshPath.ResolveObject());
+				LoadedSkeletalMeshWeapon = Cast<USkeletalMesh>(MeshPath.ResolveObject());
 
-				if (!LoadedMesh)
+				if (!LoadedSkeletalMeshWeapon)
 				{
 					UE_LOG(LogTemp, Warning, TEXT("Failed to load weapon mesh at path: %s"), *MeshPath.ToString());
 					return;
 				}
 
 
-				if (ensure(InactiveStaticMeshComp.IsValid()))
+				if (ensure(RestingSkeletalMeshComp.IsValid()))
 				{
-					InactiveStaticMeshComp->SetStaticMesh(LoadedMesh);
+					RestingSkeletalMeshComp->SetSkeletalMesh(LoadedSkeletalMeshWeapon);
 				}
 				else
 				{
@@ -85,7 +103,12 @@ void UEquipmentHandler::EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 
 UStaticMesh* UEquipmentHandler::GetCurrentWeaponMesh_Implementation() const
 {
-	return LoadedMesh;
+	return nullptr;
+}
+
+USkeletalMesh* UEquipmentHandler::GetCurrentWeaponSkeletalMesh_Implementation() const
+{
+	return LoadedSkeletalMeshWeapon;
 }
 
 bool UEquipmentHandler::IsWeaponReady_Implementation() const
@@ -120,9 +143,9 @@ void UEquipmentHandler::UnequipWeapon_Implementation()
 {
 	this->CurrentWeapon = nullptr;
 	this->LowerWeapon_Implementation();
-	if (this->InactiveStaticMeshComp.IsValid())
+	if (this->RestingSkeletalMeshComp.IsValid())
 	{
-		InactiveStaticMeshComp->SetStaticMesh(nullptr);
+		RestingSkeletalMeshComp->SetSkeletalMesh(nullptr);
 	}
 }
 
@@ -131,21 +154,6 @@ bool UEquipmentHandler::IsNoWeaponAssigned_Implementation() const
 	return CurrentWeapon == nullptr;
 }
 
-void UEquipmentHandler::BeginPlay()
-{
-	Super::BeginPlay();
 
-	IPlayerComponentBrokerInterface* Broker = Cast<IPlayerComponentBrokerInterface>(GetOwner());
-	if (Broker)
-	{
-		LocomotionStateMachine = Broker->GetStateMachineNative();
-	}
-	
-	if (!LocomotionStateMachine)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("LocomotionStateMachine IS nullptr"));
-	}
-	
-}
 
 

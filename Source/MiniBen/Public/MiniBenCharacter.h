@@ -110,11 +110,6 @@ public:
 	// IDamageable
 	virtual void TakeDamageNative(AActor* Instigator, float DamageAmount, FVector HitLocation) override;
 
-	// IEquipHelperInterface
-	virtual void SwitchEquipmentOwner_BackToLeftHand_Implementation() override;
-	virtual void SwitchEquipmentOwner_LeftHandToBack_Implementation() override;
-
-
 protected:
 	void HandlePlayerActivated();
 

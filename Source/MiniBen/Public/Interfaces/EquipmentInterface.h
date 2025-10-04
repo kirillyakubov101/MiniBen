@@ -30,6 +30,9 @@ public:
 	UStaticMesh* GetCurrentWeaponMesh() const;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipmentInterface")
+	USkeletalMesh* GetCurrentWeaponSkeletalMesh() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipmentInterface")
 	bool IsWeaponReady() const;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipmentInterface")

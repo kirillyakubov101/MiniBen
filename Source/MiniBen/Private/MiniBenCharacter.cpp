@@ -379,14 +379,6 @@ void AMiniBenCharacter::TakeDamageNative(AActor* Inst, float DamageAmount, FVect
 	//
 }
 
-void AMiniBenCharacter::SwitchEquipmentOwner_BackToLeftHand_Implementation()
-{
-}
-
-void AMiniBenCharacter::SwitchEquipmentOwner_LeftHandToBack_Implementation()
-{
-}
-
 void AMiniBenCharacter::HandlePlayerActivated()
 {
 	UE_LOG(LogTemp, Warning, TEXT("HandlePlayerActivated was called by broker"));

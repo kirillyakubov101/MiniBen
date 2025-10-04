@@ -35,6 +35,9 @@ public:
     TSoftObjectPtr<UStaticMesh> WeaponMesh;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+    TSoftObjectPtr<USkeletalMesh> WeaponSkeletalMesh;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
     EWeaponType WeaponType;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
