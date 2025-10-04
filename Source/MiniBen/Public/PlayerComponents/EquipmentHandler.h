@@ -20,7 +20,6 @@ public:
 
 	// IEquipmentInterface
 	virtual void EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon) override;
-	virtual UStaticMesh* GetCurrentWeaponMesh_Implementation() const override;
 	virtual USkeletalMesh* GetCurrentWeaponSkeletalMesh_Implementation() const override;
 	virtual bool IsWeaponReady_Implementation() const;
 	virtual void ReadyWeapon_Implementation();

@@ -32,9 +32,6 @@ public:
     FString WeaponDescription;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
-    TSoftObjectPtr<UStaticMesh> WeaponMesh;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
     TSoftObjectPtr<USkeletalMesh> WeaponSkeletalMesh;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")

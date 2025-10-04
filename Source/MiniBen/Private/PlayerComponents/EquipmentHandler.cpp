@@ -101,11 +101,6 @@ void UEquipmentHandler::EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon)
 	}
 }
 
-UStaticMesh* UEquipmentHandler::GetCurrentWeaponMesh_Implementation() const
-{
-	return nullptr;
-}
-
 USkeletalMesh* UEquipmentHandler::GetCurrentWeaponSkeletalMesh_Implementation() const
 {
 	return LoadedSkeletalMeshWeapon;
