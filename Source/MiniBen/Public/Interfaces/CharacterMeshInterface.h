@@ -25,12 +25,6 @@ public:
 	USkeletalMeshComponent* GetCharacterSkeletalMesh() const;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "CharacterMesh")
-	UStaticMeshComponent* GetLeftWeaponHolsterStaticMeshComp() const;
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "CharacterMesh")
-	UStaticMeshComponent* GetBackWeaponStaticMeshComp() const;
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "CharacterMesh")
 	USkeletalMeshComponent* GetRightHandWeaponSkeletalMeshComp() const;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "CharacterMesh")

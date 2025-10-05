@@ -58,6 +58,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
     EEquipmentSockets InactiveEquipmentSocket;
 
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+    TSubclassOf<UAnimInstance> WeaponAnimBP;
+
 protected:
     // ItemType defines the category, such as "Collectable" or "Weapon"
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
