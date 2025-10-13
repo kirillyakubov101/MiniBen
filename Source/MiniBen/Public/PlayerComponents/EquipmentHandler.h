@@ -20,7 +20,7 @@ public:
 
 	// IEquipmentInterface
 	virtual void EquipWeapon_Implementation(UWeaponDataAsset* NewWeapon) override;
-	virtual UStaticMesh* GetCurrentWeaponMesh_Implementation() const override;
+	virtual USkeletalMesh* GetCurrentWeaponSkeletalMesh_Implementation() const override;
 	virtual bool IsWeaponReady_Implementation() const;
 	virtual void ReadyWeapon_Implementation();
 	virtual void LowerWeapon_Implementation();
@@ -43,8 +43,8 @@ private:
 	class TScriptInterface<class ILocomotionStateMachineInterface> LocomotionStateMachine;
 
 	UPROPERTY()
-	UStaticMesh* LoadedMesh = nullptr;
+	USkeletalMesh* LoadedSkeletalMeshWeapon = nullptr;
 
-	TWeakObjectPtr<UStaticMeshComponent> InactiveStaticMeshComp;
 
+	TWeakObjectPtr<USkeletalMeshComponent> RestingSkeletalMeshComp;
 };

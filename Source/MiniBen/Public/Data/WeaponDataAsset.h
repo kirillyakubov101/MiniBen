@@ -32,7 +32,7 @@ public:
     FString WeaponDescription;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
-    TSoftObjectPtr<UStaticMesh> WeaponMesh;
+    TSoftObjectPtr<USkeletalMesh> WeaponSkeletalMesh;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
     EWeaponType WeaponType;
@@ -57,6 +57,9 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
     EEquipmentSockets InactiveEquipmentSocket;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+    TSubclassOf<UAnimInstance> WeaponAnimBP;
 
 protected:
     // ItemType defines the category, such as "Collectable" or "Weapon"

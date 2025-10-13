@@ -2,6 +2,8 @@
 
 
 #include "PlayerComponents/RangedCombatHandler.h"
+#include <Interfaces/PlayerComponentBroker.h>
+#include <Interfaces/PlayerActionPermissions.h>
 
 // Sets default values for this component's properties
 URangedCombatHandler::URangedCombatHandler()
@@ -19,7 +21,24 @@ void URangedCombatHandler::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// TODO: sub to the OnDynamicUpdateActionStateDelegate of the PlayerActionPermissions to Update attack state
+	IPlayerComponentBrokerInterface* Broker = Cast<IPlayerComponentBrokerInterface>(GetOwner());
+	if (Broker)
+	{
+
+		IPlayerActionPermissions* Permissions = Broker->GetPlayerActionPermissionsNative();
+		if (Permissions)
+		{
+			Permissions->GetOnDynamicUpdateActionState().AddUObject(this, &URangedCombatHandler::ValidateStateContinue);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Log, TEXT("Permissions is null"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("Broker is null"));
+	}
 	
 }
 
@@ -30,5 +49,25 @@ void URangedCombatHandler::TickComponent(float DeltaTime, ELevelTick TickType, F
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+void URangedCombatHandler::ValidateStateContinue()
+{
+	IPlayerComponentBrokerInterface* Broker = Cast<IPlayerComponentBrokerInterface>(GetOwner());
+
+	TScriptInterface<IPlayerActionPermissions> Permissions = IPlayerComponentBrokerInterface::Execute_GetPlayerActionPermissions(GetOwner());
+	bool CanStillAttack = IPlayerActionPermissions::Execute_CanPerformAction(Permissions.GetObject(), EPlayerActions::PA_Attacking);
+	if(!CanStillAttack)
+	{
+		TScriptInterface<IPlayerActionPermissions> PlayerActionPermission = IPlayerComponentBrokerInterface::Execute_GetPlayerActionPermissions(GetOwner());
+		IPlayerActionPermissions::Execute_SetActionState(PlayerActionPermission.GetObject(), EPlayerActions::PA_Attacking, false);
+		SetIsAttackingInRangedForm_Implementation(false);
+	}
+	
+}
+
+void URangedCombatHandler::SetIsAttackingInRangedForm_Implementation(bool bNewIsAttackingInRangedForm)
+{
+	this->bIsAttacking = bNewIsAttackingInRangedForm;
 }
 

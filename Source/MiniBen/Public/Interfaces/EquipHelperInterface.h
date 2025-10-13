@@ -23,9 +23,21 @@ class MINIBEN_API IEquipHelperInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipHelperInterface")
-	void SwitchEquipmentOwner_BackToLeftHand();
+	void SwitchEquipmentOwner_BackHolsterToLeftHand();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipHelperInterface")
-	void SwitchEquipmentOwner_LeftHandToBack();
+	void SwitchEquipmentOwner_LeftHandToBackHolster();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipHelperInterface")
+	void SwitchEquipmentOwner_LeftHolsterToRightHand();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipHelperInterface")
+	void SwitchEquipmentOwner_RightHandToLeftHolster();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipHelperInterface")
+	void AttachArrowToRightHandArrowDraw(UStaticMesh* Mesh);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipHelperInterface")
+	void AttachArrowToRightHandArrowAim(UStaticMesh* Mesh);
 
 };

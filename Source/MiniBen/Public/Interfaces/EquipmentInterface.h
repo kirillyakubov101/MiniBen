@@ -27,7 +27,7 @@ public:
 	void EquipWeapon(UWeaponDataAsset* NewWeapon);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipmentInterface")
-	UStaticMesh* GetCurrentWeaponMesh() const;
+	USkeletalMesh* GetCurrentWeaponSkeletalMesh() const;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipmentInterface")
 	bool IsWeaponReady() const;
