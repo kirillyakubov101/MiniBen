@@ -34,4 +34,10 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipHelperInterface")
 	void SwitchEquipmentOwner_RightHandToLeftHolster();
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipHelperInterface")
+	void AttachArrowToRightHandArrowDraw(UStaticMesh* Mesh);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EquipHelperInterface")
+	void AttachArrowToRightHandArrowAim(UStaticMesh* Mesh);
+
 };

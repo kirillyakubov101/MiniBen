@@ -35,4 +35,16 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "RangedCombatInterface")
 	void AttackCommand();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "RangedCombatInterface")
+	void AnimateBow();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "RangedCombatInterface")
+	void DrawArrowVisualCue();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "RangedCombatInterface")
+	void ReplaceDrawArrowToAimArrowVisualCue();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "RangedCombatInterface")
+	void ReleaseArrow();
 };
