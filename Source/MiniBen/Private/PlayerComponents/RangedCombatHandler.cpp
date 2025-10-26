@@ -51,7 +51,7 @@ void URangedCombatHandler::TickComponent(float DeltaTime, ELevelTick TickType, F
 	// ...
 }
 
-void URangedCombatHandler::ValidateStateContinue()
+void URangedCombatHandler::ValidateStateContinue_Implementation()
 {
 	IPlayerComponentBrokerInterface* Broker = Cast<IPlayerComponentBrokerInterface>(GetOwner());
 

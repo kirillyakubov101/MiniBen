@@ -31,6 +31,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsAttacking = false;
 
+	UFUNCTION(BlueprintNativeEvent)
 	void ValidateStateContinue();
 		
 };
