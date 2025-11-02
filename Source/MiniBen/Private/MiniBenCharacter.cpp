@@ -17,6 +17,7 @@
 #include "PlayerComponents//PlayerHealth.h"
 #include "PlayerComponents/AbilityHandler.h"
 #include "Data/WeaponDataAsset.h"
+#include "Components/AudioComponent.h"
 #include "MyStructs.h"
 
 // Sets default values
@@ -48,6 +49,10 @@ AMiniBenCharacter::AMiniBenCharacter()
 	//AbilityHandler
 	AbilityHandler = CreateDefaultSubobject<UAbilityHandler>(TEXT("AbilityHandler"));
 
+	//Audio Component - Bow
+	BowAudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("BowAudioComponent"));
+	BowAudioComponent->SetupAttachment(RootComponent);
+	PlayerAudioMap.Add("Bow", BowAudioComponent);
 }
 
 
@@ -377,6 +382,17 @@ void AMiniBenCharacter::NotifyForNewReadyRangedWeapon_Implementation(UWeaponData
 void AMiniBenCharacter::TakeDamageNative(AActor* Inst, float DamageAmount, FVector HitLocation)
 {
 	//
+}
+
+UAudioComponent* AMiniBenCharacter::GetAudioComponentByName_Implementation(FName ComponentName) const
+{
+	auto Found = PlayerAudioMap.Find(ComponentName);
+	if (Found)
+	{
+		return *Found;
+	}
+		
+	return nullptr;
 }
 
 void AMiniBenCharacter::HandlePlayerActivated()

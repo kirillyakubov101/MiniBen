@@ -16,9 +16,11 @@
 #include "Interfaces/Damageable.h"
 #include "Interfaces/LocomotionStateMachineInterface.h"
 #include "Interfaces/EquipHelperInterface.h"
+#include "Interfaces/PlayerSoundHandlerInterface.h"
 #include "MiniBenCharacter.generated.h"
 
 class UWeaponDataAsset;
+class UAudioComponent;
 
 UCLASS()
 class MINIBEN_API AMiniBenCharacter :
@@ -31,7 +33,8 @@ class MINIBEN_API AMiniBenCharacter :
 	public ICharacterMeshInterface,
 	public ICombatInterface,
 	public IDamageable,
-	public IEquipHelperInterface
+	public IEquipHelperInterface,
+	public IPlayerSoundHandlerInterface
 {
 	GENERATED_BODY()
 
@@ -106,9 +109,13 @@ public:
 	virtual void NotifyForNewReadyMeleeWeapon_Implementation(UWeaponDataAsset* NewWeapon) override;
 	virtual void NotifyForNewReadyRangedWeapon_Implementation(UWeaponDataAsset* NewWeapon) override;
 	
-
 	// IDamageable
 	virtual void TakeDamageNative(AActor* Instigator, float DamageAmount, FVector HitLocation) override;
+
+	// IEquipHelperInterface - Done in BP
+
+	// IPlayerSoundHandlerInterface
+	virtual UAudioComponent* GetAudioComponentByName_Implementation(FName ComponentName) const override;
 
 protected:
 	void HandlePlayerActivated();
@@ -151,7 +158,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class UAbilityHandler* AbilityHandler;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UAudioComponent* BowAudioComponent;
+		
 	
 	//-----------------------------------------------------------------------//
 	//======================================================================//
@@ -169,4 +179,5 @@ protected:
 
 private:
 	class UMiniBenGameInstance* GameInstance;	
+	TMap<FName, UAudioComponent*> PlayerAudioMap;
 };
