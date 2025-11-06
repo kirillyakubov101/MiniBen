@@ -17,6 +17,7 @@
 #include "Interfaces/LocomotionStateMachineInterface.h"
 #include "Interfaces/EquipHelperInterface.h"
 #include "Interfaces/PlayerSoundHandlerInterface.h"
+#include "Interfaces/CameraHandlerInterface.h"	
 #include "MiniBenCharacter.generated.h"
 
 class UWeaponDataAsset;
@@ -34,7 +35,8 @@ class MINIBEN_API AMiniBenCharacter :
 	public ICombatInterface,
 	public IDamageable,
 	public IEquipHelperInterface,
-	public IPlayerSoundHandlerInterface
+	public IPlayerSoundHandlerInterface,
+	public ICameraHandlerInterface
 {
 	GENERATED_BODY()
 
@@ -116,6 +118,10 @@ public:
 
 	// IPlayerSoundHandlerInterface
 	virtual UAudioComponent* GetAudioComponentByName_Implementation(FName ComponentName) const override;
+
+	// ICameraHandlerInterface
+	virtual class USpringArmComponent* GetCameraBoom_Implementation() const;
+	virtual class UCameraComponent* GetMainCamera_Implementation() const;
 
 protected:
 	void HandlePlayerActivated();

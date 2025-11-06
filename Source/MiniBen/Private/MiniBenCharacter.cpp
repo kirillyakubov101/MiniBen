@@ -395,6 +395,16 @@ UAudioComponent* AMiniBenCharacter::GetAudioComponentByName_Implementation(FName
 	return nullptr;
 }
 
+USpringArmComponent* AMiniBenCharacter::GetCameraBoom_Implementation() const
+{
+	return this->CameraBoom;
+}
+
+UCameraComponent* AMiniBenCharacter::GetMainCamera_Implementation() const
+{
+	return this->MainCameraComponent;
+}
+
 void AMiniBenCharacter::HandlePlayerActivated()
 {
 	UE_LOG(LogTemp, Warning, TEXT("HandlePlayerActivated was called by broker"));
