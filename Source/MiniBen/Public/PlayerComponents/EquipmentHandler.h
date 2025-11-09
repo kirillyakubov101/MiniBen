@@ -34,7 +34,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	bool bIsWeaponSheathed;
+	bool bIsWeaponUnSheathed;
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	UWeaponDataAsset* CurrentWeapon;

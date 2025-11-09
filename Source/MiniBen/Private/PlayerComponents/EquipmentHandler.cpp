@@ -108,19 +108,19 @@ USkeletalMesh* UEquipmentHandler::GetCurrentWeaponSkeletalMesh_Implementation() 
 
 bool UEquipmentHandler::IsWeaponReady_Implementation() const
 {
-	return bIsWeaponSheathed;
+	return bIsWeaponUnSheathed;
 }
 
 void UEquipmentHandler::ReadyWeapon_Implementation()
 {
-	bIsWeaponSheathed = true;
+	bIsWeaponUnSheathed = true;
 	EWeaponType WeaponType = CurrentWeapon->WeaponType;
 	ILocomotionStateMachineInterface::Execute_SwitchState(LocomotionStateMachine.GetObject(), WeaponType);
 }
 
 void UEquipmentHandler::LowerWeapon_Implementation()
 {
-	bIsWeaponSheathed = false;
+	bIsWeaponUnSheathed = false;
 	ILocomotionStateMachineInterface::Execute_SwitchState(LocomotionStateMachine.GetObject(), EWeaponType::WT_Unarmed);
 }
 
