@@ -27,4 +27,10 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Camera")
 	class UCameraComponent* GetMainCamera() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Camera")
+	void ChangeCameraPositionToNew(float targetFov,float targetArmLength,float maxTransitionTime);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Camera")
+	void ChangeCameraPositionToDefault(float StartFov, float StartArmLength);
 };
