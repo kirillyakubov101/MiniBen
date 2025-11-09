@@ -65,8 +65,8 @@ bool UPlayerActorPermissionsHandler::CanPerformAction_Implementation(EPlayerActi
 			ActionStates[EPlayerActions::PA_MidRolling] != true &&
 			ActionStates[EPlayerActions::PA_MidSheath] != true &&
 			ActionStates[EPlayerActions::PA_Stagger] != true &&
-			ActionStates[EPlayerActions::PA_Sheath] == true &&
-			ActionStates[EPlayerActions::PA_UnSheath] != true;
+			ActionStates[EPlayerActions::PA_UnSheath] == true &&
+			ActionStates[EPlayerActions::PA_Sheath] == false;
 		break;
 
 	case EPlayerActions::PA_Dead:
@@ -74,22 +74,22 @@ bool UPlayerActorPermissionsHandler::CanPerformAction_Implementation(EPlayerActi
 		break;
 
 
+	case EPlayerActions::PA_UnSheath:
+		canPerform =
+			ActionStates[EPlayerActions::PA_MidRolling] == false &&
+			ActionStates[EPlayerActions::PA_MidSheath] == false &&
+			ActionStates[EPlayerActions::PA_Stagger] == false &&
+			ActionStates[EPlayerActions::PA_Attacking] == false &&
+			ActionStates[EPlayerActions::PA_Sheath] == true;
+		break;
+
 	case EPlayerActions::PA_Sheath:
 		canPerform =
 			ActionStates[EPlayerActions::PA_MidRolling] != true &&
 			ActionStates[EPlayerActions::PA_MidSheath] != true &&
 			ActionStates[EPlayerActions::PA_Stagger] != true &&
 			ActionStates[EPlayerActions::PA_Attacking] != true &&
-			ActionStates[EPlayerActions::PA_Sheath] != true;
-		break;
-
-	case EPlayerActions::PA_UnSheath:
-		canPerform =
-			ActionStates[EPlayerActions::PA_MidRolling] != true &&
-			ActionStates[EPlayerActions::PA_MidSheath] != true &&
-			ActionStates[EPlayerActions::PA_Stagger] != true &&
-			ActionStates[EPlayerActions::PA_Attacking] != true &&
-			ActionStates[EPlayerActions::PA_Sheath] == true;
+			ActionStates[EPlayerActions::PA_UnSheath] == true;
 		break;
 
 	case EPlayerActions::PA_Stagger:
@@ -97,7 +97,7 @@ bool UPlayerActorPermissionsHandler::CanPerformAction_Implementation(EPlayerActi
 			ActionStates[EPlayerActions::PA_MidRolling] != true &&
 			ActionStates[EPlayerActions::PA_MidSheath] != true &&
 			ActionStates[EPlayerActions::PA_Stagger] != true &&
-			ActionStates[EPlayerActions::PA_Sheath] == true &&
+			ActionStates[EPlayerActions::PA_UnSheath] == true &&
 			ActionStates[EPlayerActions::PA_Air] != true;
 		break;
 
@@ -106,9 +106,9 @@ bool UPlayerActorPermissionsHandler::CanPerformAction_Implementation(EPlayerActi
 			ActionStates[EPlayerActions::PA_MidRolling] != true &&
 			ActionStates[EPlayerActions::PA_MidSheath] != true &&
 			ActionStates[EPlayerActions::PA_Stagger] != true &&
-			ActionStates[EPlayerActions::PA_Sheath] != true &&
+			ActionStates[EPlayerActions::PA_UnSheath] != true &&
 			ActionStates[EPlayerActions::PA_Air] != true &&
-			ActionStates[EPlayerActions::PA_UnSheath] == true &&
+			ActionStates[EPlayerActions::PA_Sheath] == true &&
 			ActionStates[EPlayerActions::PA_Attacking] != true;
 		break;
 		
@@ -133,6 +133,6 @@ void UPlayerActorPermissionsHandler::InitializeActionStates()
 		ActionStates.Add(Action, false);
 	}
 
-	ActionStates[EPlayerActions::PA_UnSheath] = true;
+	ActionStates[EPlayerActions::PA_Sheath] = true;
 }
 
