@@ -8,9 +8,9 @@ public class MiniBenEditorTarget : TargetRules
 	public MiniBenEditorTarget( TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V5;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_4;
-		ExtraModuleNames.Add("MiniBen");
+        DefaultBuildSettings = BuildSettingsVersion.V6;
+        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_7;
+        ExtraModuleNames.Add("MiniBen");
         ExtraModuleNames.Add("PlayerActions");
         ExtraModuleNames.Add("LevelStreamingUtils");
     }
