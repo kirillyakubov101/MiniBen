@@ -250,21 +250,32 @@ void UMiniBenGameInstance::ProcessNextSublevel()
         LatentInfo.UUID = FMath::Rand();
 
         FString LevelPackageName = NextSublevel.Level->GetWorldAssetPackageName();
-        TSoftObjectPtr<UWorld> LevelToLoad = TSoftObjectPtr<UWorld>(FStringAssetReference(LevelPackageName));
 
+        // Fix: Directly construct a SoftObjectPtr from the path string
+        TSoftObjectPtr<UWorld> LevelToLoad(LevelPackageName);
 
         if (NextSublevel.bShouldBeLoaded)
         {
-            // Load the sublevel
-            UGameplayStatics::LoadStreamLevelBySoftObjectPtr(GetWorld(), LevelToLoad, true, false, LatentInfo);
+            UGameplayStatics::LoadStreamLevelBySoftObjectPtr(
+                GetWorld(),
+                LevelToLoad,
+                true,
+                false,
+                LatentInfo
+            );
         }
         else
         {
-            // Unload the sublevel
-            UGameplayStatics::UnloadStreamLevelBySoftObjectPtr(GetWorld(), LevelToLoad, LatentInfo, false);
+            UGameplayStatics::UnloadStreamLevelBySoftObjectPtr(
+                GetWorld(),
+                LevelToLoad,
+                LatentInfo,
+                false
+            );
         }
     }
 }
+
 //Actors load and record themselves no need for manual load per actor
 //void UMiniBenGameInstance::RestoreSaveableActorsForAllSublevels()
 //{
