@@ -12,7 +12,7 @@
 
 // Sets default values for this component's properties
 UMeleeCombatHandler::UMeleeCombatHandler()
-	:TraceChannel(ECollisionChannel::ECC_Visibility)
+	:TraceChannel(ECollisionChannel::ECC_GameTraceChannel5) // EnemyAttackChannel
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -115,7 +115,7 @@ void UMeleeCombatHandler::BeginSingleTargetTrace_Implementation()
 		GetWorld()->GetTimerManager().SetTimer(
 			AttackTraceTimer,
 			this,
-			&UMeleeCombatHandler::TraceSingel,
+			&UMeleeCombatHandler::TraceSingle,
 			0.01f,
 			true
 		);
@@ -165,7 +165,7 @@ void UMeleeCombatHandler::PlayAttackSequanceEvent()
 	
 }
 
-void UMeleeCombatHandler::TraceSingel()
+void UMeleeCombatHandler::TraceSingle()
 {
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(GetOwner());
