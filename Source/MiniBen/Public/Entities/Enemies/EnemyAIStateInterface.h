@@ -45,6 +45,12 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EnemyAIState")
 	bool IsPartOfSavingSystem() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EnemyAIState")
+	void SetLastKnowPlayerPosition(FVector Position);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EnemyAIState")
+	FVector GetLastKnowPlayerPosition() const;
 	
 	
 };

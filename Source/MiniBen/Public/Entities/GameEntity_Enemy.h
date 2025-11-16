@@ -21,21 +21,23 @@ public:
 	void TakeDamageNative(AActor* Instigator, float DamageAmount, FVector HitLocation) override;
 
 	//// IEnemyAIStateInterface
-	AActor* GetCurrentTarget_Implementation() const;
-	void SwitchState_Implementation(EEnemyAIStates NewState);
-	void SetTarget_Implementation(AActor* NewTarget);
-	void ClearTarget_Implementation();
-	void CacheStartPositionBeforeChange_Implementation();
-	FVector GetStartPositionBeforeChange_Implementation();
-	EEnemyAIStates GetStartingState_Implementation();
-	EEnemyAIStates GetCurrentState_Implementation();
-	bool IsPartOfSavingSystem_Implementation() const;
+	virtual AActor* GetCurrentTarget_Implementation() const override;
+	virtual void SwitchState_Implementation(EEnemyAIStates NewState) override;
+	virtual void SetTarget_Implementation(AActor* NewTarget) override;
+	virtual void ClearTarget_Implementation() override;
+	virtual void CacheStartPositionBeforeChange_Implementation() override;
+	virtual FVector GetStartPositionBeforeChange_Implementation() override;
+	virtual EEnemyAIStates GetStartingState_Implementation() override;
+	virtual EEnemyAIStates GetCurrentState_Implementation() override;
+	virtual bool IsPartOfSavingSystem_Implementation() const override;
+	virtual void SetLastKnowPlayerPosition_Implementation(FVector Position) override;
+	virtual FVector GetLastKnowPlayerPosition_Implementation() const override;
 
 	// IEnemyAICombatInterface
-	void SheathWeapon_Implementation();
-	void UnSheathWeapon_Implementation();
-	bool IsWeaponReady_Implementation() const;
-	void AttackPlayer_Implementation();
-	void BeginMeleeTrace_Implementation();
-	void EndMeleeTrace_Implementation();
+	virtual void SheathWeapon_Implementation() override;
+	virtual void UnSheathWeapon_Implementation() override;
+	virtual bool IsWeaponReady_Implementation() const override;
+	virtual void AttackPlayer_Implementation() override;
+	virtual void BeginMeleeTrace_Implementation() override;
+	virtual void EndMeleeTrace_Implementation() override;
 };
