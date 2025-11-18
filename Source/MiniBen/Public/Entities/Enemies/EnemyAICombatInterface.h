@@ -40,4 +40,12 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EnemyAICombat")
 	void EndMeleeTrace();
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EnemyAICombat")
+	bool IsBlocking() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EnemyAICombat")
+	void TryBlock();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EnemyAICombat")
+	void NotifyEnemyAboutIncomingAttack();
 };

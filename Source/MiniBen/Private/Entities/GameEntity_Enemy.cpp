@@ -88,3 +88,16 @@ void AGameEntity_Enemy::EndMeleeTrace_Implementation()
 
 }
 
+bool AGameEntity_Enemy::IsBlocking_Implementation() const
+{
+	return false;
+}
+
+void AGameEntity_Enemy::TryBlock_Implementation()
+{
+}
+
+void AGameEntity_Enemy::NotifyEnemyAboutIncomingAttack_Implementation()
+{
+}
+

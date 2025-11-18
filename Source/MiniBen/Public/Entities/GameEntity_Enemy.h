@@ -40,4 +40,7 @@ public:
 	virtual void AttackPlayer_Implementation() override;
 	virtual void BeginMeleeTrace_Implementation() override;
 	virtual void EndMeleeTrace_Implementation() override;
+	virtual bool IsBlocking_Implementation() const override;
+	virtual void TryBlock_Implementation() override;
+	virtual void NotifyEnemyAboutIncomingAttack_Implementation() override;
 };
