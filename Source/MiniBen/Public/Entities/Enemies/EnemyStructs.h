@@ -15,4 +15,6 @@ enum class EEnemyAIStates : uint8
 	ES_EndChase			UMETA(DisplayName = "EndChase"),
 	ES_Sheath			UMETA(DisplayName = "Sheath"),
 	ES_UnSheath			UMETA(DisplayName = "UnSheath"),
+	ES_Investigate 		UMETA(DisplayName = "Investigate"),
+	ES_Blocking         UMETA(DisplayName = "Blocking")
 };

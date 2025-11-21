@@ -24,6 +24,7 @@ enum class EPlayerActions : uint8
 	PA_Air				UMETA(DisplayName = "Air"),
 	PA_MidSheath		UMETA(DisplayName = "MidSheath"),
 	PA_Equip			UMETA(DisplayName = "Equip"),
+	PA_Blocking			UMETA(DisplayName = "Blocking"),
 };
 
 UENUM(BlueprintType)

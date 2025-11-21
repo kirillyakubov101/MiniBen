@@ -49,6 +49,15 @@ bool AGameEntity_Enemy::IsPartOfSavingSystem_Implementation() const
 	return false;
 }
 
+void AGameEntity_Enemy::SetLastKnowPlayerPosition_Implementation(FVector Position)
+{
+}
+
+FVector AGameEntity_Enemy::GetLastKnowPlayerPosition_Implementation() const
+{
+	return FVector();
+}
+
 
 void AGameEntity_Enemy::SheathWeapon_Implementation() 
 {
@@ -77,5 +86,18 @@ void AGameEntity_Enemy::BeginMeleeTrace_Implementation()
 void AGameEntity_Enemy::EndMeleeTrace_Implementation()
 {
 
+}
+
+bool AGameEntity_Enemy::IsBlocking_Implementation() const
+{
+	return false;
+}
+
+void AGameEntity_Enemy::TryBlock_Implementation()
+{
+}
+
+void AGameEntity_Enemy::NotifyEnemyAboutIncomingAttack_Implementation()
+{
 }
 
