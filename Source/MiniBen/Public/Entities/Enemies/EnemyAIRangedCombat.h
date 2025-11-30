@@ -26,7 +26,7 @@ public:
 	void AnimateRangedWeaponAttack();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EnemyAIRangedCombat")
-	void ShootRangedWeapont();
+	void ShootRangedWeapon();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "EnemyAIRangedCombat")
 	void DrawArrowToRightHandFromQuiver();
